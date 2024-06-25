@@ -19,6 +19,12 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "DeleveryService"
-include(":app")
- 
+rootProject.name = "DeliveryService"
+include(
+  ":app",
+
+  ":core:data",
+  ":core:domain",
+
+  ":feature:home"
+)

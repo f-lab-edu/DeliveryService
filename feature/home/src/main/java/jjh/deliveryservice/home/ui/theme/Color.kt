@@ -1,4 +1,4 @@
-package jjh.deleveryservice.ui.theme
+package jjh.deliveryservice.home.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package jjh.deleveryservice
+package jjh.deliveryservice.feature.home
 
 import org.junit.Test
 
