@@ -4,9 +4,11 @@
   <application>
     <activity
       android:name=".MainActivity"
+      android:allowBackup="false"
       android:exported="true"
       android:label="@string/app_name"
-      android:theme="@style/Theme.DeliveryService">
+      android:theme="@style/Theme.DeliveryService"
+      android:usesCleartextTraffic="false">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
