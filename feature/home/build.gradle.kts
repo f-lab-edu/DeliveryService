@@ -1,6 +1,10 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt
+
 plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.jetbrains.kotlin.android)
+  alias(libs.plugins.googleDaggerHilt)
+  id("kotlin-kapt")
 }
 
 android {
@@ -35,6 +39,7 @@ android {
 dependencies {
   implementation(project(":core:domain"))
   implementation(project(":core:data"))
+  implementation(project(":build_config"))
 
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -44,6 +49,11 @@ dependencies {
   implementation(libs.androidx.ui.graphics)
   implementation(libs.androidx.ui.tooling.preview)
   implementation(libs.androidx.material3)
+
+  // hilt
+  implementation(libs.hilt.android)
+  kapt(libs.hilt.android.compiler)
+
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)

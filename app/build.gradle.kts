@@ -1,6 +1,10 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.jetbrains.kotlin.android)
+  alias(libs.plugins.googleDaggerHilt)
+  id("kotlin-kapt")
 }
 
 android {
@@ -45,4 +49,9 @@ android {
 
 dependencies {
   implementation(project(":feature:home"))
+  implementation(project(":build_config"))
+
+  // hilt
+  implementation(libs.hilt.android)
+  kapt(libs.hilt.android.compiler)
 }
