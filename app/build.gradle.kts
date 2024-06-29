@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
   alias(libs.plugins.android.application)

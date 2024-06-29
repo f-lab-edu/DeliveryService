@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.jetbrains.kotlin.android)
@@ -42,10 +39,23 @@ dependencies {
   implementation(libs.androidx.appcompat)
   implementation(libs.material)
 
-
   // hilt
   implementation(libs.hilt.android)
   kapt(libs.hilt.android.compiler)
+
+  // Retrofit2
+  implementation(libs.retrofit)
+  implementation(libs.converter.gson)
+  implementation(libs.converter.scalars)
+
+//  // Okhttp
+  implementation(libs.okhttp)
+  implementation(libs.logging.interceptor)
+
+  // Room
+  implementation(libs.androidx.room.runtime)
+  implementation(libs.androidx.room.ktx)
+  kapt(libs.androidx.room.compiler)
 
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
