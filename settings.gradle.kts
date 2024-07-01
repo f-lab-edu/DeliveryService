@@ -28,3 +28,5 @@ include(
 
   ":feature:home"
 )
+include(":build_config")
+//include(":build_config_stub")
