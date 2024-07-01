@@ -54,6 +54,13 @@ dependencies {
   implementation(libs.hilt.android)
   kapt(libs.hilt.android.compiler)
 
+  // glide
+  implementation(libs.glide)
+
+  // Logger
+  implementation(libs.logger)
+
+
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)

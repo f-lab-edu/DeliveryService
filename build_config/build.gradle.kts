@@ -12,6 +12,7 @@ android {
 
   defaultConfig {
     buildConfigField("String", "API_KEY", getApiKey("SMART_TRACKER_API_KEY"))
+    buildConfigField("String", "BASE_URL", "\"https://info.sweettracker.co.kr\"")
   }
 
   buildFeatures {

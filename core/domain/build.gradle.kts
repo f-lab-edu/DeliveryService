@@ -10,4 +10,6 @@ java {
 
 dependencies {
 
+  // Coroutine
+  implementation(libs.kotlinx.coroutines.core)
 }

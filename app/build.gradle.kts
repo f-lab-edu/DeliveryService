@@ -49,6 +49,7 @@ android {
 dependencies {
   implementation(project(":feature:home"))
   implementation(project(":build_config"))
+  implementation(libs.logger)
 
   // hilt
   implementation(libs.hilt.android)

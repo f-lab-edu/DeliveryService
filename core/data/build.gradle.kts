@@ -48,7 +48,7 @@ dependencies {
   implementation(libs.converter.gson)
   implementation(libs.converter.scalars)
 
-//  // Okhttp
+  // Okhttp
   implementation(libs.okhttp)
   implementation(libs.logging.interceptor)
 
@@ -56,6 +56,13 @@ dependencies {
   implementation(libs.androidx.room.runtime)
   implementation(libs.androidx.room.ktx)
   kapt(libs.androidx.room.compiler)
+
+  // Coroutine
+  implementation(libs.kotlinx.coroutines.android)
+
+  // Logger
+  implementation(libs.logger)
+
 
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
