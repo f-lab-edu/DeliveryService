@@ -41,10 +41,11 @@ object CalendarUtil {
   fun getDaysInMonth(
     year: Int,
     month: Int,
-  ): Array<Int> = with(Calendar.getInstance()) {
+  ): Array<CalendarModel> = with(Calendar.getInstance()) {
     set(year, month - 1, 1)
+
     val lastWeek = getActualMaximum(Calendar.WEEK_OF_MONTH)
-    val array = Array(lastWeek * 7) { 0 }
+    val array = Array<CalendarModel?>(lastWeek * 7) { null }
 
     // 첫째주
     val getFirstDayOfWeekIndex = getDayOfWeek(get(Calendar.DAY_OF_WEEK))
@@ -52,7 +53,12 @@ object CalendarUtil {
 
     // month에 해당하는 날짜
     for (i in getFirstDayOfWeekIndex until getFirstDayOfWeekIndex + last) {
-      array[i] = i - getFirstDayOfWeekIndex + 1
+      array[i] = CalendarModel(
+        year = year,
+        month = month,
+        date = i - getFirstDayOfWeekIndex + 1,
+        isCurrentMonth = true
+      )
     }
 
 
@@ -60,16 +66,26 @@ object CalendarUtil {
     add(Calendar.MONTH, -1)
     val previousDayOfMonth = getActualMaximum(Calendar.DAY_OF_MONTH)
     for (i in 0 until getFirstDayOfWeekIndex) {
-      array[getFirstDayOfWeekIndex - i - 1] = previousDayOfMonth - i
+      array[getFirstDayOfWeekIndex - i - 1] = CalendarModel(
+        year = year,
+        month = month - 1,
+        date = previousDayOfMonth - i,
+        isCurrentMonth = false
+      )
     }
 
     // month + 1 달에 대한 날짜
     val nextFirstDateIndex = getFirstDayOfWeekIndex + last
     for (i in nextFirstDateIndex until array.size) {
-      array[i] = i - nextFirstDateIndex + 1
+      array[i] = CalendarModel(
+        year = year,
+        month = month + 1,
+        date = i - nextFirstDateIndex + 1,
+        isCurrentMonth = false
+      )
     }
 
-    array
+    array.mapNotNull { it }.toTypedArray()
   }
 
   /**
