@@ -5,17 +5,43 @@ import java.util.Calendar
 typealias YearMonthDay = Triple<Int, Int, Int>
 
 object CalendarUtil {
-  fun getCurrentDate(): YearMonthDay = Calendar.getInstance()
+
+
+  fun getCalendar(year: Int, month: Int, date: Int): Calendar =
+    Calendar.getInstance()
+      .apply {
+        set(year, month - 1, date)
+      }
+
+  fun getCalendar(yearMonthDay: YearMonthDay): Calendar =
+    Calendar.getInstance()
+      .apply {
+        set(yearMonthDay.first, yearMonthDay.second - 1, yearMonthDay.third)
+      }
+
+
+  fun getCurrentDate(calendar: Calendar = Calendar.getInstance()): YearMonthDay = calendar
     .run {
       YearMonthDay(
         first = get(Calendar.YEAR),
         second = get(Calendar.MONTH) + 1,
-        third = get(Calendar.DATE)
+        third = get(Calendar.DATE),
       )
     }
 
 
-  fun getDaysInMonth(year: Int, month: Int): Array<Int> = with(Calendar.getInstance()) {
+  /**
+   * 해당하는 년, 월을 입력하면 일의 배열을 준다
+   *
+   * @param year 월
+   * @param month 일
+   *
+   * @return 일 배열
+   * */
+  fun getDaysInMonth(
+    year: Int,
+    month: Int,
+  ): Array<Int> = with(Calendar.getInstance()) {
     set(year, month - 1, 1)
     val lastWeek = getActualMaximum(Calendar.WEEK_OF_MONTH)
     val array = Array(lastWeek * 7) { 0 }
@@ -46,8 +72,12 @@ object CalendarUtil {
     array
   }
 
-
-  private fun getDayOfWeek(dayOfWeek: Int): Int =
+  /**
+   * @param dayOfWeek 요일에 대한 int value [Calendar.get], [Calendar.DAY_OF_WEEK]
+   * */
+  private fun getDayOfWeek(
+    dayOfWeek: Int,
+  ): Int =
     when (dayOfWeek) {
       Calendar.SUNDAY -> 0
       Calendar.MONDAY -> 1

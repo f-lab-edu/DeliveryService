@@ -39,6 +39,7 @@ android {
 dependencies {
   implementation(project(":core:domain"))
   implementation(project(":core:data"))
+  implementation(project(":core:calendar"))
   implementation(project(":build_config"))
 
   implementation(libs.androidx.core.ktx)
@@ -49,10 +50,13 @@ dependencies {
   implementation(libs.androidx.ui.graphics)
   implementation(libs.androidx.ui.tooling.preview)
   implementation(libs.androidx.material3)
+  implementation(libs.androidx.navigation.compose)
+  implementation (libs.androidx.lifecycle.runtime.compose)
 
   // hilt
   implementation(libs.hilt.android)
   kapt(libs.hilt.android.compiler)
+  implementation(libs.androidx.hilt.navigation.compose)
 
   // glide
   implementation(libs.glide)

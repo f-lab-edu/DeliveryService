@@ -1,0 +1,23 @@
+package jjh.deliveryservice.home.ui.home
+
+import jjh.deliveryservice.calendar.CalendarUtil
+import jjh.deliveryservice.calendar.YearMonthDay
+import java.util.Calendar
+
+data class HomeState(
+  val yearMonthDay: YearMonthDay,
+  private val dayOfWeekStrings: List<String> = emptyList(),
+) {
+
+  val year: Int
+    get() = yearMonthDay.first
+
+  val month: Int
+    get() = yearMonthDay.second
+
+  val date: Int
+    get() = yearMonthDay.third
+
+  val getDayOfWeekStrings: Array<String>
+    get() = this.dayOfWeekStrings.toTypedArray()
+}

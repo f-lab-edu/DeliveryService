@@ -9,15 +9,10 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
+import jjh.deliveryservice.home.ui.home.HomeScreen
 import jjh.deliveryservice.home.ui.theme.DeliveryServiceTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,33 +25,11 @@ class MainActivity : ComponentActivity() {
     setContent {
       DeliveryServiceTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-          Greeting(
-            name = "Android",
+          HomeScreen(
             modifier = Modifier.padding(innerPadding)
           )
-
-          // test
-          rememberCoroutineScope().launch {
-            viewModel.get()
-          }
         }
       }
     }
-  }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-  Text(
-    text = "Hello $name!",
-    modifier = modifier
-  )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-  DeliveryServiceTheme {
-    Greeting("Android")
   }
 }
