@@ -24,10 +24,13 @@ include(
   ":app",
 
   ":core:data",
-  ":core:domain",
 
   ":feature:home"
 )
 include(":build_config")
 //include(":build_config_stub")
 include(":core:calendar")
+include(":feature:register")
+include(":feature:main")
+include(":core:domain")
+include(":feature:resource")

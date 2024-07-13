@@ -1,15 +1,19 @@
 package jjh.deliveryservice.home.ui.home
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -63,11 +67,20 @@ fun DateComponent(
   modifier: Modifier = Modifier,
   calendarModel: CalendarModel,
 ) {
-  Text(
-    modifier = modifier,
-    text = calendarModel.date.toString(),
-    textAlign = TextAlign.Center
-  )
+  val alpha = if (calendarModel.isCurrentMonth) 1f else 0.3f
+
+  Box(modifier = modifier) {
+    Text(
+      modifier = Modifier
+        .fillMaxWidth()
+        .alpha(alpha),
+      text = calendarModel.date.toString(),
+      textAlign = TextAlign.Center,
+    )
+
+    // TODO: 택배 추가 개수마다 도트 디자인 필요 (0~5)
+  }
+
 }
 
 @Preview(showBackground = true)

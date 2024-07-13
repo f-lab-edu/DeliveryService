@@ -95,13 +95,16 @@ object CalendarUtil {
     dayOfWeek: Int,
   ): Int =
     when (dayOfWeek) {
-      Calendar.SUNDAY -> 0
+      Calendar.SUNDAY -> SUNDAY_INDEX
       Calendar.MONDAY -> 1
       Calendar.TUESDAY -> 2
       Calendar.WEDNESDAY -> 3
       Calendar.THURSDAY -> 4
       Calendar.FRIDAY -> 5
-      Calendar.SATURDAY -> 6
+      Calendar.SATURDAY -> SATURDAY_INDEX
       else -> throw IllegalArgumentException("요일이 잘못되었습니다")
     }
+
+  const val SUNDAY_INDEX = 0
+  const val SATURDAY_INDEX = 6
 }

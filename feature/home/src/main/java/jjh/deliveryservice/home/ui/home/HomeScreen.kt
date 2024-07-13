@@ -25,8 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jjh.deliveryservice.calendar.CalendarUtil
+import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
+import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
 import jjh.deliveryservice.home.R
-import jjh.deliveryservice.home.ui.theme.DeliveryServiceTheme
+import jjh.deliveryservice.resource.DeliveryServiceTheme
 
 @Composable
 fun HomeScreen(
@@ -79,9 +81,16 @@ fun DayOfWeekComponent(
 ) {
   Row(modifier = modifier) {
     for ((index, s) in dayOfWeek.withIndex()) {
-      if (index == 0 || index == 6) {
+      val color = when (index) {
+        SUNDAY_INDEX -> Color.Red
+        SATURDAY_INDEX -> Color.Blue
+        else -> Color.Black
       }
-      Text(modifier = Modifier.weight(1f), text = s, textAlign = TextAlign.Center)
+      Text(
+        modifier = Modifier.weight(1f),
+        text = s, textAlign = TextAlign.Center,
+        color = color
+      )
     }
   }
 }

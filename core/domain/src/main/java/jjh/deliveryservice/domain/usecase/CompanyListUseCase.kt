@@ -1,6 +1,6 @@
 package jjh.deliveryservice.domain.usecase
 
-import jjh.deliveryservice.domain.DeliveryServiceRepository
+import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
 import jjh.deliveryservice.domain.model.CompanyModel
 
 class CompanyListUseCase(
