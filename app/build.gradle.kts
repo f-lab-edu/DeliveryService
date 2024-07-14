@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
   alias(libs.plugins.android.application)
@@ -6,7 +7,17 @@ plugins {
   id("kotlin-kapt")
 }
 
+
 android {
+  signingConfigs {
+    create("release") {
+      storePassword = getLocalProperty("KEYSTORE_STORE_PASSWORD")
+      keyAlias = getLocalProperty("KEYSTORE_ALIAS")
+      keyPassword = getLocalProperty("KEYSTORE_PASSWORD")
+      storeFile = file("${rootDir}/app/keystore/delivery_service_keystore")
+    }
+  }
+
   namespace = "jjh.deliveryservice"
   compileSdk = 34
 
@@ -27,6 +38,8 @@ android {
     release {
       isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+      signingConfig = signingConfigs.getByName("release")
+
     }
   }
   compileOptions {
@@ -54,4 +67,9 @@ dependencies {
   // hilt
   implementation(libs.hilt.android)
   kapt(libs.hilt.android.compiler)
+}
+
+
+fun getLocalProperty(propertyKey: String): String {
+  return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }

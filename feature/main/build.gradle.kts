@@ -18,12 +18,6 @@ android {
     consumerProguardFiles("consumer-rules.pro")
   }
 
-  buildTypes {
-    release {
-      isMinifyEnabled = false
-      proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-    }
-  }
   buildFeatures {
     compose = true
   }
@@ -42,6 +36,7 @@ dependencies {
   implementation(project(":core:calendar"))
   implementation(project(":build_config"))
   implementation(project(":feature:home"))
+  implementation(project(":feature:register"))
 
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.lifecycle.runtime.ktx)
