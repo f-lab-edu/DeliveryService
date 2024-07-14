@@ -33,6 +33,7 @@ import jjh.deliveryservice.resource.DeliveryServiceTheme
 @Composable
 fun HomeScreen(
   modifier: Modifier = Modifier,
+  onStartRegisterScreen: () -> Unit = {},
   homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
   val context = LocalContext.current
@@ -62,7 +63,7 @@ fun HomeScreen(
       containerColor = Color.Gray,
       shape = CircleShape,
       elevation = FloatingActionButtonDefaults.elevation(0.dp),
-      onClick = { /*TODO*/ }
+      onClick = onStartRegisterScreen
     ) {
       Image(
         imageVector = Icons.Outlined.Add,
