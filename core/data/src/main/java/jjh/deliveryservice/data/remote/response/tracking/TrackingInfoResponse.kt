@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * 운송장 조회 결과
  *
  * @param senderName 보내는 사람
- * @param receiverAddress 받는 사람 주소
+ * @param receiverAddr 받는 사람 주소
  * @param firstDetail 첫 번째 상세 정보
  * @param level 진행 단계 [level 1: 배송준비중, 2: 집화완료, 3: 배송중, 4: 지점 도착, 5: 배송출발, 6:배송 완료]
  * @param lastDetail 마지막 상세 정보
@@ -27,47 +27,24 @@ import com.google.gson.annotations.SerializedName
  *
  * */
 data class TrackingInfoResponse(
-  @SerializedName("senderName")
-  val senderName: String,
-
-  @SerializedName("reciver_addr")
-  val receiverAddress: String,
-
-  val firstDetail: TrackingDetailResponse,
-
+  val adUrl: String?,
+  val complete: Boolean?,
+  val invoiceNo: String?,
+  val itemImage: String?,
+  val itemName: String?,
   val level: Int,
-
-  val lastDetail: TrackingDetailResponse,
-
-  val estimate: String,
-
-  val itemImage: String,
-
-  val trackingDetails: List<TrackingDetailResponse>,
-
-  val lastStateDetail: TrackingDetailResponse,
-
-  val zipCode: String,
-
-  @SerializedName("invoice_no")
-  val invoiceNo: String,
-
-  @SerializedName("complete")
-  val completeYN: String,
-
-  val orderNumber: String,
-
-  val complete: Boolean,
-
-  val recipient: String,
-
-  @SerializedName("reciver_name")
-  val receiverName: String,
-
-  val result: String,
-
-  val productInfo: String,
-
-  @SerializedName("item_name")
-  val itemName: String,
+  val receiverAddr: String?,
+  val receiverName: String?,
+  val recipient: String?,
+  val result: String?,
+  val senderName: String?,
+  val trackingDetails: List<TrackingDetailResponse>?,
+  val orderNumber: String?,
+  val estimate: String?,
+  val productInfo: String?,
+  val zipCode: String?,
+  val lastDetail: TrackingDetailResponse?,
+  val lastStateDetail: TrackingDetailResponse?,
+  val firstDetail: TrackingDetailResponse?,
+  val completeYN: String?
 )

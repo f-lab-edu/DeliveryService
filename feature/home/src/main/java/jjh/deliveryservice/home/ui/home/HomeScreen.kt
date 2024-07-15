@@ -34,7 +34,7 @@ import jjh.deliveryservice.resource.DeliveryServiceTheme
 fun HomeScreen(
   modifier: Modifier = Modifier,
   onStartRegisterScreen: () -> Unit = {},
-  homeViewModel: HomeViewModel = hiltViewModel(),
+  homeViewModel: HomeViewModel = hiltViewModel(),//TODO: HomeViewModel 종속성이 생김 필요한것만
 ) {
   val context = LocalContext.current
   val state by homeViewModel.uiState.collectAsStateWithLifecycle()

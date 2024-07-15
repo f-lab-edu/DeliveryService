@@ -1,6 +1,8 @@
 package jjh.deliveryservice.data.remote
 
-import jjh.deliveryservice.data.remote.response.CompanyListResponse
+import jjh.deliveryservice.data.remote.response.companys.CompanyListResponse
+import jjh.deliveryservice.data.remote.response.recommend.RecommendCompanyListResponse
+import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse
 import jjh.devlieryservice.build_config.BuildConfig.API_KEY
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -27,7 +29,7 @@ interface DeliveryServiceApi {
   suspend fun getRecommendCompanyList(
     @Query("t_key") apiKey: String = API_KEY,
     @Query("t_invoice") invoiceNumber: String,
-  )
+  ): RecommendCompanyListResponse
 
   /**
    * 운송장 번호 조회 택배 추적하기
@@ -41,6 +43,6 @@ interface DeliveryServiceApi {
     @Query("t_key") apiKey: String = API_KEY,
     @Query("t_invoice") invoiceNumber: String,
     @Query("t_code") code: String,
-  )
+  ): TrackingInfoResponse
 
 }

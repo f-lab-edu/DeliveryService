@@ -1,6 +1,7 @@
 package jjh.deliveryservice.domain.model
 
-import jjh.deliveryservice.data.remote.response.CompanyResponse
+import jjh.deliveryservice.data.db.entity.CompanyEntity
+import jjh.deliveryservice.data.remote.response.companys.CompanyResponse
 
 /**
  * 택배사 정보
@@ -16,6 +17,14 @@ data class CompanyModel(
 ) {
   companion object {
     fun CompanyResponse.toModel(): CompanyModel {
+      return CompanyModel(companyCode, isInternational, companyName)
+    }
+
+    fun CompanyResponse.toEntity(): CompanyEntity {
+      return CompanyEntity(companyCode, isInternational, companyName)
+    }
+
+    fun CompanyEntity.toModel(): CompanyModel {
       return CompanyModel(companyCode, isInternational, companyName)
     }
   }

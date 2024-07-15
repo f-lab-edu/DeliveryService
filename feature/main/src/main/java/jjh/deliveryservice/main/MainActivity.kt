@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
-
+    viewModel
     setContent {
       DeliveryServiceTheme {
         val navController = rememberNavController()

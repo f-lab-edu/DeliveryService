@@ -7,8 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import jjh.deliveryservice.data.db.DeliveryDao
+import jjh.deliveryservice.data.db.dao.DeliveryDao
 import jjh.deliveryservice.data.db.DeliveryDatabase
+import jjh.deliveryservice.data.db.dao.CompanyDao
 import javax.inject.Singleton
 
 @Module
@@ -23,12 +24,15 @@ object DatabaseModule {
     return Room.databaseBuilder(
       context,
       DeliveryDatabase::class.java,
-      "delivery-db"
+      "delivery_db"
     )
       .fallbackToDestructiveMigration()
       .build()
   }
 
   @Provides
-  fun provideDao(db: DeliveryDatabase): DeliveryDao = db.dao()
+  fun provideDeliveryDao(db: DeliveryDatabase): DeliveryDao = db.deliveryDao()
+
+  @Provides
+  fun provideCompanyDao(db: DeliveryDatabase): CompanyDao = db.companyDao()
 }

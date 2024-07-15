@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import jjh.deliveryservice.home.ui.home.HomeScreen
+import jjh.deliveryservice.register.RegisterScreen
 
 @Composable
 fun DeliveryNavHost(
@@ -24,7 +25,9 @@ fun DeliveryNavHost(
     }
 
     composable(route = DeliveryScreens.REGISTER()) {
-
+      RegisterScreen(
+        modifier = modifier
+      )
     }
 
     composable(route = DeliveryScreens.FIND()) {
