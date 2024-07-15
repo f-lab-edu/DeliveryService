@@ -4,5 +4,4 @@
   <application
     android:allowBackup="false"
     android:usesCleartextTraffic="false" />
-  <application />
 </manifest>
