@@ -1,11 +1,9 @@
 package jjh.deliveryservice.home.ui.home
 
-import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.YearMonthDay
-import java.util.Calendar
 
-data class HomeState(
-  val yearMonthDay: YearMonthDay,
+data class HomeUiState(
+  val yearMonthDay: YearMonthDay = Triple(0, 0, 0),
   private val dayOfWeekStrings: List<String> = emptyList(),
 ) {
 

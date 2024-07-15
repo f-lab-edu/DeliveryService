@@ -13,7 +13,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,27 +21,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
 import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
 import jjh.deliveryservice.home.R
-import jjh.deliveryservice.resource.DeliveryServiceTheme
 
 @Composable
 fun HomeScreen(
   modifier: Modifier = Modifier,
-  onStartRegisterScreen: () -> Unit = {},
-  homeViewModel: HomeViewModel = hiltViewModel(),//TODO: HomeViewModel 종속성이 생김 필요한것만
+  year: Int,
+  month: Int,
+  onStartRegisterScreen: () -> Unit = {}, // 택배 등록하기 이동
 ) {
   val context = LocalContext.current
-  val state by homeViewModel.uiState.collectAsStateWithLifecycle()
-
   Box(modifier = modifier) {
-
     Column {
-
       DayOfWeekComponent(
         modifier = Modifier
           .fillMaxWidth()
@@ -51,7 +44,7 @@ fun HomeScreen(
       ) // 요일
 
       CalendarComponent(
-        dateArray = CalendarUtil.getDaysInMonth(state.year, state.month)
+        dateArray = CalendarUtil.getDaysInMonth(year, month)
       ) // 달력
     }
 
@@ -99,7 +92,5 @@ fun DayOfWeekComponent(
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenPreview() {
-  DeliveryServiceTheme {
-    HomeScreen()
-  }
+  HomeScreen(year = 2024, month = 4)
 }

@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,8 +31,7 @@ fun CalendarComponent(
       WeekComponent(
         modifier = Modifier
           .fillMaxSize()
-          .weight(1f)
-          .clickable { },
+          .weight(1f),
         calendarModel = { dateArray[it + (i * 7)] }
       )
     }
@@ -51,12 +50,15 @@ fun WeekComponent(
   ) {
     for (i in 0 until 7) {
       val model = calendarModel(i)
+      val textColor = Color(CalendarUtil.getDateColor(i))
+
       DateComponent(
         modifier = Modifier
           .fillMaxSize()
           .weight(1f)
           .clickable { clickable(model) },
         calendarModel = model,
+        textColor = textColor
       )
     }
   }
@@ -66,6 +68,7 @@ fun WeekComponent(
 fun DateComponent(
   modifier: Modifier = Modifier,
   calendarModel: CalendarModel,
+  textColor: Color,
 ) {
   val alpha = if (calendarModel.isCurrentMonth) 1f else 0.3f
 
@@ -76,6 +79,7 @@ fun DateComponent(
         .alpha(alpha),
       text = calendarModel.date.toString(),
       textAlign = TextAlign.Center,
+      color = textColor
     )
 
     // TODO: 택배 추가 개수마다 도트 디자인 필요 (0~5)
@@ -110,5 +114,6 @@ private fun DateCellPreview() {
   DateComponent(
     modifier = Modifier.size(50.dp),
     calendarModel = CalendarModel(2024, 6, 1),
+    Color.Red
   )
 }

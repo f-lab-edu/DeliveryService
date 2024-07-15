@@ -107,4 +107,17 @@ object CalendarUtil {
 
   const val SUNDAY_INDEX = 0
   const val SATURDAY_INDEX = 6
+
+
+  const val SUNDAY_COLOR = 0xFFFF0000
+  const val SATURDAY_COLOR = 0xFF0000FF
+  const val ELSE_COLOR = 0xFF000000
+
+  fun getDateColor(index: Int): Long {
+    return when (index) {
+      SUNDAY_INDEX -> SUNDAY_COLOR
+      SATURDAY_INDEX -> SATURDAY_COLOR
+      else -> ELSE_COLOR
+    }
+  }
 }

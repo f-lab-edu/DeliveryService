@@ -1,20 +1,18 @@
 package jjh.deliveryservice.register
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jjh.deliveryservice.common.BaseViewModel
 import jjh.deliveryservice.domain.model.CompanyModel
 import jjh.deliveryservice.domain.usecase.CompanyListUseCase
 import jjh.deliveryservice.domain.usecase.DeliveryTrackingInfoUseCase
 import jjh.deliveryservice.domain.usecase.RecommendCompanyListUseCase
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -23,19 +21,22 @@ import javax.inject.Inject
  * */
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
+  private val ioDispatcher: CoroutineDispatcher,
   private val companyListUseCase: CompanyListUseCase,
   private val recommendCompanyListUseCase: RecommendCompanyListUseCase,
   private val deliveryTrackingInfoUseCase: DeliveryTrackingInfoUseCase,
-) : ViewModel() {
+) : BaseViewModel() {
   private val _state: MutableStateFlow<RegisterUiState> = MutableStateFlow(RegisterUiState())
   val state: StateFlow<RegisterUiState> = _state.asStateFlow()
 
   private var textInput: Job? = null
 
   init {
-    viewModelScope.launch { // TODO: 따로 생성
-      val companyList = withContext(Dispatchers.IO) { companyListUseCase.invoke().filter { !it.isInternational } }
-      // TODO Dispatcher => hilt로 변경
+    exceptionHandlerCoroutine {
+      val companyList = withContext(ioDispatcher) {
+        companyListUseCase.invoke().filter { !it.isInternational }
+      }
+
       _state.update { it.copy(companyList = companyList) }
     }
   }
@@ -48,7 +49,7 @@ class RegisterViewModel @Inject constructor(
   fun invoiceNumberTextChangeListener(invoiceNumber: String) {
     textInput?.cancel()
 
-    textInput = viewModelScope.launch {
+    textInput = exceptionHandlerCoroutine {
       _state.update { it.copy(invoiceNumber = invoiceNumber) }
       delay(2000L)
     }
@@ -62,7 +63,7 @@ class RegisterViewModel @Inject constructor(
   }
 
   fun requestTrackingInfo(companyCode: String, invoiceNumber: String) {
-    viewModelScope.launch {
+    exceptionHandlerCoroutine {
       deliveryTrackingInfoUseCase(companyCode = companyCode, invoiceNumber = invoiceNumber)
     }
   }

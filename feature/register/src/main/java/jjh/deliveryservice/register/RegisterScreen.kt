@@ -138,11 +138,8 @@ fun CompaniesComponent(
       key = { _, item -> item.companyName + item.companyCode }
     ) { index, item ->
 
-      val color =
-        if (selectedItem == item) Color(0xFF075500) // todo 따로 빼기
-        else Color.Black
-
-      val stroke = if (selectedItem == item) 3.dp else 1.dp // todo 따로 빼기
+      val (color, stroke) =
+        selectedColorAndStroke(isSelected = selectedItem == item)
 
       CompanyItem(
         modifier = Modifier
