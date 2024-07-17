@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -71,8 +70,8 @@ fun RegisterScreen(
       DeliveryOutlineTextField(
         modifier = Modifier
           .fillMaxWidth(),
-        text = invoiceNumber,
-        textChangeListener = invoiceNumberTextChangeListener,
+        value = invoiceNumber,
+        onValueChange = invoiceNumberTextChangeListener,
         keyboardType = KeyboardType.Number,
         isError = invoiceNumber.isNotEmpty() && invoiceNumber.toLongOrNull() == null,
         placeholder = { Text(text = "송장 번호를 입력해주세요") }

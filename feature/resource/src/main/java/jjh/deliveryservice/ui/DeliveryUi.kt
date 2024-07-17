@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -41,11 +40,11 @@ import jjh.deliveryservice.resource.CommonGreenColor
 @Composable
 fun DeliveryOutlineTextField(
   modifier: Modifier = Modifier,
-  text: String,
-  textChangeListener: (String) -> Unit,
-  keyboardType: KeyboardType,
-  isError: Boolean,
-  placeholder: @Composable () -> Unit,
+  value: String,
+  onValueChange: (String) -> Unit,
+  keyboardType: KeyboardType = KeyboardType.Text,
+  isError: Boolean = false,
+  placeholder: @Composable () -> Unit = {},
 ) {
   OutlinedTextField(
     modifier = modifier,
@@ -61,8 +60,8 @@ fun DeliveryOutlineTextField(
     singleLine = true,
     keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
     prefix = { Icon(imageVector = Icons.Default.Search, contentDescription = "") },
-    value = text,
-    onValueChange = textChangeListener
+    value = value,
+    onValueChange = onValueChange
   )
 }
 
@@ -164,7 +163,6 @@ fun Toolbar(
       )
     else
       Spacer(modifier = Modifier.size(54.dp))
-
   }
 }
 
@@ -172,8 +170,8 @@ fun Toolbar(
 @Composable
 private fun DeliveryOutlineTextFieldPreview() {
   DeliveryOutlineTextField(
-    text = "text",
-    textChangeListener = {},
+    value = "text",
+    onValueChange = {},
     keyboardType = KeyboardType.Text,
     isError = false,
     placeholder = {})
