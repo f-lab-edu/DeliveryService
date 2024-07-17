@@ -44,7 +44,8 @@ fun DeliveryNavHost(
         selectedCompany = state.selectedCompany,
         invoiceNumberTextChangeListener = registerViewModel::invoiceNumberTextChangeListener,
         onCompanySelectItem = registerViewModel::onCompanySelectItem,
-        onFindClickListener = registerViewModel::requestTrackingInfo
+        onFindClickListener = registerViewModel::requestTrackingInfo,
+        onBackListener = { navController.popBackStack() }
       )
     }
 
