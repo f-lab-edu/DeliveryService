@@ -26,8 +26,8 @@ class RegisterViewModel @Inject constructor(
   private val recommendCompanyListUseCase: RecommendCompanyListUseCase,
   private val deliveryTrackingInfoUseCase: DeliveryTrackingInfoUseCase,
 ) : BaseViewModel() {
-  private val _state: MutableStateFlow<RegisterUiState> = MutableStateFlow(RegisterUiState())
-  val state: StateFlow<RegisterUiState> = _state.asStateFlow()
+  private val _uiState: MutableStateFlow<RegisterUiState> = MutableStateFlow(RegisterUiState())
+  val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
 
   private var textInput: Job? = null
 
@@ -37,7 +37,7 @@ class RegisterViewModel @Inject constructor(
         companyListUseCase.invoke().filter { !it.isInternational }
       }
 
-      _state.update { it.copy(companyList = companyList) }
+      _uiState.update { it.copy(companyList = companyList) }
     }
   }
 
@@ -50,7 +50,7 @@ class RegisterViewModel @Inject constructor(
     textInput?.cancel()
 
     textInput = exceptionHandlerCoroutine {
-      _state.update { it.copy(invoiceNumber = invoiceNumber) }
+      _uiState.update { it.copy(invoiceNumber = invoiceNumber) }
       delay(2000L)
     }
   }
@@ -59,7 +59,7 @@ class RegisterViewModel @Inject constructor(
    * 택배사 선택
    * */
   fun onCompanySelectItem(companyModel: CompanyModel) {
-    _state.update { it.copy(selectedCompany = companyModel) }
+    _uiState.update { it.copy(selectedCompany = companyModel) }
   }
 
   fun requestTrackingInfo(companyCode: String, invoiceNumber: String) {

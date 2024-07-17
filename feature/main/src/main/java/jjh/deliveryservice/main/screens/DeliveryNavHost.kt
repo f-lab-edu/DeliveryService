@@ -1,7 +1,6 @@
 package jjh.deliveryservice.main.screens
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -12,6 +11,7 @@ import androidx.navigation.compose.composable
 import jjh.deliveryservice.home.ui.home.HomeScreen
 import jjh.deliveryservice.home.ui.home.HomeViewModel
 import jjh.deliveryservice.register.RegisterScreen
+import jjh.deliveryservice.register.RegisterViewModel
 
 @Composable
 fun DeliveryNavHost(
@@ -35,8 +35,16 @@ fun DeliveryNavHost(
     }
 
     composable(route = DeliveryScreens.REGISTER()) {
+      val registerViewModel: RegisterViewModel = hiltViewModel()
+      val state by registerViewModel.uiState.collectAsStateWithLifecycle()
       RegisterScreen(
-        modifier = modifier
+        modifier = modifier,
+        invoiceNumber = state.invoiceNumber,
+        companyList = state.companyList,
+        selectedCompany = state.selectedCompany,
+        invoiceNumberTextChangeListener = registerViewModel::invoiceNumberTextChangeListener,
+        onCompanySelectItem = registerViewModel::onCompanySelectItem,
+        onFindClickListener = registerViewModel::requestTrackingInfo
       )
     }
 

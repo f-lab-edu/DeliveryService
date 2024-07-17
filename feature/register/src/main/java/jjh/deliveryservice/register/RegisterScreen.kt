@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -35,8 +34,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jjh.deliveryservice.domain.model.CompanyModel
 
 
@@ -46,22 +43,9 @@ import jjh.deliveryservice.domain.model.CompanyModel
 @Composable
 fun RegisterScreen(
   modifier: Modifier = Modifier,
-  viewModel: RegisterViewModel = hiltViewModel(),
-) {
-  val state by viewModel.state.collectAsStateWithLifecycle()
-  RegisterComponent(
-    modifier = modifier,
-    uiState = state,
-    invoiceNumberTextChangeListener = viewModel::invoiceNumberTextChangeListener,
-    onCompanySelectItem = viewModel::onCompanySelectItem,
-    onFindClickListener = viewModel::requestTrackingInfo
-  )
-}
-
-@Composable
-fun RegisterComponent(
-  modifier: Modifier = Modifier,
-  uiState: RegisterUiState = RegisterUiState(),
+  invoiceNumber: String = "",
+  companyList: List<CompanyModel> = listOf(),
+  selectedCompany: CompanyModel? = null,
   invoiceNumberTextChangeListener: (String) -> Unit = {},
   onCompanySelectItem: (CompanyModel) -> Unit = {},
   onFindClickListener: (companyCode: String, invoiceNumber: String) -> Unit = { _, _ -> },
@@ -84,11 +68,11 @@ fun RegisterComponent(
         unfocusedContainerColor = Color.Transparent
       ),
       textStyle = TextStyle(color = Color(0xFF075500)),
-      isError = uiState.invoiceNumber.isNotEmpty() && uiState.invoiceNumber.toLongOrNull() == null,
+      isError = invoiceNumber.isNotEmpty() && invoiceNumber.toLongOrNull() == null,
       singleLine = true,
       keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
       prefix = { Icon(imageVector = Icons.Default.Search, contentDescription = "") },
-      value = uiState.invoiceNumber,
+      value = invoiceNumber,
       onValueChange = invoiceNumberTextChangeListener
     ) // OutlinedTextField
 
@@ -97,8 +81,8 @@ fun RegisterComponent(
       modifier = Modifier
         .weight(1f)
         .fillMaxHeight(),
-      companyItems = uiState.companyList,
-      selectedItem = uiState.selectedCompany,
+      companyItems = companyList,
+      selectedItem = selectedCompany,
       onCompanySelectItem = onCompanySelectItem
     ) // CompaniesComponent
 
@@ -108,8 +92,8 @@ fun RegisterComponent(
         .fillMaxWidth()
         .height(52.dp),
       shape = RoundedCornerShape(10.dp),
-      enabled = uiState.selectedCompany != null && uiState.invoiceNumber.isNotEmpty(),
-      onClick = { onFindClickListener(uiState.selectedCompany!!.companyCode, uiState.invoiceNumber) },
+      enabled = selectedCompany != null && invoiceNumber.isNotEmpty(),
+      onClick = { onFindClickListener(selectedCompany!!.companyCode, invoiceNumber) },
       colors = ButtonColors(
         containerColor = Color(0xFF075500),
         contentColor = Color(0xFF075500),
@@ -177,7 +161,11 @@ fun CompanyItem(
 @Preview(showBackground = true)
 @Composable
 private fun RegisterComponentPreview() {
-  RegisterComponent(uiState = RegisterUiState(companyList = companies))
+  val list = mutableListOf<CompanyModel>()
+  repeat(4) {
+    list.add(CompanyModel("$it", false, "택배사$it"))
+  }
+  RegisterScreen(companyList = list)
 }
 
 @Preview(showBackground = true)
