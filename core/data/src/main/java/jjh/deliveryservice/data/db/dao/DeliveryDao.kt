@@ -10,10 +10,10 @@ import jjh.deliveryservice.data.db.entity.DeliveryEntity
 interface DeliveryDao {
 
   @Insert
-  suspend fun insertDeliveryInfo(deliveryEntity: DeliveryEntity)
+  suspend fun insertDeliveryInfo(deliveryEntity: List<DeliveryEntity>)
 
   @Update
-  suspend fun updateDeliveryInfo(deliveryEntity: DeliveryEntity)
+  suspend fun updateDeliveryInfo(deliveryEntity: List<DeliveryEntity>)
 
   @Query("DELETE FROM DeliveryEntity where invoiceNo == :invoiceNo")
   suspend fun deleteDeliveryInfo(invoiceNo: String)

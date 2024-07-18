@@ -1,6 +1,7 @@
-package jjh.deliveryservice.data.remote.response.tracking
+package jjh.deliveryservice.data.db.entity
 
-import com.google.gson.annotations.SerializedName
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * 진행 상세
@@ -17,10 +18,12 @@ import com.google.gson.annotations.SerializedName
  * @param telNo2 배송 기사 전화번호
  * @param timeString 진행 시간
  * */
-data class TrackingDetailResponse(
-  val remark: String,
-
+@Entity
+data class TrackingDetailsEntity(
+  @PrimaryKey
   val level: Int, // 2
+
+  val remark: String,
 
   val manName: String,
 
@@ -34,10 +37,8 @@ data class TrackingDetailResponse(
 
   val kind: String, // 집화처리
 
-  @SerializedName("telno")
   val telNo: String, // 010-3350-5902
 
-  @SerializedName("telno2")
   val telNo2: String,
 
   val timeString: String, // 2024-04-25 20:33:14

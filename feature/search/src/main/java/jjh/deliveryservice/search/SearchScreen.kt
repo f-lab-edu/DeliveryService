@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
@@ -29,6 +30,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import jjh.deliveryservice.data.db.entity.DeliveryEntity
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.resource.emptyColors
 
@@ -36,7 +38,7 @@ import jjh.deliveryservice.resource.emptyColors
 @Composable
 fun SearchScreen(
   modifier: Modifier = Modifier,
-  deliveryList: List<TrackingInfoModel> = listOf(),
+  deliveryList: List<DeliveryEntity> = listOf(),
   onBackListener: () -> Unit = {},
   onItemClickListener: (TrackingInfoModel) -> Unit = {},
   onValueChange: (String) -> Unit = {},
@@ -89,7 +91,26 @@ fun SearchScreen(
     } // Row
 
     LazyColumn {
-      // TODO: 검색한 택배 리스트
+      items(deliveryList, key = { it.invoiceNo }) {
+        DeliveryItem(
+          modifier = Modifier.fillMaxWidth(),
+          deliveryEntity = it
+        )
+      }
+    }
+  }
+}
+
+@Composable
+fun DeliveryItem(
+  modifier: Modifier = Modifier,
+  deliveryEntity: DeliveryEntity,
+) {
+
+  Row(modifier) {
+    Column {
+      Text(text = "TODO: 조회 날짜")
+      Text(text = "")
     }
   }
 }
@@ -98,4 +119,12 @@ fun SearchScreen(
 @Composable
 private fun SearchScreenPreview() {
   SearchScreen()
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DeliveryItemPreview() {
+  DeliveryItem(
+    deliveryEntity = DeliveryEntity("invoiceNumber", listOf(), "14시~16시", DeliveryEntity.Level.DELIVERY_START)
+  )
 }
