@@ -18,27 +18,24 @@ android {
     consumerProguardFiles("consumer-rules.pro")
   }
 
-  buildTypes {
-    release {
-      isMinifyEnabled = false
-      proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-    }
-  }
   buildFeatures {
     compose = true
   }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
   kotlinOptions {
-    jvmTarget = "1.8"
+    jvmTarget = "17"
   }
 }
 
 dependencies {
+  implementation(project(":common"))
+  implementation(project(":feature:resource"))
   implementation(project(":core:domain"))
   implementation(project(":core:data"))
+  implementation(project(":core:calendar"))
   implementation(project(":build_config"))
 
   implementation(libs.androidx.core.ktx)
@@ -49,10 +46,13 @@ dependencies {
   implementation(libs.androidx.ui.graphics)
   implementation(libs.androidx.ui.tooling.preview)
   implementation(libs.androidx.material3)
+  implementation(libs.androidx.navigation.compose)
+  implementation (libs.androidx.lifecycle.runtime.compose)
 
   // hilt
   implementation(libs.hilt.android)
   kapt(libs.hilt.android.compiler)
+  implementation(libs.androidx.hilt.navigation.compose)
 
   // glide
   implementation(libs.glide)

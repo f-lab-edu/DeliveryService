@@ -1,15 +1,31 @@
 plugins {
-  kotlin("jvm")
-  kotlin("kapt")
+  alias(libs.plugins.android.library)
+  alias(libs.plugins.jetbrains.kotlin.android)
+  alias(libs.plugins.googleDaggerHilt)
+  id("kotlin-kapt")
 }
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
+android {
+  namespace = "jjh.deliveryservice.domain"
+  compileSdk = 34
+  defaultConfig {
+    minSdk = 24
+  }
+
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+  }
+
+  kotlinOptions {
+    jvmTarget = "17"
+  }
 }
 
 dependencies {
+  implementation(project(":core:data"))
 
-  // Coroutine
-  implementation(libs.kotlinx.coroutines.core)
+  // hilt
+  implementation(libs.hilt.android)
+  kapt(libs.hilt.android.compiler)
 }

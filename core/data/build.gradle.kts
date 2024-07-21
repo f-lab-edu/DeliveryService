@@ -16,23 +16,16 @@ android {
     consumerProguardFiles("consumer-rules.pro")
   }
 
-  buildTypes {
-    release {
-      isMinifyEnabled = false
-      proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-    }
-  }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
   kotlinOptions {
-    jvmTarget = "1.8"
+    jvmTarget = "17"
   }
 }
 
 dependencies {
-  implementation(project(":core:domain"))
   implementation(project(":build_config"))
 
   implementation(libs.androidx.core.ktx)
@@ -56,6 +49,8 @@ dependencies {
   implementation(libs.androidx.room.runtime)
   implementation(libs.androidx.room.ktx)
   kapt(libs.androidx.room.compiler)
+  annotationProcessor(libs.androidx.room.compiler)
+
 
   // Coroutine
   implementation(libs.kotlinx.coroutines.android)
