@@ -16,4 +16,9 @@ class DeliveryTrackingInfoUseCase(
   }
 
   // TODO: 에러 발생 시 result class or Exception viewModel에서 처리할지?
+
+
+  suspend fun saveTrackingInfo(trackingInfoModel: TrackingInfoModel) {
+    return companyListRepository.saveTrackingInfo(model = trackingInfoModel)
+  }
 }

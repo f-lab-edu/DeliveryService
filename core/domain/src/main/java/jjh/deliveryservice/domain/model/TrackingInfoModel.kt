@@ -1,5 +1,7 @@
 package jjh.deliveryservice.domain.model
 
+import jjh.deliveryservice.data.db.entity.DeliveryEntity
+import jjh.deliveryservice.data.db.entity.findLevel
 import jjh.deliveryservice.data.remote.response.tracking.TrackingDetailResponse
 import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse
 
@@ -58,6 +60,16 @@ data class TrackingInfoModel(
         receiverName = receiverName ?: "",
         result = result ?: "",
         itemName = itemName ?: "",
+      )
+    }
+
+    fun TrackingInfoModel.toEntity(): DeliveryEntity {
+      return DeliveryEntity(
+        invoiceNo = invoiceNo,
+        name = itemName,
+        trackingDetails = trackingDetails.map { it.toEntity() },
+        estimate = estimate,
+        level = findLevel(level),
       )
     }
   }

@@ -1,11 +1,14 @@
 package jjh.deliveryservice.register
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,12 +20,12 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
@@ -48,6 +51,7 @@ import jjh.deliveryservice.ui.Toolbar
 @Composable
 fun RegisterScreen(
   modifier: Modifier = Modifier,
+  isShowCompleteAlert: Boolean = false,
   invoiceNumber: String = "",
   companyList: List<CompanyModel> = listOf(),
   trackingInfoModel: TrackingInfoModel? = null,
@@ -60,6 +64,27 @@ fun RegisterScreen(
   cancelDelivery: () -> Unit = {},
   onBackListener: () -> Unit = {},
 ) {
+
+  // insert 성공
+  if (isShowCompleteAlert) {
+    BasicAlertDialog(onDismissRequest = { }) {
+      Box(
+        modifier = Modifier
+          .background(Color.White, shape = RoundedCornerShape(10.dp))
+          .defaultMinSize(minHeight = 130.dp)
+          .padding(all = 16.dp)
+      ) {
+        Text("택배 등록이 완료되었습니다!")
+        Spacer(modifier = Modifier.height(30.dp))
+        TextButton(
+          modifier = Modifier.align(Alignment.BottomEnd),
+          onClick = { onBackListener() },
+        ) {
+          Text(text = "닫기")
+        }
+      }
+    }
+  }
 
   Column(
     modifier = modifier
@@ -77,6 +102,7 @@ fun RegisterScreen(
         .padding(bottom = 24.dp, top = 10.dp)
     ) {
 
+      // 송장번호 입력 전체 화면
       InputInvoiceNumberScreen(
         invoiceNumber = invoiceNumber,
         companyList = companyList,
@@ -84,9 +110,9 @@ fun RegisterScreen(
         invoiceNumberTextChangeListener = invoiceNumberTextChangeListener,
         onCompanySelectItem = onCompanySelectItem,
         onFindClickListener = onFindClickListener,
-      )
+      ) // InputInvoiceNumberScreen
 
-      // TODO: 조회 성공한 경우 택배이름 등록하는 화면 그리기
+      // 조회된 데이터 있는 경우
       if (trackingInfoModel != null) {
         ModalBottomSheet(
           onDismissRequest = { cancelDelivery() }
@@ -97,13 +123,13 @@ fun RegisterScreen(
             modifier = Modifier
               .fillMaxWidth()
               .padding(horizontal = 16.dp),
-            value = trackingInfoModel?.itemName.orEmpty(),
+            value = trackingInfoModel.itemName,
             onValueChange = itemNameTextChangeListener,
             keyboardType = KeyboardType.Number,
             isError = invoiceNumber.isNotEmpty() && invoiceNumber.toLongOrNull() == null,
             placeholder = { Text(text = "택배 이름을 입력해주세요") }
           ) // DeliveryOutlineTextField
-          
+
           Spacer(modifier = Modifier.height(20.dp))
 
           // 택배사 저장하기
@@ -114,7 +140,7 @@ fun RegisterScreen(
               .padding(horizontal = 16.dp),
             shape = RoundedCornerShape(10.dp),
             enabled = selectedCompany != null && invoiceNumber.isNotEmpty(),
-            onClick = { saveDelivery(trackingInfoModel!!) },
+            onClick = { saveDelivery(trackingInfoModel) },
             colors = ButtonColors(
               containerColor = CommonGreenColor,
               contentColor = CommonGreenColor,

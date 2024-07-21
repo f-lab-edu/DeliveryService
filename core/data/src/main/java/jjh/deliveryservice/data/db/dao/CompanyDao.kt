@@ -12,7 +12,7 @@ interface CompanyDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun insertCompanyInfo(companyList: List<CompanyEntity>)
 
-  @Query("SELECT * FROM CompanyEntity")
+  @Query("SELECT * FROM CompanyEntity WHERE isInternational == 0")
   suspend fun getAll(): List<CompanyEntity>
 
   @Query("DELETE FROM CompanyEntity")

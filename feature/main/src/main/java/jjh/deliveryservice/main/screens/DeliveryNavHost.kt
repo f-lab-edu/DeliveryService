@@ -39,6 +39,7 @@ fun DeliveryNavHost(
       val state by registerViewModel.uiState.collectAsStateWithLifecycle()
       RegisterScreen(
         modifier = modifier,
+        isShowCompleteAlert = registerViewModel.isShowCompleteAlert,
         invoiceNumber = state.invoiceNumber,
         trackingInfoModel = state.trackingInfo,
         companyList = state.companyList,

@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jjh.deliveryservice.data.db.dao.CompanyDao
+import jjh.deliveryservice.data.db.dao.DeliveryDao
 import jjh.deliveryservice.data.remote.DeliveryServiceApi
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepositoryImpl
@@ -21,8 +22,10 @@ object UseCaseModule {
   @Provides
   fun provideDeliveryServiceRepository(
     deliveryServiceApi: DeliveryServiceApi,
-    dao: CompanyDao,
-  ): DeliveryServiceRepository = DeliveryServiceRepositoryImpl(deliveryServiceApi, dao)
+    companyDao: CompanyDao,
+    deliveryDao: DeliveryDao,
+  ): DeliveryServiceRepository =
+    DeliveryServiceRepositoryImpl(deliveryServiceApi, companyDao, deliveryDao)
 
   @Singleton
   @Provides

@@ -8,7 +8,7 @@ class CompanyListUseCase(
 ) {
 
   // 첫 실행 시 API 호출로 리스트 업데이트
-  suspend operator fun invoke(isFirst: Boolean = false): List<CompanyModel> {
+  suspend operator fun invoke(isFirst: Boolean): List<CompanyModel> {
     return companyListRepository.getCompanyList(isFirst)
   }
 

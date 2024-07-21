@@ -1,19 +1,22 @@
 package jjh.deliveryservice.domain.repository
 
 import jjh.deliveryservice.data.db.dao.CompanyDao
+import jjh.deliveryservice.data.db.dao.DeliveryDao
 import jjh.deliveryservice.data.remote.DeliveryServiceApi
 import jjh.deliveryservice.data.remote.response.companys.CompanyResponse
 import jjh.deliveryservice.domain.model.CompanyModel
 import jjh.deliveryservice.domain.model.CompanyModel.Companion.toEntity
 import jjh.deliveryservice.domain.model.CompanyModel.Companion.toModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
+import jjh.deliveryservice.domain.model.TrackingInfoModel.Companion.toEntity
 import jjh.deliveryservice.domain.model.TrackingInfoModel.Companion.toModel
 import javax.inject.Inject
 
 
 class DeliveryServiceRepositoryImpl @Inject constructor(
   private val deliveryServiceApi: DeliveryServiceApi,
-  private val dao: CompanyDao,
+  private val companyDao: CompanyDao,
+  private val deliveryDao: DeliveryDao,
 ) : DeliveryServiceRepository {
 
   /**
@@ -23,11 +26,11 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * */
   override suspend fun getCompanyList(needUpdate: Boolean): List<CompanyModel> {
     if (needUpdate) {
-      getCompanyList()
+      return getCompanyList()
     }
 
     // TODO: toModel, toEntity interface화
-    return dao.getAll().map { it.toModel() }.ifEmpty { getCompanyList() }
+    return companyDao.getAll().map { it.toModel() }.ifEmpty { getCompanyList() }
   }
 
   /**
@@ -51,6 +54,10 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
     return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel()
   }
 
+  override suspend fun saveTrackingInfo(model: TrackingInfoModel) {
+    return deliveryDao.insertTrackingInfo(listOf(model.toEntity()))
+  }
+
   /**
    * 택배사 리스트 조회 (API)
    * */
@@ -65,7 +72,7 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * 택배사 리스트 저장 (DB)
    * */
   private suspend fun saveCompanyList(response: List<CompanyResponse>) {
-    dao.insertCompanyInfo(response.map { it.toEntity() })
+    companyDao.insertCompanyInfo(response.map { it.toEntity() })
   }
 
 }
