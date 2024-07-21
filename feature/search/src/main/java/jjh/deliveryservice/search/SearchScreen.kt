@@ -125,6 +125,11 @@ private fun SearchScreenPreview() {
 @Composable
 private fun DeliveryItemPreview() {
   DeliveryItem(
-    deliveryEntity = DeliveryEntity("invoiceNumber", listOf(), "14시~16시", DeliveryEntity.Level.DELIVERY_START)
+    deliveryEntity = DeliveryEntity("invoiceNumber",
+      trackingDetails = listOf(),
+      name = "택배이름",
+      estimate = "14시~16시",
+      level = DeliveryEntity.Level.DELIVERY_START
+    )
   )
 }

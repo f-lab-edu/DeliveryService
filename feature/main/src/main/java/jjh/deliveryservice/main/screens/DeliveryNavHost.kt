@@ -40,11 +40,15 @@ fun DeliveryNavHost(
       RegisterScreen(
         modifier = modifier,
         invoiceNumber = state.invoiceNumber,
+        trackingInfoModel = state.trackingInfo,
         companyList = state.companyList,
         selectedCompany = state.selectedCompany,
         invoiceNumberTextChangeListener = registerViewModel::invoiceNumberTextChangeListener,
+        itemNameTextChangeListener = registerViewModel::changeDeliveryItemName,
         onCompanySelectItem = registerViewModel::onCompanySelectItem,
         onFindClickListener = registerViewModel::requestTrackingInfo,
+        saveDelivery = registerViewModel::saveDelivery,
+        cancelDelivery = registerViewModel::cancelDelivery,
         onBackListener = { navController.popBackStack() }
       )
     }

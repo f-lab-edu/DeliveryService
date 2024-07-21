@@ -5,12 +5,16 @@ import androidx.room.PrimaryKey
 
 /**
  * @param invoiceNo 송장 번호
- * @param
+ * @param name 택배 이름
+ * @param trackingDetails 택배 상태
+ * @param estimate 도착 시간
+ * @param level 배송 단계
  * */
 @Entity
 data class DeliveryEntity(
   @PrimaryKey
   val invoiceNo: String,
+  val name: String,
   val trackingDetails: List<TrackingDetailsEntity>?,
   val estimate: String,
   val level: Level,

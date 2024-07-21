@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,8 +18,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
@@ -31,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jjh.deliveryservice.domain.model.CompanyModel
+import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.resource.CommonGreenColor
 import jjh.deliveryservice.ui.DeliveryOutlineTextField
 import jjh.deliveryservice.ui.Toolbar
@@ -39,17 +44,23 @@ import jjh.deliveryservice.ui.Toolbar
 /**
  * 택배 등록
  * */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
   modifier: Modifier = Modifier,
   invoiceNumber: String = "",
   companyList: List<CompanyModel> = listOf(),
+  trackingInfoModel: TrackingInfoModel? = null,
   selectedCompany: CompanyModel? = null,
   invoiceNumberTextChangeListener: (String) -> Unit = {},
+  itemNameTextChangeListener: (String) -> Unit = {},
   onCompanySelectItem: (CompanyModel) -> Unit = {},
   onFindClickListener: (companyCode: String, invoiceNumber: String) -> Unit = { _, _ -> },
+  saveDelivery: (TrackingInfoModel) -> Unit = {},
+  cancelDelivery: () -> Unit = {},
   onBackListener: () -> Unit = {},
 ) {
+
   Column(
     modifier = modifier
       .fillMaxSize()
@@ -61,48 +72,109 @@ fun RegisterScreen(
     )
 
     Column(
-      modifier = modifier
+      modifier = Modifier
         .padding(horizontal = 16.dp)
         .padding(bottom = 24.dp, top = 10.dp)
     ) {
 
-      // 송장번호 입력
-      DeliveryOutlineTextField(
-        modifier = Modifier
-          .fillMaxWidth(),
-        value = invoiceNumber,
-        onValueChange = invoiceNumberTextChangeListener,
-        keyboardType = KeyboardType.Number,
-        isError = invoiceNumber.isNotEmpty() && invoiceNumber.toLongOrNull() == null,
-        placeholder = { Text(text = "송장 번호를 입력해주세요") }
+      InputInvoiceNumberScreen(
+        invoiceNumber = invoiceNumber,
+        companyList = companyList,
+        selectedCompany = selectedCompany,
+        invoiceNumberTextChangeListener = invoiceNumberTextChangeListener,
+        onCompanySelectItem = onCompanySelectItem,
+        onFindClickListener = onFindClickListener,
       )
 
-      // 택배사 리스트
-      CompaniesComponent(
-        modifier = Modifier
-          .weight(1f)
-          .fillMaxHeight(),
-        companyItems = companyList,
-        selectedItem = selectedCompany,
-        onCompanySelectItem = onCompanySelectItem
-      ) // CompaniesComponent
+      // TODO: 조회 성공한 경우 택배이름 등록하는 화면 그리기
+      if (trackingInfoModel != null) {
+        ModalBottomSheet(
+          onDismissRequest = { cancelDelivery() }
+        ) {
 
-      // 택배사 조회하기
-      TextButton(
-        modifier = Modifier
-          .fillMaxWidth()
-          .height(52.dp),
-        shape = RoundedCornerShape(10.dp),
-        enabled = selectedCompany != null && invoiceNumber.isNotEmpty(),
-        onClick = { onFindClickListener(selectedCompany!!.companyCode, invoiceNumber) },
-        colors = ButtonColors(
-          containerColor = CommonGreenColor,
-          contentColor = CommonGreenColor,
-          disabledContainerColor = Color.Gray.copy(alpha = 0.4f),
-          disabledContentColor = Color.Gray.copy(alpha = 0.4f)
-        )
-      ) { Text("조회", style = TextStyle(color = Color.White)) } // TextButton
+          // 택배 이름 입력
+          DeliveryOutlineTextField(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(horizontal = 16.dp),
+            value = trackingInfoModel?.itemName.orEmpty(),
+            onValueChange = itemNameTextChangeListener,
+            keyboardType = KeyboardType.Number,
+            isError = invoiceNumber.isNotEmpty() && invoiceNumber.toLongOrNull() == null,
+            placeholder = { Text(text = "택배 이름을 입력해주세요") }
+          ) // DeliveryOutlineTextField
+          
+          Spacer(modifier = Modifier.height(20.dp))
+
+          // 택배사 저장하기
+          TextButton(
+            modifier = Modifier
+              .fillMaxWidth()
+              .height(52.dp)
+              .padding(horizontal = 16.dp),
+            shape = RoundedCornerShape(10.dp),
+            enabled = selectedCompany != null && invoiceNumber.isNotEmpty(),
+            onClick = { saveDelivery(trackingInfoModel!!) },
+            colors = ButtonColors(
+              containerColor = CommonGreenColor,
+              contentColor = CommonGreenColor,
+              disabledContainerColor = Color.Gray.copy(alpha = 0.4f),
+              disabledContentColor = Color.Gray.copy(alpha = 0.4f)
+            )
+          ) { Text("저장하기", style = TextStyle(color = Color.White)) } // TextButton
+        }
+      } // if (trackingInfoModel != null)
     }
+  }
+
+}
+
+@Composable
+fun InputInvoiceNumberScreen(
+  modifier: Modifier = Modifier,
+  invoiceNumber: String = "",
+  companyList: List<CompanyModel> = listOf(),
+  selectedCompany: CompanyModel? = null,
+  invoiceNumberTextChangeListener: (String) -> Unit = {},
+  onCompanySelectItem: (CompanyModel) -> Unit = {},
+  onFindClickListener: (companyCode: String, invoiceNumber: String) -> Unit = { _, _ -> },
+) {
+  Column(modifier) {
+    // 송장번호 입력
+    DeliveryOutlineTextField(
+      modifier = Modifier.fillMaxWidth(),
+      value = invoiceNumber,
+      onValueChange = invoiceNumberTextChangeListener,
+      keyboardType = KeyboardType.Number,
+      isError = invoiceNumber.isNotEmpty() && invoiceNumber.toLongOrNull() == null,
+      placeholder = { Text(text = "송장 번호를 입력해주세요") }
+    )
+
+    // 택배사 리스트
+    CompaniesComponent(
+      modifier = Modifier
+        .fillMaxHeight()
+        .weight(1f),
+      companyItems = companyList,
+      selectedItem = selectedCompany,
+      onCompanySelectItem = onCompanySelectItem
+    ) // CompaniesComponent
+
+    // 택배사 조회하기
+    TextButton(
+      modifier = Modifier
+        .fillMaxWidth()
+        .height(52.dp),
+      shape = RoundedCornerShape(10.dp),
+      enabled = selectedCompany != null && invoiceNumber.isNotEmpty(),
+      onClick = { onFindClickListener(selectedCompany!!.companyCode, invoiceNumber) },
+      colors = ButtonColors(
+        containerColor = CommonGreenColor,
+        contentColor = CommonGreenColor,
+        disabledContainerColor = Color.Gray.copy(alpha = 0.4f),
+        disabledContentColor = Color.Gray.copy(alpha = 0.4f)
+      )
+    ) { Text("조회", style = TextStyle(color = Color.White)) } // TextButton
   }
 }
 

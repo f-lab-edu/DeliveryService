@@ -3,6 +3,7 @@ package jjh.deliveryservice.register
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jjh.deliveryservice.common.BaseViewModel
 import jjh.deliveryservice.domain.model.CompanyModel
+import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.domain.usecase.CompanyListUseCase
 import jjh.deliveryservice.domain.usecase.DeliveryTrackingInfoUseCase
 import jjh.deliveryservice.domain.usecase.RecommendCompanyListUseCase
@@ -30,6 +31,8 @@ class RegisterViewModel @Inject constructor(
   val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
 
   private var textInput: Job? = null
+
+  private var tempDeliveryInfo: TrackingInfoModel? = null
 
   init {
     exceptionHandlerCoroutine {
@@ -64,7 +67,30 @@ class RegisterViewModel @Inject constructor(
 
   fun requestTrackingInfo(companyCode: String, invoiceNumber: String) {
     exceptionHandlerCoroutine {
-      deliveryTrackingInfoUseCase(companyCode = companyCode, invoiceNumber = invoiceNumber)
+      if (_uiState.value.trackingInfo != null && invoiceNumber == _uiState.value.invoiceNumber) {
+        _uiState.update { it.copy(trackingInfo = tempDeliveryInfo) }
+        tempDeliveryInfo = null
+        return@exceptionHandlerCoroutine
+      }
+
+
+      val data = deliveryTrackingInfoUseCase(companyCode = companyCode, invoiceNumber = invoiceNumber)
+      _uiState.update { it.copy(trackingInfo = data) }
+    }
+  }
+
+  fun changeDeliveryItemName(name: String) {
+    _uiState.update {
+      it.copy(trackingInfo =  it.trackingInfo?.copy(itemName = name))
+    }
+  }
+
+  fun saveDelivery(info: TrackingInfoModel) {}
+  fun cancelDelivery() {
+
+    _uiState.update {
+      tempDeliveryInfo = it.trackingInfo
+      it.copy(trackingInfo = null)
     }
   }
 }
