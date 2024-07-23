@@ -1,5 +1,8 @@
 package jjh.deliveryservice.domain.repository
 
+import jjh.deliveryservice.calendar.date
+import jjh.deliveryservice.calendar.month
+import jjh.deliveryservice.calendar.year
 import jjh.deliveryservice.data.db.dao.CompanyDao
 import jjh.deliveryservice.data.db.dao.DeliveryDao
 import jjh.deliveryservice.data.remote.DeliveryServiceApi
@@ -10,6 +13,7 @@ import jjh.deliveryservice.domain.model.CompanyModel.Companion.toModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel.Companion.toEntity
 import jjh.deliveryservice.domain.model.TrackingInfoModel.Companion.toModel
+import java.util.Calendar
 import javax.inject.Inject
 
 
@@ -25,12 +29,10 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * @param needUpdate 첫 실행 여부 (택배사 리스트 업데이트)
    * */
   override suspend fun getCompanyList(needUpdate: Boolean): List<CompanyModel> {
-    if (needUpdate) {
-      return getCompanyList()
-    }
-
-    // TODO: toModel, toEntity interface화
-    return companyDao.getAll().map { it.toModel() }.ifEmpty { getCompanyList() }
+    return if (needUpdate)
+      getCompanyList()
+    else
+      companyDao.getAll().map { it.toModel() }.ifEmpty { getCompanyList() }
   }
 
   /**
@@ -50,12 +52,23 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * @param companyCode 택배사 코드
    * @param invoiceNumber 송장 번호
    * */
+  @Throws(IllegalArgumentException::class)
   override suspend fun trackingInfo(companyCode: String, invoiceNumber: String): TrackingInfoModel {
-    return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel()
+    if (deliveryDao.getAllDeliveryInfo().isEmpty()) {
+      return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel()
+    }
+
+    throw IllegalArgumentException("이미 등록된 택배입니다")
   }
 
   override suspend fun saveTrackingInfo(model: TrackingInfoModel) {
-    return deliveryDao.insertTrackingInfo(listOf(model.toEntity()))
+    val entity = model
+      .toEntity()
+      .copy(
+        registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" }
+      )
+
+    return deliveryDao.insertTrackingInfo(listOf(entity))
   }
 
   /**

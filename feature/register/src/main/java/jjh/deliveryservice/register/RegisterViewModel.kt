@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -43,12 +42,8 @@ class RegisterViewModel @Inject constructor(
     private set
 
   init {
-    exceptionHandlerCoroutine {
-      val companyList = withContext(ioDispatcher) {
-        companyListUseCase.invoke(false)
-      }
-
-      _uiState.update { it.copy(companyList = companyList) }
+    exceptionHandlerCoroutine(ioDispatcher) {
+      _uiState.update { it.copy(companyList = companyListUseCase.invoke(false)) }
     }
   }
 
@@ -84,8 +79,17 @@ class RegisterViewModel @Inject constructor(
         return@launch
       }
 
+      val data = runCatching {
+        deliveryTrackingInfoUseCase(companyCode = companyCode, invoiceNumber = invoiceNumber)
+      }.onFailure { tr ->
+        if (tr is IllegalArgumentException) {
+          _uiState.update { it.copy(error = tr) }
+          return@onFailure
+        }
 
-      val data = deliveryTrackingInfoUseCase(companyCode = companyCode, invoiceNumber = invoiceNumber)
+        throw tr
+      }.getOrNull()
+
       _uiState.update { it.copy(trackingInfo = data) }
     }
   }
@@ -103,7 +107,7 @@ class RegisterViewModel @Inject constructor(
    * 택배 저장
    * */
   fun saveDelivery(info: TrackingInfoModel) {
-    exceptionHandlerCoroutine {
+    exceptionHandlerCoroutine(ioDispatcher) {
       deliveryTrackingInfoUseCase.saveTrackingInfo(info)
       isShowCompleteAlert = true
     }

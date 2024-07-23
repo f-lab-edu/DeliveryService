@@ -9,6 +9,7 @@ interface DeliveryServiceRepository {
 
   suspend fun getRecommendCompanyList(invoiceNumber: String): List<CompanyModel>
 
+  @Throws(IllegalArgumentException::class)
   suspend fun trackingInfo(
     companyCode: String,
     invoiceNumber: String,

@@ -26,6 +26,7 @@ data class DeliveryEntity(
   val trackingDetails: List<TrackingDetailsEntity>?,
   val estimate: String,
   val level: Level,
+  val registerDate: String = "",
 ) {
 
   enum class Level {

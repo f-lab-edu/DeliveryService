@@ -1,6 +1,6 @@
 package jjh.deliveryservice.data.remote.response.tracking
 
-import com.google.gson.annotations.SerializedName
+import java.util.Calendar
 
 /**
  * 운송장 조회 결과
@@ -46,5 +46,9 @@ data class TrackingInfoResponse(
   val lastDetail: TrackingDetailResponse?,
   val lastStateDetail: TrackingDetailResponse?,
   val firstDetail: TrackingDetailResponse?,
-  val completeYN: String?
-)
+  val completeYN: String?,
+
+  private var calendar: Calendar?,
+) {
+  val nonNullCalendar = this.calendar ?: Calendar.getInstance()
+}

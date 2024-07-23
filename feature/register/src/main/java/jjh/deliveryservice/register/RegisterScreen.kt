@@ -1,5 +1,6 @@
 package jjh.deliveryservice.register
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,11 +28,13 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -60,10 +63,18 @@ fun RegisterScreen(
   itemNameTextChangeListener: (String) -> Unit = {},
   onCompanySelectItem: (CompanyModel) -> Unit = {},
   onFindClickListener: (companyCode: String, invoiceNumber: String) -> Unit = { _, _ -> },
+  onError: Exception? = null,
   saveDelivery: (TrackingInfoModel) -> Unit = {},
   cancelDelivery: () -> Unit = {},
   onBackListener: () -> Unit = {},
 ) {
+  val context = LocalContext.current
+
+  onError?.let {
+    LaunchedEffect(key1 = onError) {
+      Toast.makeText(context, "이미 등록된 택배입니다.", Toast.LENGTH_SHORT).show()
+    }
+  }
 
   // insert 성공
   if (isShowCompleteAlert) {
@@ -71,7 +82,7 @@ fun RegisterScreen(
       Box(
         modifier = Modifier
           .background(Color.White, shape = RoundedCornerShape(10.dp))
-          .defaultMinSize(minHeight = 130.dp)
+          .defaultMinSize(minHeight = 100.dp)
           .padding(all = 16.dp)
       ) {
         Text("택배 등록이 완료되었습니다!")

@@ -129,7 +129,7 @@ private fun DeliveryItemPreview() {
       trackingDetails = listOf(),
       name = "택배이름",
       estimate = "14시~16시",
-      level = DeliveryEntity.Level.DELIVERY_START
+      level = DeliveryEntity.Level.DELIVERY_START,
     )
   )
 }

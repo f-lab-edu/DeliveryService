@@ -1,11 +1,9 @@
 package jjh.deliveryservice.domain.model
 
-import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.data.db.entity.DeliveryEntity
 import jjh.deliveryservice.data.db.entity.findLevel
 import jjh.deliveryservice.data.remote.response.tracking.TrackingDetailResponse
 import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse
-import java.util.Calendar
 
 /**
  * 운송장 조회 결과
@@ -72,7 +70,6 @@ data class TrackingInfoModel(
         trackingDetails = trackingDetails.map { it.toEntity() },
         estimate = estimate,
         level = findLevel(level),
-        registerDate = CalendarUtil.getCurrentDate(Calendar.getInstance()).toString()
       )
     }
 
@@ -84,7 +81,6 @@ data class TrackingInfoModel(
         trackingDetails = trackingDetails?.map { it.toEntity() },
         estimate = estimate.orEmpty(),
         level = findLevel(level),
-        registerDate = CalendarUtil.getCurrentDate(Calendar.getInstance()).toString()
       )
     }
   }

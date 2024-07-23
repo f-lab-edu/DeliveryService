@@ -1,6 +1,6 @@
 package jjh.deliveryservice.home.ui.home
 
-import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.common.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,8 +8,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.Calendar
+import javax.inject.Inject
 
-class HomeViewModel : BaseViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+
+) : BaseViewModel() {
   private val calendar = Calendar.getInstance()
 
   private val _uiState = MutableStateFlow(
@@ -22,6 +26,5 @@ class HomeViewModel : BaseViewModel() {
     val addMonthCalendar = calendar.apply { add(Calendar.MONTH, 1) }
     it.copy(yearMonthDay = CalendarUtil.getCurrentDate(addMonthCalendar))
   }
-
 
 }

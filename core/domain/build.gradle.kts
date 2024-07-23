@@ -24,6 +24,7 @@ android {
 
 dependencies {
   implementation(project(":core:data"))
+  implementation(project(":core:calendar"))
 
   // hilt
   implementation(libs.hilt.android)

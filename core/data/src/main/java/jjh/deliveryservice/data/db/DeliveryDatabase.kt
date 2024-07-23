@@ -10,7 +10,7 @@ import jjh.deliveryservice.data.db.dao.DeliveryDao
 import jjh.deliveryservice.data.db.entity.CompanyEntity
 import jjh.deliveryservice.data.db.entity.DeliveryEntity
 
-@Database(entities = [DeliveryEntity::class, CompanyEntity::class], version = 1)
+@Database(entities = [DeliveryEntity::class, CompanyEntity::class], version = 2)
 @TypeConverters(DeliveryTypeConverter::class, TrackingDetailTypeConverter::class)
 abstract class DeliveryDatabase : RoomDatabase() {
   abstract fun deliveryDao(): DeliveryDao

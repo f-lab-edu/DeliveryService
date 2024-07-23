@@ -48,6 +48,7 @@ fun DeliveryNavHost(
         itemNameTextChangeListener = registerViewModel::changeDeliveryItemName,
         onCompanySelectItem = registerViewModel::onCompanySelectItem,
         onFindClickListener = registerViewModel::requestTrackingInfo,
+        onError = state.error,
         saveDelivery = registerViewModel::saveDelivery,
         cancelDelivery = registerViewModel::cancelDelivery,
         onBackListener = { navController.popBackStack() }

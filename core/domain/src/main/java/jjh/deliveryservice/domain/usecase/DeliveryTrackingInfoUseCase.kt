@@ -8,6 +8,7 @@ class DeliveryTrackingInfoUseCase(
 ) {
 
   // 첫 실행 시 API 호출로 리스트 업데이트
+  @Throws(IllegalArgumentException::class)
   suspend operator fun invoke(
     companyCode: String,
     invoiceNumber: String,
