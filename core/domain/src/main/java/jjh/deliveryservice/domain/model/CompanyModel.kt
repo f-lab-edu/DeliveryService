@@ -14,13 +14,14 @@ data class CompanyModel(
   val companyCode: String, // "18"
   val isInternational: Boolean, // false
   val companyName: String, // 건영택배
-) {
-  companion object {
-    fun CompanyResponse.toModel(): CompanyModel {
+) : Model<CompanyResponse, CompanyEntity> by Companion {
+
+  companion object : Model<CompanyResponse, CompanyEntity> {
+    override fun CompanyResponse.toModel(): CompanyModel {
       return CompanyModel(companyCode, isInternational, companyName)
     }
 
-    fun CompanyResponse.toEntity(): CompanyEntity {
+    override fun CompanyResponse.toEntity(): CompanyEntity {
       return CompanyEntity(companyCode, isInternational, companyName)
     }
 

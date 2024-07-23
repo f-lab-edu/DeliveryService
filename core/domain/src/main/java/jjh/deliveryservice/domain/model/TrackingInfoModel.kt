@@ -1,9 +1,11 @@
 package jjh.deliveryservice.domain.model
 
+import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.data.db.entity.DeliveryEntity
 import jjh.deliveryservice.data.db.entity.findLevel
 import jjh.deliveryservice.data.remote.response.tracking.TrackingDetailResponse
 import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse
+import java.util.Calendar
 
 /**
  * 운송장 조회 결과
@@ -40,10 +42,10 @@ data class TrackingInfoModel(
   val receiverName: String,
   val result: String,
   val itemName: String,
-) {
+) : Model<TrackingInfoResponse, DeliveryEntity> by Companion {
 
-  companion object {
-    fun TrackingInfoResponse.toModel(): TrackingInfoModel {
+  companion object : Model<TrackingInfoResponse, DeliveryEntity> {
+    override fun TrackingInfoResponse.toModel(): TrackingInfoModel {
       return TrackingInfoModel(
         senderName = senderName ?: "",
         receiverAddress = receiverAddr ?: "",
@@ -70,6 +72,19 @@ data class TrackingInfoModel(
         trackingDetails = trackingDetails.map { it.toEntity() },
         estimate = estimate,
         level = findLevel(level),
+        registerDate = CalendarUtil.getCurrentDate(Calendar.getInstance()).toString()
+      )
+    }
+
+    override fun TrackingInfoResponse.toEntity(): DeliveryEntity {
+
+      return DeliveryEntity(
+        invoiceNo = invoiceNo.orEmpty(),
+        name = itemName.orEmpty(),
+        trackingDetails = trackingDetails?.map { it.toEntity() },
+        estimate = estimate.orEmpty(),
+        level = findLevel(level),
+        registerDate = CalendarUtil.getCurrentDate(Calendar.getInstance()).toString()
       )
     }
   }
