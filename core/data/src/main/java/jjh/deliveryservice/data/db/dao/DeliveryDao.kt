@@ -18,6 +18,9 @@ interface DeliveryDao {
   @Query("SELECT * FROM DeliveryEntity")
   suspend fun getAllDeliveryInfo(): List<DeliveryEntity>
 
+  @Query("SELECT * FROM DeliveryEntity WHERE registerDate BETWEEN :startDate AND :endDate")
+  suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<DeliveryEntity>
+
   @Query("SELECT * FROM DeliveryEntity where invoiceNo == :invoiceNo")
-  suspend fun getAllDeliveryInfo(invoiceNo: String): DeliveryEntity
+  suspend fun getDeliveryInfo(invoiceNo: String): DeliveryEntity
 }

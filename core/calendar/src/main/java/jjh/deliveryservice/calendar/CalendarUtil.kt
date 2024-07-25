@@ -5,27 +5,12 @@ import java.util.Calendar
 typealias YearMonthDay = Triple<Int, Int, Int>
 
 object CalendarUtil {
-
-
-  fun getCalendar(year: Int, month: Int, date: Int): Calendar =
-    Calendar.getInstance()
-      .apply {
-        set(year, month - 1, date)
-      }
-
-  fun getCalendar(yearMonthDay: YearMonthDay): Calendar =
-    Calendar.getInstance()
-      .apply {
-        set(yearMonthDay.first, yearMonthDay.second - 1, yearMonthDay.third)
-      }
-
-
   fun getCurrentDate(calendar: Calendar = Calendar.getInstance()): YearMonthDay = calendar
     .run {
       YearMonthDay(
-        first = get(Calendar.YEAR),
-        second = get(Calendar.MONTH) + 1,
-        third = get(Calendar.DATE),
+        first = year,
+        second = month + 1,
+        third = date,
       )
     }
 
@@ -109,9 +94,9 @@ object CalendarUtil {
   const val SATURDAY_INDEX = 6
 
 
-  const val SUNDAY_COLOR = 0xFFFF0000
-  const val SATURDAY_COLOR = 0xFF0000FF
-  const val ELSE_COLOR = 0xFF000000
+  private const val SUNDAY_COLOR = 0xFFFF0000
+  private const val SATURDAY_COLOR = 0xFF0000FF
+  private const val ELSE_COLOR = 0xFF000000
 
   fun getDateColor(index: Int): Long {
     return when (index) {

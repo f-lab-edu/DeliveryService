@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
 import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
+import jjh.deliveryservice.data.db.entity.DeliveryEntity
 import jjh.deliveryservice.home.R
 import jjh.deliveryservice.resource.CommonGreenColor
 
@@ -40,6 +41,7 @@ fun HomeScreen(
   modifier: Modifier = Modifier,
   year: Int,
   month: Int,
+  deliveryList: List<DeliveryEntity> = listOf(),
   onDateClickListener: (year: Int, month: Int) -> Unit = { _, _ -> },
   onStartSearchScreen: () -> Unit = {}, // 택배 검색하기 이동
   onStartRegisterScreen: () -> Unit = {}, // 택배 등록하기 이동
@@ -63,7 +65,8 @@ fun HomeScreen(
       ) // DayOfWeekComponent 요일
 
       CalendarComponent(
-        dateArray = CalendarUtil.getDaysInMonth(year, month)
+        dateArray = CalendarUtil.getDaysInMonth(year, month),
+        deliveryList = deliveryList
       ) // CalendarComponent 달력
     }
 
@@ -125,7 +128,7 @@ fun DateAndSearchComponent(
     Icon(
       modifier = Modifier
         .align(Alignment.CenterVertically)
-        .clickable { }
+        .clickable { onStartSearchScreen() }
         .padding(vertical = 10.dp)
         .padding(horizontal = 16.dp),
       imageVector = Icons.Default.Search,

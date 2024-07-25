@@ -17,6 +17,7 @@ import jjh.deliveryservice.data.db.entity.DeliveryEntity.Level.UNKNOWN
  * @param trackingDetails 택배 상태
  * @param estimate 도착 시간
  * @param level 배송 단계
+ * @param registerDate 등록 날짜 "year.month.date"
  * */
 @Entity
 data class DeliveryEntity(

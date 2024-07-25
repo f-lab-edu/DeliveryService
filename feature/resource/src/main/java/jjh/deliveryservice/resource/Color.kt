@@ -20,6 +20,8 @@ val Pink40 = Color(0xFF7D5260)
 
 val CommonGreenColor = Color(0x88075500)
 
+val CommonGreenColor2 = Color(0xFF075500)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

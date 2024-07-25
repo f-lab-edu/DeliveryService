@@ -5,4 +5,7 @@ data class CalendarModel(
   val month: Int,
   val date: Int,
   val isCurrentMonth: Boolean = false,
-)
+) {
+
+  fun toDateString(): String = "$year.$month.$date"
+}

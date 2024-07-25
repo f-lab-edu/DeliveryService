@@ -30,7 +30,8 @@ fun DeliveryNavHost(
         modifier = modifier,
         year = state.year,
         month = state.month,
-        onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) }
+        onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) },
+        deliveryList = state.deliveryEntities,
       )
     }
 

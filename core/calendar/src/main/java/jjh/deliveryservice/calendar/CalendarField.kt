@@ -17,6 +17,8 @@ val Calendar.minute: Int by CalendarField(Calendar.MINUTE)
 
 val Calendar.second: Int by CalendarField(Calendar.SECOND)
 
+val Calendar.monthLastDate: Int
+  get() = getActualMaximum(Calendar.DAY_OF_MONTH)
 
 private class CalendarField(private val field: Int) : ReadWriteProperty<Calendar, Int> {
   override fun getValue(thisRef: Calendar, property: KProperty<*>): Int = thisRef.get(field)
