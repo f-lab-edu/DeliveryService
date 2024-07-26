@@ -1,0 +1,3 @@
+package jjh.deliveryservice.domain.model
+
+interface DeliveryServiceModel

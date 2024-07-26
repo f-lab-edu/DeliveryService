@@ -1,18 +1,14 @@
-package jjh.deliveryservice.domain.repository
+package jjh.deliveryservice.data.remote
 
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.year
 import jjh.deliveryservice.data.db.dao.CompanyDao
 import jjh.deliveryservice.data.db.dao.DeliveryDao
-import jjh.deliveryservice.data.remote.DeliveryServiceApi
-import jjh.deliveryservice.data.remote.response.companys.CompanyResponse
+import jjh.deliveryservice.data.db.entity.TrackingInfoEntity.Companion.toEntity
 import jjh.deliveryservice.domain.model.CompanyModel
-import jjh.deliveryservice.domain.model.CompanyModel.Companion.toEntity
-import jjh.deliveryservice.domain.model.CompanyModel.Companion.toModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
-import jjh.deliveryservice.domain.model.TrackingInfoModel.Companion.toEntity
-import jjh.deliveryservice.domain.model.TrackingInfoModel.Companion.toModel
+import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -78,14 +74,5 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
     deliveryServiceApi
       .getCompanyList()
       .companyList
-      .apply { saveCompanyList(this) } // DB 저장
       .map { it.toModel() }
-
-  /**
-   * 택배사 리스트 저장 (DB)
-   * */
-  private suspend fun saveCompanyList(response: List<CompanyResponse>) {
-    companyDao.insertCompanyInfo(response.map { it.toEntity() })
-  }
-
 }

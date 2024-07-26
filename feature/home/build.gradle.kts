@@ -34,7 +34,6 @@ dependencies {
   implementation(project(":common"))
   implementation(project(":feature:resource"))
   implementation(project(":core:domain"))
-  implementation(project(":core:data"))
   implementation(project(":core:calendar"))
   implementation(project(":build_config"))
 

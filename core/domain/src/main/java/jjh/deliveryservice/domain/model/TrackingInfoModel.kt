@@ -1,10 +1,5 @@
 package jjh.deliveryservice.domain.model
 
-import jjh.deliveryservice.data.db.entity.DeliveryEntity
-import jjh.deliveryservice.data.db.entity.findLevel
-import jjh.deliveryservice.data.remote.response.tracking.TrackingDetailResponse
-import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse
-
 /**
  * 운송장 조회 결과
  *
@@ -27,12 +22,12 @@ import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse
 data class TrackingInfoModel(
   val senderName: String,
   val receiverAddress: String,
-  val firstDetail: TrackingDetailResponse?,
+  val firstDetail: TrackingDetailModel?,
   val level: Int,
-  val lastDetail: TrackingDetailResponse?,
+  val lastDetail: TrackingDetailModel?,
   val estimate: String,
-  val trackingDetails: List<TrackingDetailResponse>,
-  val lastStateDetail: TrackingDetailResponse?,
+  val trackingDetails: List<TrackingDetailModel>,
+  val lastStateDetail: TrackingDetailModel?,
   val invoiceNo: String,
   val completeYN: String,
   val complete: Boolean,
@@ -40,48 +35,4 @@ data class TrackingInfoModel(
   val receiverName: String,
   val result: String,
   val itemName: String,
-) : Model<TrackingInfoResponse, DeliveryEntity> by Companion {
-
-  companion object : Model<TrackingInfoResponse, DeliveryEntity> {
-    override fun TrackingInfoResponse.toModel(): TrackingInfoModel {
-      return TrackingInfoModel(
-        senderName = senderName ?: "",
-        receiverAddress = receiverAddr ?: "",
-        firstDetail = firstDetail,
-        level = level,
-        lastDetail = lastDetail,
-        estimate = estimate ?: "",
-        trackingDetails = trackingDetails ?: listOf(),
-        lastStateDetail = lastStateDetail,
-        invoiceNo = invoiceNo ?: "",
-        completeYN = completeYN ?: "",
-        complete = complete ?: false,
-        recipient = recipient ?: "",
-        receiverName = receiverName ?: "",
-        result = result ?: "",
-        itemName = itemName ?: "",
-      )
-    }
-
-    fun TrackingInfoModel.toEntity(): DeliveryEntity {
-      return DeliveryEntity(
-        invoiceNo = invoiceNo,
-        name = itemName,
-        trackingDetails = trackingDetails.map { it.toEntity() },
-        estimate = estimate,
-        level = findLevel(level),
-      )
-    }
-
-    override fun TrackingInfoResponse.toEntity(): DeliveryEntity {
-
-      return DeliveryEntity(
-        invoiceNo = invoiceNo.orEmpty(),
-        name = itemName.orEmpty(),
-        trackingDetails = trackingDetails?.map { it.toEntity() },
-        estimate = estimate.orEmpty(),
-        level = findLevel(level),
-      )
-    }
-  }
-}
+) : DeliveryServiceModel

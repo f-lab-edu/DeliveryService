@@ -1,6 +1,7 @@
 package jjh.deliveryservice.data.remote.response.tracking
 
-import java.util.Calendar
+import jjh.deliveryservice.data.remote.response.DeliveryServiceResponse
+import jjh.deliveryservice.domain.model.TrackingInfoModel
 
 /**
  * 운송장 조회 결과
@@ -47,8 +48,24 @@ data class TrackingInfoResponse(
   val lastStateDetail: TrackingDetailResponse?,
   val firstDetail: TrackingDetailResponse?,
   val completeYN: String?,
-
-  private var calendar: Calendar?,
-) {
-  val nonNullCalendar = this.calendar ?: Calendar.getInstance()
+) : DeliveryServiceResponse<TrackingInfoModel> {
+  override fun toModel(): TrackingInfoModel {
+    return TrackingInfoModel(
+      senderName = senderName.orEmpty(),
+      receiverAddress = receiverAddr.orEmpty(),
+      firstDetail = firstDetail?.toModel(),
+      level = level,
+      lastDetail = lastDetail?.toModel(),
+      estimate = estimate.orEmpty(),
+      trackingDetails = trackingDetails?.map { it.toModel() } ?: listOf(),
+      lastStateDetail = lastStateDetail?.toModel(),
+      invoiceNo = invoiceNo.orEmpty(),
+      completeYN = completeYN.orEmpty(),
+      complete = complete ?: false,
+      recipient = recipient.orEmpty(),
+      receiverName = receiverName.orEmpty(),
+      result = result.orEmpty(),
+      itemName = itemName.orEmpty(),
+    )
+  }
 }

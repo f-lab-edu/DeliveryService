@@ -1,8 +1,5 @@
 package jjh.deliveryservice.domain.model
 
-import jjh.deliveryservice.data.db.entity.CompanyEntity
-import jjh.deliveryservice.data.remote.response.companys.CompanyResponse
-
 /**
  * 택배사 정보
  *
@@ -14,19 +11,4 @@ data class CompanyModel(
   val companyCode: String, // "18"
   val isInternational: Boolean, // false
   val companyName: String, // 건영택배
-) : Model<CompanyResponse, CompanyEntity> by Companion {
-
-  companion object : Model<CompanyResponse, CompanyEntity> {
-    override fun CompanyResponse.toModel(): CompanyModel {
-      return CompanyModel(companyCode, isInternational, companyName)
-    }
-
-    override fun CompanyResponse.toEntity(): CompanyEntity {
-      return CompanyEntity(companyCode, isInternational, companyName)
-    }
-
-    fun CompanyEntity.toModel(): CompanyModel {
-      return CompanyModel(companyCode, isInternational, companyName)
-    }
-  }
-}
+) : DeliveryServiceModel

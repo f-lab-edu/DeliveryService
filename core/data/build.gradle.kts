@@ -27,6 +27,8 @@ android {
 
 dependencies {
   implementation(project(":build_config"))
+  implementation(project(":core:domain"))
+  implementation(project(":core:calendar"))
 
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)

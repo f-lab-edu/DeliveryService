@@ -1,7 +1,8 @@
 package jjh.deliveryservice.data.remote.response.tracking
 
 import com.google.gson.annotations.SerializedName
-import jjh.deliveryservice.data.db.entity.TrackingDetailsEntity
+import jjh.deliveryservice.data.remote.response.DeliveryServiceResponse
+import jjh.deliveryservice.domain.model.TrackingDetailModel
 
 /**
  * 진행 상세
@@ -42,20 +43,8 @@ data class TrackingDetailResponse(
   val telNo2: String,
 
   val timeString: String, // 2024-04-25 20:33:14
-) {
-  fun toEntity(): TrackingDetailsEntity {
-    return TrackingDetailsEntity(
-      remark = remark,
-      level = level,
-      manName = manName,
-      where = where,
-      code = code,
-      time = time,
-      manPic = manPic,
-      kind = kind,
-      telNo = telNo,
-      telNo2 = telNo2,
-      timeString = timeString,
-    )
+) : DeliveryServiceResponse<TrackingDetailModel> {
+  override fun toModel(): TrackingDetailModel {
+    return TrackingDetailModel(remark, level, manName, where, code, time, manPic, kind, telNo, telNo2, timeString)
   }
 }
