@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import jjh.deliveryservice.data.db.entity.TrackingInfoEntity
+import jjh.deliveryservice.data.getTypeTokens
 
 class DeliveryTypeConverter {
   @TypeConverter
@@ -11,8 +12,5 @@ class DeliveryTypeConverter {
 
   @TypeConverter
   fun jsonToList(value: String): List<TrackingInfoEntity>? =
-    Gson().fromJson(
-      value,
-      object : TypeToken<List<TrackingInfoEntity>>() {}.type
-    )
+    Gson().fromJson(value, getTypeTokens<List<TrackingInfoEntity>>())
 }

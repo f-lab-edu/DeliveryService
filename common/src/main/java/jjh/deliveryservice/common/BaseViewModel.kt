@@ -12,8 +12,8 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
 
-  private val ceh = CoroutineExceptionHandler { _, _ ->
-
+  private val ceh = CoroutineExceptionHandler { _, t ->
+    t.printStackTrace()
   }
 
   fun exceptionHandlerCoroutine(

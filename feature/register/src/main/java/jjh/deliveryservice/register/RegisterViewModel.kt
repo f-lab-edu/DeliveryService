@@ -17,6 +17,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,9 +43,11 @@ class RegisterViewModel @Inject constructor(
   var isShowCompleteAlert by mutableStateOf(false)
     private set
 
-  init {
+  fun getCompanyList() {
     exceptionHandlerCoroutine(ioDispatcher) {
-      _uiState.update { it.copy(companyList = companyListUseCase.invoke(false)) }
+      companyListUseCase.invoke(false).collectLatest { companyList ->
+        _uiState.update { it.copy(companyList = companyList) }
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 package jjh.deliveryservice.main.screens
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +39,11 @@ fun DeliveryNavHost(
     composable(route = DeliveryScreens.REGISTER()) {
       val registerViewModel: RegisterViewModel = hiltViewModel()
       val state by registerViewModel.uiState.collectAsStateWithLifecycle()
+
+      LaunchedEffect(key1 = null) {
+        registerViewModel.getCompanyList()
+      }
+
       RegisterScreen(
         modifier = modifier,
         isShowCompleteAlert = registerViewModel.isShowCompleteAlert,

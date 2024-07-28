@@ -24,8 +24,9 @@ class MainActivity : ComponentActivity() {
   @SuppressLint("CoroutineCreationDuringComposition")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    viewModel.getCompanyList()
+
     enableEdgeToEdge()
-    viewModel
     setContent {
       DeliveryServiceTheme {
         val systemUiController = rememberSystemUiController()

@@ -1,14 +1,15 @@
 package jjh.deliveryservice.domain.usecase
 
-import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
 import jjh.deliveryservice.domain.model.CompanyModel
+import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
+import kotlinx.coroutines.flow.Flow
 
 class CompanyListUseCase(
   private val companyListRepository: DeliveryServiceRepository,
 ) {
 
   // 첫 실행 시 API 호출로 리스트 업데이트
-  suspend operator fun invoke(isFirst: Boolean): List<CompanyModel> {
+  suspend operator fun invoke(isFirst: Boolean): Flow<List<CompanyModel>> {
     return companyListRepository.getCompanyList(isFirst)
   }
 

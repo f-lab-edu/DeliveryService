@@ -60,6 +60,11 @@ dependencies {
   // Logger
   implementation(libs.logger)
 
+  // Data store
+  implementation(libs.androidx.datastore)
+  implementation(libs.androidx.datastore.preferences)
+
+
 
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)

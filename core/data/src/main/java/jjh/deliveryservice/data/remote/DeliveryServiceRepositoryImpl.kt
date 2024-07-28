@@ -1,22 +1,34 @@
 package jjh.deliveryservice.data.remote
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.year
-import jjh.deliveryservice.data.db.dao.CompanyDao
 import jjh.deliveryservice.data.db.dao.DeliveryDao
+import jjh.deliveryservice.data.db.datastore.COMPANY_LIST_KEY
 import jjh.deliveryservice.data.db.entity.TrackingInfoEntity.Companion.toEntity
+import jjh.deliveryservice.data.remote.response.companys.CompanyResponse
 import jjh.deliveryservice.domain.model.CompanyModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import java.io.IOException
 import java.util.Calendar
 import javax.inject.Inject
 
 
 class DeliveryServiceRepositoryImpl @Inject constructor(
   private val deliveryServiceApi: DeliveryServiceApi,
-  private val companyDao: CompanyDao,
   private val deliveryDao: DeliveryDao,
+  private val dataStorePreferences: DataStore<Preferences>,
 ) : DeliveryServiceRepository {
 
   /**
@@ -24,11 +36,45 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    *
    * @param needUpdate 첫 실행 여부 (택배사 리스트 업데이트)
    * */
-  override suspend fun getCompanyList(needUpdate: Boolean): List<CompanyModel> {
-    return if (needUpdate)
-      getCompanyList()
-    else
-      companyDao.getAll().map { it.toModel() }.ifEmpty { getCompanyList() }
+  override suspend fun getCompanyList(needUpdate: Boolean): Flow<List<CompanyModel>> {
+
+    if (needUpdate)
+      return flowOf(getCompanyList()
+        .map { response -> response.toModel() }
+        .apply { saveCompanyList(this) }
+      )
+
+    val savedList = getSavedCompanyList()
+      .map {
+        it ?: getCompanyList()
+          .map { response -> response.toModel() }
+          .apply { saveCompanyList(this) }
+      }
+
+    return savedList
+  }
+
+  private suspend fun getSavedCompanyList(): Flow<List<CompanyModel>?> = dataStorePreferences.data
+    .catch { t ->
+      if (t is IOException) emit(emptyPreferences())
+      else throw t
+    }
+    .map {
+      Gson().run {
+        val jsonString = it[COMPANY_LIST_KEY]
+        Gson().fromJson(jsonString, object : TypeToken<List<CompanyModel>?>() {}.type)
+      }
+    }
+
+  /**
+   * DataStore 에 저장
+   * */
+  private suspend fun saveCompanyList(companyList: List<CompanyModel>) {
+    dataStorePreferences
+      .edit { preferences ->
+        val jsonString: String = Gson().toJson(companyList)
+        preferences[COMPANY_LIST_KEY] = jsonString
+      }
   }
 
   /**
@@ -70,9 +116,8 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
   /**
    * 택배사 리스트 조회 (API)
    * */
-  private suspend fun getCompanyList(): List<CompanyModel> =
-    deliveryServiceApi
-      .getCompanyList()
-      .companyList
-      .map { it.toModel() }
+  private suspend fun getCompanyList(): List<CompanyResponse> = deliveryServiceApi
+    .getCompanyList()
+    .companyList
+
 }
