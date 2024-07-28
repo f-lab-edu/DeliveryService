@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jjh.deliveryservice.calendar.CalendarModel
 import jjh.deliveryservice.calendar.CalendarUtil
-import jjh.deliveryservice.data.db.entity.DeliveryEntity
+import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.ui.Dot
 import jjh.deliveryservice.ui.getDisplayWidth
 
@@ -32,7 +32,7 @@ import jjh.deliveryservice.ui.getDisplayWidth
 fun CalendarComponent(
   modifier: Modifier = Modifier,
   dateArray: Array<CalendarModel> = arrayOf(),
-  deliveryList: List<DeliveryEntity> = listOf(),
+  deliveryList: List<TrackingInfoModel> = listOf(),
 ) {
   val context = LocalContext.current
   Column(modifier = modifier.fillMaxSize()) {
@@ -61,7 +61,7 @@ fun WeekComponent(
   modifier: Modifier = Modifier,
   calendarModel: (Int) -> CalendarModel,
   onDateClickListener: (CalendarModel) -> Unit = {},
-  deliveryList: List<DeliveryEntity> = listOf(),
+  deliveryList: List<TrackingInfoModel> = listOf(),
 ) {
   Row(
     modifier = modifier,
@@ -89,7 +89,7 @@ fun DateComponent(
   modifier: Modifier = Modifier,
   calendarModel: CalendarModel,
   textColor: Color,
-  deliveryList: List<DeliveryEntity> = listOf(),
+  deliveryList: List<TrackingInfoModel> = listOf(),
 ) {
   val alpha = if (calendarModel.isCurrentMonth) 1f else 0.3f
 
@@ -144,15 +144,6 @@ private fun DateCellPreview() {
     modifier = Modifier.size(50.dp),
     calendarModel = CalendarModel(2024, 6, 1),
     Color.Red,
-    deliveryList = listOf(
-      DeliveryEntity(
-        "",
-        "",
-        null,
-        "",
-        DeliveryEntity.Level.DELIVERY_START,
-        registerDate = "2024.07.25"
-      )
-    )
+    deliveryList = listOf()
   )
 }

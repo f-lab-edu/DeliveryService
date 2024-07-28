@@ -1,12 +1,12 @@
 package jjh.deliveryservice.home.ui.home
 
 import jjh.deliveryservice.calendar.YearMonthDay
-import jjh.deliveryservice.data.db.entity.DeliveryEntity
+import jjh.deliveryservice.domain.model.TrackingInfoModel
 
 data class HomeUiState(
   val yearMonthDay: YearMonthDay = Triple(0, 0, 0),
   private val dayOfWeekStrings: List<String> = emptyList(),
-  val deliveryEntities: List<DeliveryEntity> = listOf(),
+  val deliveryEntities: List<TrackingInfoModel> = listOf(),
 ) {
 
   val year: Int

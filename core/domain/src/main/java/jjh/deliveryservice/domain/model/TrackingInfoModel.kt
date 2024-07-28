@@ -35,4 +35,5 @@ data class TrackingInfoModel(
   val receiverName: String,
   val result: String,
   val itemName: String,
+  val registerDate: String,
 ) : DeliveryServiceModel

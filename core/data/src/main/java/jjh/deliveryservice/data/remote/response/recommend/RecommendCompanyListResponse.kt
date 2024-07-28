@@ -7,4 +7,4 @@ import jjh.deliveryservice.data.remote.response.companys.CompanyResponse
 data class RecommendCompanyListResponse(
   @SerializedName("Recommend")
   val companyList: List<CompanyResponse>,
-) : DeliveryServiceResponse
+)

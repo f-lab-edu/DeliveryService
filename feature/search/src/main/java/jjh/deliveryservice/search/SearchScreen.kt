@@ -30,7 +30,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import jjh.deliveryservice.data.db.entity.DeliveryEntity
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.resource.emptyColors
 
@@ -38,7 +37,7 @@ import jjh.deliveryservice.resource.emptyColors
 @Composable
 fun SearchScreen(
   modifier: Modifier = Modifier,
-  deliveryList: List<DeliveryEntity> = listOf(),
+  deliveryList: List<TrackingInfoModel> = listOf(),
   onBackListener: () -> Unit = {},
   onItemClickListener: (TrackingInfoModel) -> Unit = {},
   onValueChange: (String) -> Unit = {},
@@ -94,7 +93,7 @@ fun SearchScreen(
       items(deliveryList, key = { it.invoiceNo }) {
         DeliveryItem(
           modifier = Modifier.fillMaxWidth(),
-          deliveryEntity = it
+          trackingInfoModel = it
         )
       }
     }
@@ -104,7 +103,7 @@ fun SearchScreen(
 @Composable
 fun DeliveryItem(
   modifier: Modifier = Modifier,
-  deliveryEntity: DeliveryEntity,
+  trackingInfoModel: TrackingInfoModel,
 ) {
 
   Row(modifier) {
@@ -124,12 +123,5 @@ private fun SearchScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun DeliveryItemPreview() {
-  DeliveryItem(
-    deliveryEntity = DeliveryEntity("invoiceNumber",
-      trackingDetails = listOf(),
-      name = "택배이름",
-      estimate = "14시~16시",
-      level = DeliveryEntity.Level.DELIVERY_START,
-    )
-  )
+//  DeliveryItem(trackingInfoModel = )
 }

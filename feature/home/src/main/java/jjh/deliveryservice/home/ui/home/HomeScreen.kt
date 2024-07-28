@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
 import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
-import jjh.deliveryservice.data.db.entity.DeliveryEntity
+import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.home.R
 import jjh.deliveryservice.resource.CommonGreenColor
 
@@ -41,7 +41,7 @@ fun HomeScreen(
   modifier: Modifier = Modifier,
   year: Int,
   month: Int,
-  deliveryList: List<DeliveryEntity> = listOf(),
+  deliveryList: List<TrackingInfoModel> = listOf(),
   onDateClickListener: (year: Int, month: Int) -> Unit = { _, _ -> },
   onStartSearchScreen: () -> Unit = {}, // 택배 검색하기 이동
   onStartRegisterScreen: () -> Unit = {}, // 택배 등록하기 이동

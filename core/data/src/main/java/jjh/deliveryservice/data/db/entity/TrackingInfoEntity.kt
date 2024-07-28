@@ -5,7 +5,6 @@ import androidx.room.PrimaryKey
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.year
-import jjh.deliveryservice.data.db.entity.TrackingInfoEntity.Level
 import jjh.deliveryservice.data.db.entity.TrackingInfoEntity.Level.ARRIVED_BRANCH
 import jjh.deliveryservice.data.db.entity.TrackingInfoEntity.Level.COMPLETE_PICKUP
 import jjh.deliveryservice.data.db.entity.TrackingInfoEntity.Level.DELIVERY_COMPLETE
@@ -34,10 +33,10 @@ data class TrackingInfoEntity(
   val estimate: String,
   val level: Level,
   val registerDate: String = "",
-) : DeliveryServiceEntity<TrackingInfoModel> by Companion {
+) {
 
-  companion object : DeliveryServiceEntity<TrackingInfoModel> {
-    override fun TrackingInfoModel.toEntity(): TrackingInfoEntity {
+  companion object {
+    fun TrackingInfoModel.toEntity(): TrackingInfoEntity {
       return TrackingInfoEntity(
         invoiceNo = invoiceNo,
         name = itemName,
@@ -55,7 +54,7 @@ data class TrackingInfoEntity(
   }
 }
 
-fun findLevel(level: Int): Level {
+fun findLevel(level: Int): TrackingInfoEntity.Level {
   return when (level) {
     1 -> READY
     2 -> COMPLETE_PICKUP

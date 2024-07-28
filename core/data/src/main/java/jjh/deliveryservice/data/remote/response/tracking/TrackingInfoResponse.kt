@@ -1,7 +1,11 @@
 package jjh.deliveryservice.data.remote.response.tracking
 
+import jjh.deliveryservice.calendar.date
+import jjh.deliveryservice.calendar.month
+import jjh.deliveryservice.calendar.year
 import jjh.deliveryservice.data.remote.response.DeliveryServiceResponse
 import jjh.deliveryservice.domain.model.TrackingInfoModel
+import java.util.Calendar
 
 /**
  * 운송장 조회 결과
@@ -66,6 +70,7 @@ data class TrackingInfoResponse(
       receiverName = receiverName.orEmpty(),
       result = result.orEmpty(),
       itemName = itemName.orEmpty(),
+      registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" }
     )
   }
 }
