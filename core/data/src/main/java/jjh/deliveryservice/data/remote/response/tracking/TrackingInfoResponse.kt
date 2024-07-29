@@ -3,8 +3,10 @@ package jjh.deliveryservice.data.remote.response.tracking
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.year
+import jjh.deliveryservice.data.db.entity.TrackingInfoEntity
 import jjh.deliveryservice.data.remote.response.DeliveryServiceResponse
 import jjh.deliveryservice.domain.model.TrackingInfoModel
+import jjh.deliveryservice.domain.model.findLevel
 import java.util.Calendar
 
 /**
@@ -53,23 +55,37 @@ data class TrackingInfoResponse(
   val firstDetail: TrackingDetailResponse?,
   val completeYN: String?,
 ) : DeliveryServiceResponse<TrackingInfoModel> {
+  companion object {
+    fun TrackingInfoResponse.toEntity(): TrackingInfoEntity {
+      return TrackingInfoEntity(
+        invoiceNo = invoiceNo.orEmpty(),
+//        senderName = senderName.orEmpty(),
+//        receiverAddress = receiverAddr.orEmpty(),
+//        firstDetail = firstDetail?.toModel(),
+        level = findLevel(level),
+//        lastDetail = lastDetail?.toModel(),
+        estimate = estimate.orEmpty(),
+        trackingDetails = trackingDetails?.map { it.toModel() } ?: listOf(),
+//        lastStateDetail = lastStateDetail?.toModel(),
+//        completeYN = completeYN.orEmpty(),
+//        complete = complete ?: false,
+//        recipient = recipient.orEmpty(),
+//        receiverName = receiverName.orEmpty(),
+//        result = result.orEmpty(),
+//        itemName = itemName.orEmpty(),
+        name = itemName.orEmpty(),
+        registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" },
+      )
+    }
+  }
+
   override fun toModel(): TrackingInfoModel {
     return TrackingInfoModel(
-      senderName = senderName.orEmpty(),
-      receiverAddress = receiverAddr.orEmpty(),
-      firstDetail = firstDetail?.toModel(),
-      level = level,
-      lastDetail = lastDetail?.toModel(),
+      invoiceNo = invoiceNo!!,
+      name = itemName.orEmpty(),
+      trackingDetails = trackingDetails?.map { it.toModel() },
       estimate = estimate.orEmpty(),
-      trackingDetails = trackingDetails?.map { it.toModel() } ?: listOf(),
-      lastStateDetail = lastStateDetail?.toModel(),
-      invoiceNo = invoiceNo.orEmpty(),
-      completeYN = completeYN.orEmpty(),
-      complete = complete ?: false,
-      recipient = recipient.orEmpty(),
-      receiverName = receiverName.orEmpty(),
-      result = result.orEmpty(),
-      itemName = itemName.orEmpty(),
+      level = findLevel(level),
       registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" }
     )
   }

@@ -104,13 +104,14 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
   }
 
   override suspend fun saveTrackingInfo(model: TrackingInfoModel) {
-    val entity = model
-      .toEntity()
-      .copy(
-        registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" }
-      )
+    val entity = model.toEntity()
+      .copy(registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" })
 
     return deliveryDao.insertTrackingInfo(listOf(entity))
+  }
+
+  override suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel> {
+    return deliveryDao.getDateDeliveryInfo(startDate, endDate).map { it.toModel() }
   }
 
   /**

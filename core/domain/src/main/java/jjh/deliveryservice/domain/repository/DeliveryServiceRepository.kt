@@ -17,4 +17,6 @@ interface DeliveryServiceRepository {
   ): TrackingInfoModel
 
   suspend fun saveTrackingInfo(model: TrackingInfoModel)
+
+  suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel>
 }

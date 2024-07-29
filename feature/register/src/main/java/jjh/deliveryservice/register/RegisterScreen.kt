@@ -134,7 +134,7 @@ fun RegisterScreen(
             modifier = Modifier
               .fillMaxWidth()
               .padding(horizontal = 16.dp),
-            value = trackingInfoModel.itemName,
+            value = trackingInfoModel.name,
             onValueChange = itemNameTextChangeListener,
             keyboardType = KeyboardType.Number,
             isError = invoiceNumber.isNotEmpty() && invoiceNumber.toLongOrNull() == null,

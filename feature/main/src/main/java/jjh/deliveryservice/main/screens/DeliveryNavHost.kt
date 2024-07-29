@@ -32,7 +32,7 @@ fun DeliveryNavHost(
         year = state.year,
         month = state.month,
         onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) },
-        deliveryList = state.deliveryEntities,
+        deliveryList = state.savedTrackingInfoList,
       )
     }
 

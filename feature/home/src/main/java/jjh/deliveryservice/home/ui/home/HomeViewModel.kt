@@ -4,6 +4,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.monthLastDate
 import jjh.deliveryservice.common.BaseViewModel
+import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
   ioDispatcher: CoroutineDispatcher,
+  deliveryServiceRepository: DeliveryServiceRepository
 ) : BaseViewModel() {
   private val calendar = Calendar.getInstance()
 
@@ -28,10 +30,8 @@ class HomeViewModel @Inject constructor(
       val startDate = uiState.value.run { "$year.$month.1" }
       val endDate = uiState.value.run { "$year.$month.${calendar.monthLastDate}" }
 
-//      val deliveryEntities =
-//        deliveryDao.getDateDeliveryInfo(startDate, endDate)
 
-//      _uiState.update { it.copy(deliveryEntities = deliveryEntities) }
+      _uiState.update { it.copy(savedTrackingInfoList = deliveryServiceRepository.getDateDeliveryInfo(startDate, endDate)) }
     }
   }
 

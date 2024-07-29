@@ -103,7 +103,7 @@ class RegisterViewModel @Inject constructor(
    * */
   fun changeDeliveryItemName(name: String) {
     _uiState.update {
-      it.copy(trackingInfo = it.trackingInfo?.copy(itemName = name))
+      it.copy(trackingInfo = it.trackingInfo?.copy(name = name))
     }
   }
 

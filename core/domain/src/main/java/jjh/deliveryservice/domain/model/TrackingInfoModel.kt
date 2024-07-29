@@ -20,20 +20,28 @@ package jjh.deliveryservice.domain.model
  * @param itemName 상품 이름
  * */
 data class TrackingInfoModel(
-  val senderName: String,
-  val receiverAddress: String,
-  val firstDetail: TrackingDetailModel?,
-  val level: Int,
-  val lastDetail: TrackingDetailModel?,
-  val estimate: String,
-  val trackingDetails: List<TrackingDetailModel>,
-  val lastStateDetail: TrackingDetailModel?,
   val invoiceNo: String,
-  val completeYN: String,
-  val complete: Boolean,
-  val recipient: String,
-  val receiverName: String,
-  val result: String,
-  val itemName: String,
-  val registerDate: String,
+  val name: String,
+  val trackingDetails: List<TrackingDetailModel>?,
+  val estimate: String,
+  val level: Level,
+  val registerDate: String = "",
 ) : DeliveryServiceModel
+
+
+enum class Level {
+  // 1: 배송준비중, 2: 집하완료, 3: 배송중, 4: 지점 도착, 5: 배송출발, 6:배송 완료
+  READY, COMPLETE_PICKUP, DELIVERY_PROGRESS, ARRIVED_BRANCH, DELIVERY_START, DELIVERY_COMPLETE, UNKNOWN;
+}
+
+fun findLevel(level: Int): Level {
+  return when (level) {
+    1 -> Level.READY
+    2 -> Level.COMPLETE_PICKUP
+    3 -> Level.DELIVERY_PROGRESS
+    4 -> Level.ARRIVED_BRANCH
+    5 -> Level.DELIVERY_START
+    6 -> Level.DELIVERY_COMPLETE
+    else -> Level.UNKNOWN
+  }
+}
