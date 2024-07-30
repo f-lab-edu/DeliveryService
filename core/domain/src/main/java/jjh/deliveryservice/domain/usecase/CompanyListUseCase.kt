@@ -3,8 +3,9 @@ package jjh.deliveryservice.domain.usecase
 import jjh.deliveryservice.domain.model.CompanyModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class CompanyListUseCase(
+class CompanyListUseCase @Inject constructor(
   private val companyListRepository: DeliveryServiceRepository,
 ) {
 

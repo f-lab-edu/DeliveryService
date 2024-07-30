@@ -2,8 +2,9 @@ package jjh.deliveryservice.domain.usecase
 
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
+import javax.inject.Inject
 
-class DeliveryTrackingInfoUseCase(
+class DeliveryTrackingInfoUseCase @Inject constructor(
   private val companyListRepository: DeliveryServiceRepository,
 ) {
 
