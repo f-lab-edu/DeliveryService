@@ -27,6 +27,8 @@ fun DeliveryNavHost(
       val homeViewModel: HomeViewModel = hiltViewModel()
       val state by homeViewModel.uiState.collectAsStateWithLifecycle()
 
+      LaunchedEffect(Unit) { homeViewModel.getSavedTrackingInfo() }
+
       HomeScreen(
         modifier = modifier,
         year = state.year,
@@ -40,9 +42,7 @@ fun DeliveryNavHost(
       val registerViewModel: RegisterViewModel = hiltViewModel()
       val state by registerViewModel.uiState.collectAsStateWithLifecycle()
 
-      LaunchedEffect(key1 = null) {
-        registerViewModel.getCompanyList()
-      }
+      LaunchedEffect(Unit) { registerViewModel.getCompanyList() }
 
       RegisterScreen(
         modifier = modifier,

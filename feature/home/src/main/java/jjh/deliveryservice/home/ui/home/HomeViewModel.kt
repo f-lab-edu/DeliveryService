@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-  ioDispatcher: CoroutineDispatcher,
-  deliveryServiceRepository: DeliveryServiceRepository
+  private val ioDispatcher: CoroutineDispatcher,
+  private val deliveryServiceRepository: DeliveryServiceRepository
 ) : BaseViewModel() {
   private val calendar = Calendar.getInstance()
 
@@ -25,16 +25,15 @@ class HomeViewModel @Inject constructor(
   )
   val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-  init {
+  fun getSavedTrackingInfo() {
     exceptionHandlerCoroutine(ioDispatcher) {
       val startDate = uiState.value.run { "$year.$month.1" }
       val endDate = uiState.value.run { "$year.$month.${calendar.monthLastDate}" }
-
-
-      _uiState.update { it.copy(savedTrackingInfoList = deliveryServiceRepository.getDateDeliveryInfo(startDate, endDate)) }
+      _uiState.update {
+        it.copy(savedTrackingInfoList = deliveryServiceRepository.getDateDeliveryInfo(startDate, endDate))
+      }
     }
   }
-
 
   fun nextMonth(): Unit = _uiState.update {
     val addMonthCalendar = calendar.apply { add(Calendar.MONTH, 1) }
