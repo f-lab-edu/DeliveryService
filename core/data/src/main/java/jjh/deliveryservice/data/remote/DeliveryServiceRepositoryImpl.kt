@@ -94,13 +94,8 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * @param companyCode 택배사 코드
    * @param invoiceNumber 송장 번호
    * */
-  @Throws(IllegalArgumentException::class)
   override suspend fun trackingInfo(companyCode: String, invoiceNumber: String): TrackingInfoModel {
-    if (deliveryDao.getAllDeliveryInfo().isEmpty()) {
-      return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel()
-    }
-
-    throw IllegalArgumentException("이미 등록된 택배입니다")
+    return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel()
   }
 
   override suspend fun saveTrackingInfo(model: TrackingInfoModel) {
@@ -108,6 +103,10 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
       .copy(registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" })
 
     return deliveryDao.insertTrackingInfo(listOf(entity))
+  }
+
+  override suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean {
+    return deliveryDao.getAllDeliveryInfo().isNotEmpty()
   }
 
   override suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel> {

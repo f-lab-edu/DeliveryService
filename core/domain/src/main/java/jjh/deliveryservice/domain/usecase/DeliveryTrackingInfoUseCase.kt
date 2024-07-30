@@ -9,12 +9,15 @@ class DeliveryTrackingInfoUseCase @Inject constructor(
 ) {
 
   // 첫 실행 시 API 호출로 리스트 업데이트
-  @Throws(IllegalArgumentException::class)
   suspend operator fun invoke(
     companyCode: String,
     invoiceNumber: String,
   ): TrackingInfoModel {
     return companyListRepository.trackingInfo(companyCode = companyCode, invoiceNumber = invoiceNumber)
+  }
+
+  suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean {
+    return companyListRepository.isExistedDeliveryTrackingInfo(companyCode, invoiceNumber)
   }
 
   // TODO: 에러 발생 시 result class or Exception viewModel에서 처리할지?

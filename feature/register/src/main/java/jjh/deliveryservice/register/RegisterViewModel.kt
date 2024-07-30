@@ -3,7 +3,6 @@ package jjh.deliveryservice.register
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jjh.deliveryservice.common.BaseViewModel
 import jjh.deliveryservice.domain.model.CompanyModel
@@ -18,9 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -76,24 +73,23 @@ class RegisterViewModel @Inject constructor(
    * 택배 조회
    * */
   fun requestTrackingInfo(companyCode: String, invoiceNumber: String) {
-    viewModelScope.launch {
+    exceptionHandlerCoroutine {
       if (_uiState.value.trackingInfo != null && invoiceNumber == _uiState.value.invoiceNumber) {
         _uiState.update { it.copy(trackingInfo = tempDeliveryInfo) }
         tempDeliveryInfo = null
-        return@launch
+        return@exceptionHandlerCoroutine
       }
 
-      val data = runCatching {
-        deliveryTrackingInfoUseCase(companyCode = companyCode, invoiceNumber = invoiceNumber)
-      }.onFailure { tr ->
-        if (tr is IllegalArgumentException) {
-          _uiState.update { it.copy(error = tr) }
-          return@onFailure
-        }
+      if (deliveryTrackingInfoUseCase.isExistedDeliveryTrackingInfo(companyCode, invoiceNumber)) {
+        _uiState.update { it.copy(
+          invoiceNumber = "",
+          selectedCompany = null,
+          errorMessage = "이미 등록된 택배입니다."
+        ) }
+        return@exceptionHandlerCoroutine
+      }
 
-        throw tr
-      }.getOrNull()
-
+      val data = deliveryTrackingInfoUseCase(companyCode = companyCode, invoiceNumber = invoiceNumber)
       _uiState.update { it.copy(trackingInfo = data) }
     }
   }

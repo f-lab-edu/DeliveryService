@@ -19,4 +19,6 @@ interface DeliveryServiceRepository {
   suspend fun saveTrackingInfo(model: TrackingInfoModel)
 
   suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel>
+
+  suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean
 }

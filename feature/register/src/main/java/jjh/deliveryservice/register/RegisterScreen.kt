@@ -63,16 +63,16 @@ fun RegisterScreen(
   itemNameTextChangeListener: (String) -> Unit = {},
   onCompanySelectItem: (CompanyModel) -> Unit = {},
   onFindClickListener: (companyCode: String, invoiceNumber: String) -> Unit = { _, _ -> },
-  onError: Exception? = null,
+  onError: String? = null,
   saveDelivery: (TrackingInfoModel) -> Unit = {},
   cancelDelivery: () -> Unit = {},
   onBackListener: () -> Unit = {},
 ) {
   val context = LocalContext.current
 
-  onError?.let {
+  onError?.let { errorMessage ->
     LaunchedEffect(key1 = onError) {
-      Toast.makeText(context, "이미 등록된 택배입니다.", Toast.LENGTH_SHORT).show()
+      Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
     }
   }
 

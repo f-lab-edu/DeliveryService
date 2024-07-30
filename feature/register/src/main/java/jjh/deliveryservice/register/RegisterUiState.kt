@@ -9,5 +9,5 @@ data class RegisterUiState(
   val companyList: List<CompanyModel> = emptyList(),
   val selectedCompany: CompanyModel? = null,
   val trackingInfo: TrackingInfoModel? = null,
-  val error: Exception? = null,
+  val errorMessage: String? = null,
 )
