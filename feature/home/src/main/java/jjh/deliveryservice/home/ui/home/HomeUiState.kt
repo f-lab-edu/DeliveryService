@@ -1,12 +1,19 @@
 package jjh.deliveryservice.home.ui.home
 
+import jjh.deliveryservice.calendar.CalendarModel
 import jjh.deliveryservice.calendar.YearMonthDay
+import jjh.deliveryservice.calendar.date
+import jjh.deliveryservice.calendar.month
+import jjh.deliveryservice.calendar.year
 import jjh.deliveryservice.domain.model.TrackingInfoModel
+import java.util.Calendar
 
 data class HomeUiState(
   val yearMonthDay: YearMonthDay = Triple(0, 0, 0),
   private val dayOfWeekStrings: List<String> = emptyList(),
   val savedTrackingInfoList: List<TrackingInfoModel> = listOf(),
+  val today: CalendarModel = Calendar.getInstance().run { CalendarModel(this.year, this.month + 1, this.date, true) },
+  val clickedDate: CalendarModel? = null,
 ) {
 
   val year: Int

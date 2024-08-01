@@ -33,8 +33,11 @@ fun DeliveryNavHost(
         modifier = modifier,
         year = state.year,
         month = state.month,
-        onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) },
+        today = state.today,
+        clickedDate = state.clickedDate,
         deliveryList = state.savedTrackingInfoList,
+        onDateClickListener = homeViewModel::onDateClickListener,
+        onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) },
       )
     }
 

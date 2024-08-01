@@ -1,6 +1,7 @@
 package jjh.deliveryservice.home.ui.home
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jjh.deliveryservice.calendar.CalendarModel
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.monthLastDate
 import jjh.deliveryservice.common.BaseViewModel
@@ -16,12 +17,12 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
   private val ioDispatcher: CoroutineDispatcher,
-  private val deliveryServiceRepository: DeliveryServiceRepository
+  private val deliveryServiceRepository: DeliveryServiceRepository,
 ) : BaseViewModel() {
   private val calendar = Calendar.getInstance()
 
   private val _uiState = MutableStateFlow(
-    HomeUiState(yearMonthDay = CalendarUtil.getCurrentDate(calendar))
+    HomeUiState(yearMonthDay = CalendarUtil.getCurrentDate(calendar),)
   )
   val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
@@ -35,8 +36,20 @@ class HomeViewModel @Inject constructor(
     }
   }
 
+  fun onDateClickListener(year: Int, month: Int) {
+    _uiState.update {
+      it.copy(
+      )
+    }
+  }
+
   fun nextMonth(): Unit = _uiState.update {
     val addMonthCalendar = calendar.apply { add(Calendar.MONTH, 1) }
+    it.copy(yearMonthDay = CalendarUtil.getCurrentDate(addMonthCalendar))
+  }
+
+  fun beforeMonth(): Unit = _uiState.update {
+    val addMonthCalendar = calendar.apply { add(Calendar.MONTH, -1) }
     it.copy(yearMonthDay = CalendarUtil.getCurrentDate(addMonthCalendar))
   }
 
