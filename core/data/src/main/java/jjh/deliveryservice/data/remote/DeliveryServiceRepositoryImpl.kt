@@ -95,7 +95,7 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * @param invoiceNumber 송장 번호
    * */
   override suspend fun trackingInfo(companyCode: String, invoiceNumber: String): TrackingInfoModel {
-    return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel()
+    return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel(companyCode)
   }
 
   override suspend fun saveTrackingInfo(model: TrackingInfoModel) {

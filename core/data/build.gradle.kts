@@ -1,72 +1,73 @@
 plugins {
-  alias(libs.plugins.android.library)
-  alias(libs.plugins.jetbrains.kotlin.android)
-  alias(libs.plugins.googleDaggerHilt)
-  id("kotlin-kapt")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.googleDaggerHilt)
+    id("kotlin-kapt")
 }
 
 android {
-  namespace = "jjh.deliveryservice.data"
-  compileSdk = 34
+    namespace = "jjh.deliveryservice.data"
+    compileSdk = 34
 
-  defaultConfig {
-    minSdk = 24
+    defaultConfig {
+        minSdk = 24
 
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    consumerProguardFiles("consumer-rules.pro")
-  }
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
 
-  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-  }
-  kotlinOptions {
-    jvmTarget = "17"
-  }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
-  implementation(project(":build_config"))
-  implementation(project(":core:domain"))
-  implementation(project(":core:calendar"))
+    implementation(project(":build_config"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:calendar"))
 
-  implementation(libs.androidx.core.ktx)
-  implementation(libs.androidx.appcompat)
-  implementation(libs.material)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
 
-  // hilt
-  implementation(libs.hilt.android)
-  kapt(libs.hilt.android.compiler)
+    // hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
-  // Retrofit2
-  implementation(libs.retrofit)
-  implementation(libs.converter.gson)
-  implementation(libs.converter.scalars)
+    // Retrofit2
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.converter.scalars)
 
-  // Okhttp
-  implementation(libs.okhttp)
-  implementation(libs.logging.interceptor)
+    // Okhttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
-  // Room
-  implementation(libs.androidx.room.runtime)
-  implementation(libs.androidx.room.ktx)
-  kapt(libs.androidx.room.compiler)
-  annotationProcessor(libs.androidx.room.compiler)
-
-
-  // Coroutine
-  implementation(libs.kotlinx.coroutines.android)
-
-  // Logger
-  implementation(libs.logger)
-
-  // Data store
-  implementation(libs.androidx.datastore)
-  implementation(libs.androidx.datastore.preferences)
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+    annotationProcessor(libs.androidx.room.compiler)
 
 
+    // Coroutine
+    implementation(libs.kotlinx.coroutines.android)
 
-  testImplementation(libs.junit)
-  androidTestImplementation(libs.androidx.junit)
-  androidTestImplementation(libs.androidx.espresso.core)
+    // Logger
+    implementation(libs.logger)
+
+    // Data store
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.preferences)
+
+
+    implementation(libs.androidx.work.runtime.ktx)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
