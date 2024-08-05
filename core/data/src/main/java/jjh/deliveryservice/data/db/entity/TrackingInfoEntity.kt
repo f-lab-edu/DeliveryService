@@ -2,6 +2,7 @@ package jjh.deliveryservice.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import jjh.deliveryservice.calendar.CalendarUtil.calendarStringFormat
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.year
@@ -36,7 +37,9 @@ data class TrackingInfoEntity(
       trackingDetails = trackingDetails,
       estimate = estimate,
       level = level,
-      registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" }
+      registerDate = Calendar.getInstance().run {
+        calendarStringFormat(this.year, this.month + 1, this.date)
+      }
     )
   }
 
@@ -48,7 +51,7 @@ data class TrackingInfoEntity(
         trackingDetails = trackingDetails,
         estimate = estimate,
         level = level,
-        registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" }
+        registerDate = registerDate
       )
     }
   }

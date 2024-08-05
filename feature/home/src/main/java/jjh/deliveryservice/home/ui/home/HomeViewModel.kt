@@ -3,6 +3,7 @@ package jjh.deliveryservice.home.ui.home
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jjh.deliveryservice.calendar.CalendarModel
 import jjh.deliveryservice.calendar.CalendarUtil
+import jjh.deliveryservice.calendar.CalendarUtil.calendarStringFormat
 import jjh.deliveryservice.calendar.monthLastDate
 import jjh.deliveryservice.common.BaseViewModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
@@ -22,23 +23,24 @@ class HomeViewModel @Inject constructor(
   private val calendar = Calendar.getInstance()
 
   private val _uiState = MutableStateFlow(
-    HomeUiState(yearMonthDay = CalendarUtil.getCurrentDate(calendar),)
+    HomeUiState(yearMonthDay = CalendarUtil.getCurrentDate(calendar))
   )
   val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
   fun getSavedTrackingInfo() {
     exceptionHandlerCoroutine(ioDispatcher) {
-      val startDate = uiState.value.run { "$year.$month.1" }
-      val endDate = uiState.value.run { "$year.$month.${calendar.monthLastDate}" }
+      val startDate = uiState.value.run { calendarStringFormat(year, month, 1) }
+      val endDate = uiState.value.run { calendarStringFormat(year, month, calendar.monthLastDate) }
       _uiState.update {
         it.copy(savedTrackingInfoList = deliveryServiceRepository.getDateDeliveryInfo(startDate, endDate))
       }
     }
   }
 
-  fun onDateClickListener(year: Int, month: Int) {
+  fun onDateClickListener(clickedDate: CalendarModel) {
     _uiState.update {
       it.copy(
+        clickedDate = clickedDate
       )
     }
   }

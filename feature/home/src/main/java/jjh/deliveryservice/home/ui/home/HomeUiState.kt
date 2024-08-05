@@ -1,6 +1,7 @@
 package jjh.deliveryservice.home.ui.home
 
 import jjh.deliveryservice.calendar.CalendarModel
+import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.YearMonthDay
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
@@ -24,6 +25,8 @@ data class HomeUiState(
 
   val date: Int
     get() = yearMonthDay.third
+
+  fun dateArray(): Array<CalendarModel> = CalendarUtil.getDaysInMonth(year, month)
 
   val getDayOfWeekStrings: Array<String>
     get() = this.dayOfWeekStrings.toTypedArray()

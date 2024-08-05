@@ -31,6 +31,7 @@ fun DeliveryNavHost(
 
       HomeScreen(
         modifier = modifier,
+        dateArray = state.dateArray(),
         year = state.year,
         month = state.month,
         today = state.today,
@@ -61,7 +62,7 @@ fun DeliveryNavHost(
         onError = state.errorMessage,
         saveDelivery = registerViewModel::saveDelivery,
         cancelDelivery = registerViewModel::cancelDelivery,
-        onBackListener = { navController.popBackStack() }
+        onBackListener = { navController.popBackStack() },
       )
     }
 

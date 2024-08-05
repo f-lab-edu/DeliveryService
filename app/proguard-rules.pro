@@ -19,3 +19,74 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn org.bouncycastle.jsse.BCSSLParameters
+-dontwarn org.bouncycastle.jsse.BCSSLSocket
+-dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
+-dontwarn org.conscrypt.Conscrypt$Version
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
+-dontwarn org.openjsse.javax.net.ssl.SSLParameters
+-dontwarn org.openjsse.javax.net.ssl.SSLSocket
+-dontwarn org.openjsse.net.ssl.OpenJSSE
+
+-keep class org.bouncycastle.jsse.** { *; }
+-keep class org.bouncycastle.jsse.provider.** { *; }
+-keep class org.conscrypt.** { *; }
+-keep class org.openjsse.javax.net.ssl.** { *; }
+-keep class org.openjsse.net.ssl.** { *; }
+
+-keep class jjh.deliveryservice.data.remote.response.** { *; }
+-keepclassmembers class jjh.deliveryservice.data.remote.response.** { *; }
+
+-keep class jjh.deliveryservice.data.db.entity.** { *; }
+-keepclassmembers class jjh.deliveryservice.data.db.entity.** { *; }
+
+-keep class jjh.deliveryservice.domain.model.** { *; }
+-keepclassmembers class jjh.deliveryservice.domain.model.** { *; }
+
+
+##---------------Begin: proguard configuration for Gson  ----------
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+-keepattributes Signature
+
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
+
+# Gson specific classes
+-dontwarn sun.misc.**
+#-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.examples.android.model.** { <fields>; }
+
+# Prevent proguard from stripping interface information from TypeAdapter, TypeAdapterFactory,
+# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
+-keep class * implements com.google.gson.TypeAdapter
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+# Prevent R8 from leaving Data object members always null
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
+
+##---------------End: proguard configuration for Gson  ----------
+
+
+#okhttp3
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+
+-keep class com.squareup.** { *; }
+
+#flow
+-keep,allowobfuscation,allowshrinking class kotlinx.coroutines.flow.Flow
+
+-keep class com.google.gson.reflect.TypeToken
+-keep class * extends com.google.gson.reflect.TypeToken
+-keep public class * implements java.lang.reflect.Type
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation

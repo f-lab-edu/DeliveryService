@@ -1,5 +1,6 @@
 package jjh.deliveryservice.calendar
 
+import jjh.deliveryservice.calendar.CalendarUtil.getDayOfWeekString
 import java.util.Calendar
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -16,6 +17,11 @@ val Calendar.hour: Int by CalendarField(Calendar.HOUR)
 val Calendar.minute: Int by CalendarField(Calendar.MINUTE)
 
 val Calendar.second: Int by CalendarField(Calendar.SECOND)
+
+val Calendar.dayOfWeek: Int by CalendarField(Calendar.DAY_OF_WEEK)
+
+val Calendar.dayOfWeekString: String
+  get() = getDayOfWeekString(dayOfWeek)
 
 val Calendar.monthLastDate: Int
   get() = getActualMaximum(Calendar.DAY_OF_MONTH)
