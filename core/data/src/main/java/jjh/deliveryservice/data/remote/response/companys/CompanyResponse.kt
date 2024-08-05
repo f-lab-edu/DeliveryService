@@ -1,6 +1,8 @@
 package jjh.deliveryservice.data.remote.response.companys
 
 import com.google.gson.annotations.SerializedName
+import jjh.deliveryservice.data.remote.response.DeliveryServiceResponse
+import jjh.deliveryservice.domain.model.CompanyModel
 
 /**
  * [jjh.deliveryservice.data.remote.DeliveryServiceApi.getCompanyList] Response
@@ -19,4 +21,8 @@ data class CompanyResponse(
 
   @SerializedName("Name")
   val companyName: String, // 건영택배
-)
+) : DeliveryServiceResponse<CompanyModel> {
+  override fun toModel(): CompanyModel {
+    return CompanyModel(companyCode, isInternational, companyName)
+  }
+}

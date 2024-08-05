@@ -1,6 +1,10 @@
 package jjh.deliveryservice.resource
 
 import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.material3.DatePickerColors
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -14,8 +18,61 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 
-val CommonGreenColor = Color(0xFF075500)
+val CommonGreenColor = Color(0x88075500)
 
+val CommonGreenColor2 = Color(0xFF075500)
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun deliveryDatePickerColor(
+  containerColor: Color = Color.Unspecified,
+  titleContentColor: Color = Color.Unspecified,
+  headlineContentColor: Color = Color.Unspecified,
+  weekdayContentColor: Color = Color.Unspecified,
+  subheadContentColor: Color = Color.Unspecified,
+  navigationContentColor: Color = Color.Unspecified,
+  yearContentColor: Color = Color.Unspecified,
+  disabledYearContentColor: Color = Color.Unspecified,
+  selectedYearContentColor: Color = Color.Unspecified,
+  disabledSelectedYearContentColor: Color = Color.Unspecified,
+  disabledSelectedYearContainerColor: Color = Color.Unspecified,
+  dayContentColor: Color = Color.Unspecified,
+  disabledDayContentColor: Color = Color.Unspecified,
+  disabledSelectedDayContentColor: Color = Color.Unspecified,
+  disabledSelectedDayContainerColor: Color = Color.Unspecified,
+  dayInSelectionRangeContainerColor: Color = Color.Unspecified,
+  dividerColor: Color = Color.Unspecified,
+  dateTextFieldColors: TextFieldColors? = null,
+): DatePickerColors =
+  DatePickerDefaults.colors(
+    selectedDayContainerColor = CommonGreenColor,
+    selectedDayContentColor = Color.White,
+    selectedYearContainerColor = CommonGreenColor,
+    currentYearContentColor = CommonGreenColor,
+    todayContentColor = CommonGreenColor,
+    todayDateBorderColor = CommonGreenColor,
+    dayInSelectionRangeContentColor = CommonGreenColor,
+
+    containerColor = containerColor,
+    titleContentColor = titleContentColor,
+    headlineContentColor = headlineContentColor,
+    weekdayContentColor = weekdayContentColor,
+    subheadContentColor = subheadContentColor,
+    navigationContentColor = navigationContentColor,
+    yearContentColor = yearContentColor,
+    disabledYearContentColor = disabledYearContentColor,
+    selectedYearContentColor = selectedYearContentColor,
+    disabledSelectedYearContentColor = disabledSelectedYearContentColor,
+    disabledSelectedYearContainerColor = disabledSelectedYearContainerColor,
+    dayContentColor = dayContentColor,
+    disabledDayContentColor = disabledDayContentColor,
+    disabledSelectedDayContentColor = disabledSelectedDayContentColor,
+    disabledSelectedDayContainerColor = disabledSelectedDayContainerColor,
+    dayInSelectionRangeContainerColor = dayInSelectionRangeContainerColor,
+    dividerColor = dividerColor,
+    dateTextFieldColors = dateTextFieldColors,
+  )
 
 @Composable
 fun TextFieldDefaults.emptyColors(
@@ -107,3 +164,4 @@ fun TextFieldDefaults.emptyColors(
   disabledSuffixColor = disabledSuffixColor,
   errorSuffixColor = errorSuffixColor,
 )
+

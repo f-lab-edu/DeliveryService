@@ -2,8 +2,9 @@ package jjh.deliveryservice.domain.usecase
 
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
+import javax.inject.Inject
 
-class DeliveryTrackingInfoUseCase(
+class DeliveryTrackingInfoUseCase @Inject constructor(
   private val companyListRepository: DeliveryServiceRepository,
 ) {
 
@@ -15,5 +16,14 @@ class DeliveryTrackingInfoUseCase(
     return companyListRepository.trackingInfo(companyCode = companyCode, invoiceNumber = invoiceNumber)
   }
 
+  suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean {
+    return companyListRepository.isExistedDeliveryTrackingInfo(companyCode, invoiceNumber)
+  }
+
   // TODO: 에러 발생 시 result class or Exception viewModel에서 처리할지?
+
+
+  suspend fun saveTrackingInfo(trackingInfoModel: TrackingInfoModel) {
+    return companyListRepository.saveTrackingInfo(model = trackingInfoModel)
+  }
 }

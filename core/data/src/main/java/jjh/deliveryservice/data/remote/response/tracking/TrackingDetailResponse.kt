@@ -1,6 +1,8 @@
 package jjh.deliveryservice.data.remote.response.tracking
 
 import com.google.gson.annotations.SerializedName
+import jjh.deliveryservice.data.remote.response.DeliveryServiceResponse
+import jjh.deliveryservice.domain.model.TrackingDetailModel
 
 /**
  * 진행 상세
@@ -18,27 +20,43 @@ import com.google.gson.annotations.SerializedName
  * @param timeString 진행 시간
  * */
 data class TrackingDetailResponse(
-  val remark: String,
+  val remark: String?,
 
   val level: Int, // 2
 
-  val manName: String,
+  val manName: String?,
 
   val where: String, // 글로벌직구팀직영(신현호)
 
-  val code: String,
+  val code: String?,
 
   val time: Long, // 1714044794000
 
-  val manPic: String,
+  val manPic: String?,
 
-  val kind: String, // 집화처리
+  val kind: String?, // 집화처리
 
   @SerializedName("telno")
   val telNo: String, // 010-3350-5902
 
   @SerializedName("telno2")
-  val telNo2: String,
+  val telNo2: String?,
 
   val timeString: String, // 2024-04-25 20:33:14
-)
+) : DeliveryServiceResponse<TrackingDetailModel> {
+  override fun toModel(): TrackingDetailModel {
+    return TrackingDetailModel(
+      remark.orEmpty(),
+      level,
+      manName.orEmpty(),
+      where,
+      code.orEmpty(),
+      time,
+      manPic.orEmpty(),
+      kind.orEmpty(),
+      telNo,
+      telNo2.orEmpty(),
+      timeString
+    )
+  }
+}

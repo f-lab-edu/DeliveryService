@@ -1,8 +1,5 @@
 package jjh.deliveryservice.domain.model
 
-import jjh.deliveryservice.data.remote.response.tracking.TrackingDetailResponse
-import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse
-
 /**
  * 운송장 조회 결과
  *
@@ -23,42 +20,28 @@ import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse
  * @param itemName 상품 이름
  * */
 data class TrackingInfoModel(
-  val senderName: String,
-  val receiverAddress: String,
-  val firstDetail: TrackingDetailResponse?,
-  val level: Int,
-  val lastDetail: TrackingDetailResponse?,
-  val estimate: String,
-  val trackingDetails: List<TrackingDetailResponse>,
-  val lastStateDetail: TrackingDetailResponse?,
   val invoiceNo: String,
-  val completeYN: String,
-  val complete: Boolean,
-  val recipient: String,
-  val receiverName: String,
-  val result: String,
-  val itemName: String,
-) {
+  val name: String,
+  val trackingDetails: List<TrackingDetailModel>?,
+  val estimate: String,
+  val level: Level,
+  val registerDate: String = "",
+) : DeliveryServiceModel
 
-  companion object {
-    fun TrackingInfoResponse.toModel(): TrackingInfoModel {
-      return TrackingInfoModel(
-        senderName = senderName ?: "",
-        receiverAddress = receiverAddr ?: "",
-        firstDetail = firstDetail,
-        level = level,
-        lastDetail = lastDetail,
-        estimate = estimate ?: "",
-        trackingDetails = trackingDetails ?: listOf(),
-        lastStateDetail = lastStateDetail,
-        invoiceNo = invoiceNo ?: "",
-        completeYN = completeYN ?: "",
-        complete = complete ?: false,
-        recipient = recipient ?: "",
-        receiverName = receiverName ?: "",
-        result = result ?: "",
-        itemName = itemName ?: "",
-      )
-    }
+
+enum class Level {
+  // 1: 배송준비중, 2: 집하완료, 3: 배송중, 4: 지점 도착, 5: 배송출발, 6:배송 완료
+  READY, COMPLETE_PICKUP, DELIVERY_PROGRESS, ARRIVED_BRANCH, DELIVERY_START, DELIVERY_COMPLETE, UNKNOWN;
+}
+
+fun findLevel(level: Int): Level {
+  return when (level) {
+    1 -> Level.READY
+    2 -> Level.COMPLETE_PICKUP
+    3 -> Level.DELIVERY_PROGRESS
+    4 -> Level.ARRIVED_BRANCH
+    5 -> Level.DELIVERY_START
+    6 -> Level.DELIVERY_COMPLETE
+    else -> Level.UNKNOWN
   }
 }

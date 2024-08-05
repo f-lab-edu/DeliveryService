@@ -1,16 +1,21 @@
 package jjh.deliveryservice.home.ui.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,34 +23,51 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
 import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
+import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.home.R
+import jjh.deliveryservice.resource.CommonGreenColor
 
 @Composable
 fun HomeScreen(
   modifier: Modifier = Modifier,
   year: Int,
   month: Int,
+  deliveryList: List<TrackingInfoModel> = listOf(),
+  onDateClickListener: (year: Int, month: Int) -> Unit = { _, _ -> },
+  onStartSearchScreen: () -> Unit = {}, // 택배 검색하기 이동
   onStartRegisterScreen: () -> Unit = {}, // 택배 등록하기 이동
 ) {
   val context = LocalContext.current
   Box(modifier = modifier) {
     Column {
+      DateAndSearchComponent(
+        modifier = Modifier.fillMaxWidth(),
+        year = year,
+        month = month,
+        onDateClickListener = onDateClickListener,
+        onStartSearchScreen = onStartSearchScreen,
+      ) // DateAndSearchComponent 날짜
+
       DayOfWeekComponent(
         modifier = Modifier
           .fillMaxWidth()
-          .padding(vertical = 10.dp),
+          .padding(bottom = 10.dp),
         dayOfWeek = context.resources.getStringArray(R.array.day_of_week)
-      ) // 요일
+      ) // DayOfWeekComponent 요일
 
       CalendarComponent(
-        dateArray = CalendarUtil.getDaysInMonth(year, month)
-      ) // 달력
+        dateArray = CalendarUtil.getDaysInMonth(year, month),
+        deliveryList = deliveryList
+      ) // CalendarComponent 달력
     }
 
 
@@ -53,7 +75,7 @@ fun HomeScreen(
       modifier = Modifier
         .padding(10.dp)
         .align(Alignment.BottomEnd),
-      containerColor = Color.Gray,
+      containerColor = CommonGreenColor,
       shape = CircleShape,
       elevation = FloatingActionButtonDefaults.elevation(0.dp),
       onClick = onStartRegisterScreen
@@ -66,6 +88,54 @@ fun HomeScreen(
     } // Floating Button
   }
 
+}
+
+@Composable
+fun DateAndSearchComponent(
+  modifier: Modifier = Modifier,
+  year: Int,
+  month: Int,
+  onDateClickListener: (year: Int, month: Int) -> Unit = { _, _ -> },
+  onStartSearchScreen: () -> Unit = {},
+) {
+  Row(
+    modifier = modifier
+  ) {
+    Row(modifier = Modifier
+      .align(Alignment.CenterVertically)
+      .clickable { onDateClickListener(year, month) }
+      .padding(vertical = 10.dp)
+      .padding(start = 16.dp)
+    ) {
+      Text(
+        text = "$year.$month",
+        style = TextStyle(
+          color = CommonGreenColor,
+          fontWeight = FontWeight.Bold,
+          fontSize = 20.sp
+        )
+      )
+      Icon(
+        modifier = Modifier,
+        imageVector = Icons.Default.KeyboardArrowDown,
+        contentDescription = "",
+        tint = CommonGreenColor,
+      )
+    }
+
+    Spacer(modifier = Modifier.weight(1f))
+
+    Icon(
+      modifier = Modifier
+        .align(Alignment.CenterVertically)
+        .clickable { onStartSearchScreen() }
+        .padding(vertical = 10.dp)
+        .padding(horizontal = 16.dp),
+      imageVector = Icons.Default.Search,
+      tint = CommonGreenColor,
+      contentDescription = ""
+    )
+  }
 }
 
 @Composable

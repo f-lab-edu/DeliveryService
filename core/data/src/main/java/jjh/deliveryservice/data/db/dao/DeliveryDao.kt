@@ -2,21 +2,25 @@ package jjh.deliveryservice.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
-import jjh.deliveryservice.data.db.entity.DeliveryEntity
+import jjh.deliveryservice.data.db.entity.TrackingInfoEntity
 
 @Dao
 interface DeliveryDao {
 
-  @Insert
-  suspend fun insertTrackingInfo(deliveryEntity: List<DeliveryEntity>)
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun insertTrackingInfo(trackingInfoEntity: List<TrackingInfoEntity>)
 
-  @Update
-  suspend fun updateTrackingInfo(deliveryEntity: List<DeliveryEntity>)
-
-  @Query("DELETE FROM DeliveryEntity where invoiceNo == :invoiceNo")
+  @Query("DELETE FROM TrackingInfoEntity where invoiceNo == :invoiceNo")
   suspend fun deleteTrackingInfo(invoiceNo: String)
 
+  @Query("SELECT * FROM TrackingInfoEntity")
+  suspend fun getAllDeliveryInfo(): List<TrackingInfoEntity>
 
+  @Query("SELECT * FROM TrackingInfoEntity WHERE registerDate BETWEEN :startDate AND :endDate")
+  suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoEntity>
+
+  @Query("SELECT * FROM TrackingInfoEntity where invoiceNo == :invoiceNo")
+  suspend fun getDeliveryInfo(invoiceNo: String): TrackingInfoEntity
 }

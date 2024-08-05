@@ -9,7 +9,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import jjh.deliveryservice.data.db.dao.DeliveryDao
 import jjh.deliveryservice.data.db.DeliveryDatabase
-import jjh.deliveryservice.data.db.dao.CompanyDao
 import javax.inject.Singleton
 
 @Module
@@ -33,6 +32,4 @@ object DatabaseModule {
   @Provides
   fun provideDeliveryDao(db: DeliveryDatabase): DeliveryDao = db.deliveryDao()
 
-  @Provides
-  fun provideCompanyDao(db: DeliveryDatabase): CompanyDao = db.companyDao()
 }

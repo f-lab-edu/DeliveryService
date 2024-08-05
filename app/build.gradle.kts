@@ -62,6 +62,8 @@ android {
 dependencies {
   implementation(project(":feature:main"))
   implementation(project(":build_config"))
+  implementation(project(":core:data"))
+  implementation(project(":core:domain"))
   implementation(libs.logger)
 
   // hilt

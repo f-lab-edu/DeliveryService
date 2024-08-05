@@ -27,6 +27,8 @@ android {
 
 dependencies {
   implementation(project(":build_config"))
+  implementation(project(":core:domain"))
+  implementation(project(":core:calendar"))
 
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
@@ -57,6 +59,11 @@ dependencies {
 
   // Logger
   implementation(libs.logger)
+
+  // Data store
+  implementation(libs.androidx.datastore)
+  implementation(libs.androidx.datastore.preferences)
+
 
 
   testImplementation(libs.junit)

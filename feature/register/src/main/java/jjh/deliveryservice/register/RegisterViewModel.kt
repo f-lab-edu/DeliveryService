@@ -1,5 +1,8 @@
 package jjh.deliveryservice.register
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jjh.deliveryservice.common.BaseViewModel
 import jjh.deliveryservice.domain.model.CompanyModel
@@ -13,8 +16,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -34,13 +37,14 @@ class RegisterViewModel @Inject constructor(
 
   private var tempDeliveryInfo: TrackingInfoModel? = null
 
-  init {
-    exceptionHandlerCoroutine {
-      val companyList = withContext(ioDispatcher) {
-        companyListUseCase.invoke().filter { !it.isInternational }
-      }
+  var isShowCompleteAlert by mutableStateOf(false)
+    private set
 
-      _uiState.update { it.copy(companyList = companyList) }
+  fun getCompanyList() {
+    exceptionHandlerCoroutine(ioDispatcher) {
+      companyListUseCase.invoke(false).collectLatest { companyList ->
+        _uiState.update { it.copy(companyList = companyList) }
+      }
     }
   }
 
@@ -65,6 +69,9 @@ class RegisterViewModel @Inject constructor(
     _uiState.update { it.copy(selectedCompany = companyModel) }
   }
 
+  /**
+   * 택배 조회
+   * */
   fun requestTrackingInfo(companyCode: String, invoiceNumber: String) {
     exceptionHandlerCoroutine {
       if (_uiState.value.trackingInfo != null && invoiceNumber == _uiState.value.invoiceNumber) {
@@ -73,19 +80,42 @@ class RegisterViewModel @Inject constructor(
         return@exceptionHandlerCoroutine
       }
 
+      if (deliveryTrackingInfoUseCase.isExistedDeliveryTrackingInfo(companyCode, invoiceNumber)) {
+        _uiState.update { it.copy(
+          invoiceNumber = "",
+          selectedCompany = null,
+          errorMessage = "이미 등록된 택배입니다."
+        ) }
+        return@exceptionHandlerCoroutine
+      }
 
       val data = deliveryTrackingInfoUseCase(companyCode = companyCode, invoiceNumber = invoiceNumber)
       _uiState.update { it.copy(trackingInfo = data) }
     }
   }
 
+  /**
+   * 등록할 택배이름 변경
+   * */
   fun changeDeliveryItemName(name: String) {
     _uiState.update {
-      it.copy(trackingInfo =  it.trackingInfo?.copy(itemName = name))
+      it.copy(trackingInfo = it.trackingInfo?.copy(name = name))
     }
   }
 
-  fun saveDelivery(info: TrackingInfoModel) {}
+  /**
+   * 택배 저장
+   * */
+  fun saveDelivery(info: TrackingInfoModel) {
+    exceptionHandlerCoroutine(ioDispatcher) {
+      deliveryTrackingInfoUseCase.saveTrackingInfo(info)
+      isShowCompleteAlert = true
+    }
+  }
+
+  /**
+   * 입력중인 택배 취소 model bottom sheet close
+   * */
   fun cancelDelivery() {
 
     _uiState.update {
