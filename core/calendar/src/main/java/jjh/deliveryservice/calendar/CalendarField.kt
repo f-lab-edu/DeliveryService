@@ -5,6 +5,9 @@ import java.util.Calendar
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
+fun calendar() = Calendar.getInstance()
+fun calendar(timeInMillis: Long) = Calendar.getInstance().apply { setTimeInMillis(timeInMillis) }
+fun calendar(year: Int, month: Int, date: Int) = Calendar.getInstance().apply { set(year, month, date) }
 
 val Calendar.year: Int by CalendarField(Calendar.YEAR)
 

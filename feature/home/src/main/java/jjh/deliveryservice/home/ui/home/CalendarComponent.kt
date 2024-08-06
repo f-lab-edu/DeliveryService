@@ -131,18 +131,13 @@ fun DateComponent(
 
     val paddingVertical = constraints.maxHeight * 0.1f
 
-    Box(
-      modifier = Modifier
-        .align(Alignment.TopCenter)
-        .size(25.dp)
-        .background(color = dateBackgroundColor, shape = CircleShape)
-    ) // Background
-
     Text(
       modifier = Modifier
         .padding(top = 2.5.dp)
-        .fillMaxWidth()
-        .alpha(alpha),
+        .alpha(alpha)
+        .align(Alignment.TopCenter)
+        .size(25.dp)
+        .background(color = dateBackgroundColor, shape = CircleShape),
       text = calendarModel.date.toString(),
       textAlign = TextAlign.Center,
       color = dateTextColor,

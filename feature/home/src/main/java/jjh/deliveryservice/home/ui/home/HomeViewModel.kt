@@ -4,7 +4,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jjh.deliveryservice.calendar.CalendarModel
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.CalendarUtil.calendarStringFormat
+import jjh.deliveryservice.calendar.YearMonthDay
+import jjh.deliveryservice.calendar.calendar
+import jjh.deliveryservice.calendar.date
+import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.monthLastDate
+import jjh.deliveryservice.calendar.year
 import jjh.deliveryservice.common.BaseViewModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -40,19 +45,29 @@ class HomeViewModel @Inject constructor(
   fun onDateClickListener(clickedDate: CalendarModel) {
     _uiState.update {
       it.copy(
-        clickedDate = clickedDate
+        clickedDate = clickedDate,
+        homeScreenDetailState = true
       )
     }
   }
 
-  fun nextMonth(): Unit = _uiState.update {
-    val addMonthCalendar = calendar.apply { add(Calendar.MONTH, 1) }
-    it.copy(yearMonthDay = CalendarUtil.getCurrentDate(addMonthCalendar))
+  fun onDateChangeClickListener(timeInMillis: Long) {
+    val calendar = calendar(timeInMillis)
+    val year = calendar.year
+    val month = calendar.month + 1
+    val date = calendar.date
+
+    _uiState.update {
+      it.copy(
+        yearMonthDay = YearMonthDay(year, month, date),
+        clickedDate = CalendarModel(year, month, date, true),
+        homeScreenDetailState = true
+      )
+    }
   }
 
-  fun beforeMonth(): Unit = _uiState.update {
-    val addMonthCalendar = calendar.apply { add(Calendar.MONTH, -1) }
-    it.copy(yearMonthDay = CalendarUtil.getCurrentDate(addMonthCalendar))
+  fun homeScreenDetailStateChange(state: Boolean) {
+    _uiState.update { it.copy(homeScreenDetailState = state) }
   }
 
 }

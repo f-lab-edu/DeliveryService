@@ -34,9 +34,13 @@ fun DeliveryNavHost(
         dateArray = state.dateArray(),
         year = state.year,
         month = state.month,
+        date = state.date,
         today = state.today,
         clickedDate = state.clickedDate,
         deliveryList = state.savedTrackingInfoList,
+        homeScreenDetailState = state.homeScreenDetailState,
+        homeScreenDetailStateChange = homeViewModel::homeScreenDetailStateChange,
+        onDateChangeClickListener = homeViewModel::onDateChangeClickListener,
         onDateClickListener = homeViewModel::onDateClickListener,
         onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) },
       )

@@ -15,6 +15,7 @@ data class HomeUiState(
   val savedTrackingInfoList: List<TrackingInfoModel> = listOf(),
   val today: CalendarModel = Calendar.getInstance().run { CalendarModel(this.year, this.month + 1, this.date, true) },
   val clickedDate: CalendarModel? = null,
+  val homeScreenDetailState: Boolean = false,
 ) {
 
   val year: Int

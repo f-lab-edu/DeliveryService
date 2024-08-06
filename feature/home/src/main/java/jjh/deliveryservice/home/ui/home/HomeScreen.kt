@@ -16,11 +16,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,10 +45,12 @@ import jjh.deliveryservice.calendar.CalendarModel
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
 import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
+import jjh.deliveryservice.calendar.calendar
 import jjh.deliveryservice.calendar.dayOfWeekString
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.home.R
 import jjh.deliveryservice.resource.CommonGreenColor
+import jjh.deliveryservice.ui.DeliveryDatePickerDialog
 
 @Composable
 fun HomeScreen(
@@ -53,16 +58,17 @@ fun HomeScreen(
   dateArray: Array<CalendarModel>,
   year: Int,
   month: Int,
+  date: Int,
   today: CalendarModel,
   clickedDate: CalendarModel? = null,
   deliveryList: List<TrackingInfoModel> = listOf(),
-  onDateChangeClickListener: (year: Int, month: Int) -> Unit = { _, _ -> },
+  homeScreenDetailState: Boolean = false,
+  homeScreenDetailStateChange: (Boolean) -> Unit = {},
+  onDateChangeClickListener: (timeInMillis: Long) -> Unit = {},
   onDateClickListener: (CalendarModel) -> Unit = { },
   onStartSearchScreen: () -> Unit = {}, // 택배 검색하기 이동
   onStartRegisterScreen: () -> Unit = {}, // 택배 등록하기 이동
 ) {
-
-  var homeScreenDetailState by remember { mutableStateOf(false) }
 
   val context = LocalContext.current
   Box(modifier = modifier) {
@@ -71,6 +77,7 @@ fun HomeScreen(
         modifier = Modifier.fillMaxWidth(),
         year = year,
         month = month,
+        date = date,
         onDateChangeClickListener = onDateChangeClickListener,
         onStartSearchScreen = onStartSearchScreen,
       ) // DateAndSearchComponent 날짜
@@ -93,7 +100,7 @@ fun HomeScreen(
           detectVerticalDragGestures(
             onDragStart = { dragPosition = it },
             onDragEnd = {
-              homeScreenDetailState = isDetailViewExtended
+              homeScreenDetailStateChange(isDetailViewExtended)
               isMoving = false
             },
             onVerticalDrag = { _, dragAmount ->
@@ -111,10 +118,7 @@ fun HomeScreen(
           clickedDate = clickedDate,
           dateArray = dateArray,
           deliveryList = deliveryList,
-          onDateClickListener = {
-            onDateClickListener(it)
-            homeScreenDetailState = true
-          },
+          onDateClickListener = { onDateClickListener(it) },
           isDetailViewExpended = homeScreenDetailState
         ) // CalendarComponent 달력
 
@@ -157,20 +161,37 @@ fun HomeScreen(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateAndSearchComponent(
   modifier: Modifier = Modifier,
   year: Int,
   month: Int,
-  onDateChangeClickListener: (year: Int, month: Int) -> Unit = { _, _ -> },
+  date: Int,
+  onDateChangeClickListener: (timeInMillis: Long) -> Unit = {},
   onStartSearchScreen: () -> Unit = {},
 ) {
+
+  var isShowDatePicker by remember { mutableStateOf(false) }
+  val calendar = calendar(year, month - 1, date)
+
+  if (isShowDatePicker) {
+    DeliveryDatePickerDialog(
+      onDismissRequest = { isShowDatePicker = false },
+      onConfirmClickListener = {
+        onDateChangeClickListener(it)
+        isShowDatePicker = false
+      },
+      state = rememberDatePickerState(initialSelectedDateMillis = calendar.timeInMillis)
+    )
+  }
+
   Row(
     modifier = modifier
   ) {
     Row(modifier = Modifier
       .align(Alignment.CenterVertically)
-      .clickable { onDateChangeClickListener(year, month) }
+      .clickable { isShowDatePicker = true }
       .padding(vertical = 10.dp)
       .padding(start = 16.dp)
     ) {
@@ -230,7 +251,7 @@ fun DayOfWeekComponent(
 @Composable
 private fun HomeScreenPreview() {
   HomeScreen(
-    year = 2024, month = 4,
+    year = 2024, month = 4, date = 2,
     today = CalendarModel(0, 0, 0),
     dateArray = CalendarUtil.getDaysInMonth(2024, 4)
   )
