@@ -107,7 +107,7 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
   }
 
   override suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean {
-    return deliveryDao.getAllDeliveryInfo().isNotEmpty()
+    return deliveryDao.getDeliveryInfo(invoiceNumber) != null
   }
 
   override suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel> {

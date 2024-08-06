@@ -22,5 +22,5 @@ interface DeliveryDao {
   suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoEntity>
 
   @Query("SELECT * FROM TrackingInfoEntity where invoiceNo == :invoiceNo")
-  suspend fun getDeliveryInfo(invoiceNo: String): TrackingInfoEntity
+  suspend fun getDeliveryInfo(invoiceNo: String): TrackingInfoEntity?
 }
