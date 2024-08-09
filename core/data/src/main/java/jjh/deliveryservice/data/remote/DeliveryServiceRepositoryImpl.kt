@@ -113,6 +113,17 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
     return deliveryDao.getDateDeliveryInfo(startDate, endDate).map { it.toModel() }
   }
 
+  override suspend fun updateTrackingInfo() {
+    val resultList = deliveryDao.getNotCompletedDeliveryInfo()
+      .map {
+        deliveryServiceApi.trackingInfo(
+          invoiceNumber = it.invoiceNo,
+          code = it.companyCode
+        ).toEntity(companyCode = it.companyCode)
+      }
+    deliveryDao.insertTrackingInfo(resultList)
+  }
+
   /**
    * 택배사 리스트 조회 (API)
    * */

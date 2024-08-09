@@ -69,6 +69,14 @@ dependencies {
   // hilt
   implementation(libs.hilt.android)
   kapt(libs.hilt.android.compiler)
+  kapt(libs.androidx.hilt.compiler)
+
+  // lint
+  lintChecks(libs.compose.lint.checks)
+
+  // WorkManager
+  implementation(libs.androidx.work.runtime.ktx)
+  implementation (libs.androidx.hilt.work)
 }
 
 
