@@ -23,4 +23,12 @@ interface DeliveryDao {
 
   @Query("SELECT * FROM TrackingInfoEntity where invoiceNo == :invoiceNo")
   suspend fun getDeliveryInfo(invoiceNo: String): TrackingInfoEntity
+
+
+  @Query("SELECT * FROM TrackingInfoEntity where name LIKE '%' || :name || '%'")
+  suspend fun getDeliveryInfoByName(name: String): List<TrackingInfoEntity>
+
+  @Query("SELECT * FROM TrackingInfoEntity where invoiceNo LIKE '%' || :invoiceNo || '%'")
+  suspend fun getDeliveryInfoByInvoiceNo(invoiceNo: String): List<TrackingInfoEntity>
+
 }

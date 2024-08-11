@@ -21,4 +21,6 @@ interface DeliveryServiceRepository {
   suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel>
 
   suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean
+  suspend fun getSearchByName(name: String): List<TrackingInfoModel>
+  suspend fun getSearchByInvoiceNumber(invoiceNumber: String): List<TrackingInfoModel>
 }

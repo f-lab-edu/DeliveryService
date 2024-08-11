@@ -54,6 +54,10 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
     return savedList
   }
 
+
+  /**
+   * 저장된 택배사 리스트 불러오기
+   * */
   private suspend fun getSavedCompanyList(): Flow<List<CompanyModel>?> = dataStorePreferences.data
     .catch { t ->
       if (t is IOException) emit(emptyPreferences())
@@ -78,6 +82,25 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
   }
 
   /**
+   * 이름으로 검색
+   * */
+  override suspend fun getSearchByName(
+    name: String
+  ): List<TrackingInfoModel> {
+    return deliveryDao.getDeliveryInfoByName(name).map { it.toModel() }
+
+  }
+
+  /**
+   * 송장번호로 검색
+   * */
+  override suspend fun getSearchByInvoiceNumber(
+    invoiceNumber: String
+  ): List<TrackingInfoModel> {
+    return deliveryDao.getDeliveryInfoByInvoiceNo(invoiceNumber).map { it.toModel() }
+  }
+
+  /**
    * 추천 택배사 리스트 조회
    *
    * @param invoiceNumber 송장 번호
@@ -98,6 +121,11 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
     return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel()
   }
 
+  /**
+   * 택배 저장하기
+   *
+   * @param model 택배 정보
+   * */
   override suspend fun saveTrackingInfo(model: TrackingInfoModel) {
     val entity = model.toEntity()
       .copy(registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" })
@@ -105,10 +133,23 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
     return deliveryDao.insertTrackingInfo(listOf(entity))
   }
 
+
+  /**
+   * 저장된 택배 확인
+   *
+   * @param companyCode 택배사 코드
+   * @param invoiceNumber 송장 번호
+   * */
   override suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean {
     return deliveryDao.getAllDeliveryInfo().isNotEmpty()
   }
 
+  /**
+   * 기간 내 택배 확인 (보통 월별)
+   *
+   * @param startDate 검색 시작 날짜
+   * @param endDate 검색 종료 날짜
+   * */
   override suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel> {
     return deliveryDao.getDateDeliveryInfo(startDate, endDate).map { it.toModel() }
   }

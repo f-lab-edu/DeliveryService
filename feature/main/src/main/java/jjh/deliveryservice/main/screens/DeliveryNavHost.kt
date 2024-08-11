@@ -10,10 +10,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import jjh.deliveryservice.home.ui.home.HomeScreen
+import jjh.deliveryservice.home.ui.home.HomeUiState
 import jjh.deliveryservice.home.ui.home.HomeViewModel
 import jjh.deliveryservice.register.RegisterScreen
+import jjh.deliveryservice.register.RegisterUiState
 import jjh.deliveryservice.register.RegisterViewModel
 import jjh.deliveryservice.search.SearchScreen
+import jjh.deliveryservice.search.SearchUiState
+import jjh.deliveryservice.search.SearchViewModel
 
 @Composable
 fun DeliveryNavHost(
@@ -26,7 +30,7 @@ fun DeliveryNavHost(
   ) {
     composable(route = DeliveryScreens.HOME()) {
       val homeViewModel: HomeViewModel = hiltViewModel()
-      val state by homeViewModel.uiState.collectAsStateWithLifecycle()
+      val state: HomeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
       LaunchedEffect(Unit) { homeViewModel.getSavedTrackingInfo() }
 
@@ -42,7 +46,7 @@ fun DeliveryNavHost(
 
     composable(route = DeliveryScreens.REGISTER()) {
       val registerViewModel: RegisterViewModel = hiltViewModel()
-      val state by registerViewModel.uiState.collectAsStateWithLifecycle()
+      val state: RegisterUiState by registerViewModel.uiState.collectAsStateWithLifecycle()
 
       LaunchedEffect(Unit) { registerViewModel.getCompanyList() }
 
@@ -60,20 +64,22 @@ fun DeliveryNavHost(
         onError = state.errorMessage,
         saveDelivery = registerViewModel::saveDelivery,
         cancelDelivery = registerViewModel::cancelDelivery,
-        onBackListener = { navController.popBackStack() }
+        onBackListener = navController::popBackStack
       )
     }
 
     composable(route = DeliveryScreens.SEARCH()) {
-      // TODO: 테스트 임시 삭제 예정
-      val homeViewModel: HomeViewModel = hiltViewModel()
-      val state by homeViewModel.uiState.collectAsStateWithLifecycle()
+      val searchViewModel: SearchViewModel = hiltViewModel()
+      val state: SearchUiState by searchViewModel.uiState.collectAsStateWithLifecycle()
 
-      LaunchedEffect(Unit) { homeViewModel.getSavedTrackingInfo() }
       SearchScreen(
         modifier = modifier,
-        onBackListener = { navController.popBackStack() },
-        trackingInfoList = state.savedTrackingInfoList
+        searchText = state.searchText,
+        trackingInfoList = state.searchedList,
+        isEmptyResult = state.isEmptyResult,
+        onBackListener = navController::popBackStack,
+        onItemClickListener = {},
+        onValueChange = searchViewModel::changeSearchText,
       )
     }
 
