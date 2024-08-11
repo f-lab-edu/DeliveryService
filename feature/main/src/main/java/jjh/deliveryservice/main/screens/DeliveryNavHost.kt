@@ -13,6 +13,7 @@ import jjh.deliveryservice.home.ui.home.HomeScreen
 import jjh.deliveryservice.home.ui.home.HomeViewModel
 import jjh.deliveryservice.register.RegisterScreen
 import jjh.deliveryservice.register.RegisterViewModel
+import jjh.deliveryservice.search.SearchScreen
 
 @Composable
 fun DeliveryNavHost(
@@ -33,6 +34,7 @@ fun DeliveryNavHost(
         modifier = modifier,
         year = state.year,
         month = state.month,
+        onStartSearchScreen = { navController.navigate(route = DeliveryScreens.SEARCH()) },
         onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) },
         deliveryList = state.savedTrackingInfoList,
       )
@@ -62,8 +64,17 @@ fun DeliveryNavHost(
       )
     }
 
-    composable(route = DeliveryScreens.FIND()) {
+    composable(route = DeliveryScreens.SEARCH()) {
+      // TODO: 테스트 임시 삭제 예정
+      val homeViewModel: HomeViewModel = hiltViewModel()
+      val state by homeViewModel.uiState.collectAsStateWithLifecycle()
 
+      LaunchedEffect(Unit) { homeViewModel.getSavedTrackingInfo() }
+      SearchScreen(
+        modifier = modifier,
+        onBackListener = { navController.popBackStack() },
+        trackingInfoList = state.savedTrackingInfoList
+      )
     }
 
 

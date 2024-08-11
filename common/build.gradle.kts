@@ -31,6 +31,10 @@ android {
 }
 
 dependencies {
+
+  // domain의 level class를 위함. 모델이라는 모듈을 따로 만들어서 빼는것도 고려 필요할듯 싶음.
+  implementation(project(":core:domain"))
+
   // hilt
   implementation(libs.hilt.android)
   kapt(libs.hilt.android.compiler)
