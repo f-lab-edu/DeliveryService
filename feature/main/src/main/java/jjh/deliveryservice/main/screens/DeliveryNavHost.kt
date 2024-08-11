@@ -7,14 +7,20 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import jjh.deliveryservice.common.fromJson
+import jjh.deliveryservice.common.toJson
+import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.home.ui.home.HomeScreen
 import jjh.deliveryservice.home.ui.home.HomeUiState
 import jjh.deliveryservice.home.ui.home.HomeViewModel
 import jjh.deliveryservice.register.RegisterScreen
 import jjh.deliveryservice.register.RegisterUiState
 import jjh.deliveryservice.register.RegisterViewModel
+import jjh.deliveryservice.search.SearchDetailScreen
 import jjh.deliveryservice.search.SearchScreen
 import jjh.deliveryservice.search.SearchUiState
 import jjh.deliveryservice.search.SearchViewModel
@@ -78,8 +84,27 @@ fun DeliveryNavHost(
         trackingInfoList = state.searchedList,
         isEmptyResult = state.isEmptyResult,
         onBackListener = navController::popBackStack,
-        onItemClickListener = {},
+        onItemClickListener = { clickedTrackingInfo ->
+          navController.navigate(route = DeliveryScreens.SEARCH_DETAIL() + "/${clickedTrackingInfo.toJson()}")
+        },
         onValueChange = searchViewModel::changeSearchText,
+      )
+    }
+
+    composable(
+      route = DeliveryScreens.SEARCH_DETAIL() + "/{clickedTrackingInfo}",
+      arguments = listOf(navArgument("clickedTrackingInfo") { type = NavType.StringType })
+    ) { navBackStackEntry ->
+
+      val clickedTrackingInfo: TrackingInfoModel =
+        navBackStackEntry.arguments
+          ?.getString("clickedTrackingInfo")
+          ?.fromJson<TrackingInfoModel>()
+          ?: return@composable
+
+      SearchDetailScreen(
+        modifier = modifier,
+        trackingInfoModel = clickedTrackingInfo
       )
     }
 
