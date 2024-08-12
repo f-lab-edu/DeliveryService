@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import jjh.deliveryservice.calendar.CalendarUtil.calendarStringFormat
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.year
@@ -100,13 +101,13 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
 
   override suspend fun saveTrackingInfo(model: TrackingInfoModel) {
     val entity = model.toEntity()
-      .copy(registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" })
+      .copy(registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) })
 
     return deliveryDao.insertTrackingInfo(listOf(entity))
   }
 
   override suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean {
-    return deliveryDao.getAllDeliveryInfo().isNotEmpty()
+    return deliveryDao.getDeliveryInfo(invoiceNumber) != null
   }
 
   override suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel> {

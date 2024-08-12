@@ -1,5 +1,6 @@
 package jjh.deliveryservice.data.remote.response.tracking
 
+import jjh.deliveryservice.calendar.CalendarUtil.calendarStringFormat
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.year
@@ -59,22 +60,11 @@ data class TrackingInfoResponse(
     fun TrackingInfoResponse.toEntity(): TrackingInfoEntity {
       return TrackingInfoEntity(
         invoiceNo = invoiceNo.orEmpty(),
-//        senderName = senderName.orEmpty(),
-//        receiverAddress = receiverAddr.orEmpty(),
-//        firstDetail = firstDetail?.toModel(),
         level = findLevel(level),
-//        lastDetail = lastDetail?.toModel(),
         estimate = estimate.orEmpty(),
         trackingDetails = trackingDetails?.map { it.toModel() } ?: listOf(),
-//        lastStateDetail = lastStateDetail?.toModel(),
-//        completeYN = completeYN.orEmpty(),
-//        complete = complete ?: false,
-//        recipient = recipient.orEmpty(),
-//        receiverName = receiverName.orEmpty(),
-//        result = result.orEmpty(),
-//        itemName = itemName.orEmpty(),
         name = itemName.orEmpty(),
-        registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" },
+        registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) }
       )
     }
   }
@@ -86,7 +76,7 @@ data class TrackingInfoResponse(
       trackingDetails = trackingDetails?.map { it.toModel() },
       estimate = estimate.orEmpty(),
       level = findLevel(level),
-      registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" }
+      registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) }
     )
   }
 }

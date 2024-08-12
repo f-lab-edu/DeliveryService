@@ -31,10 +31,18 @@ fun DeliveryNavHost(
 
       HomeScreen(
         modifier = modifier,
+        dateArray = state.dateArray(),
         year = state.year,
         month = state.month,
-        onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) },
+        date = state.date,
+        today = state.today,
+        clickedDate = state.clickedDate,
         deliveryList = state.savedTrackingInfoList,
+        homeScreenDetailState = state.homeScreenDetailState,
+        homeScreenDetailStateChange = homeViewModel::homeScreenDetailStateChange,
+        onDateChangeClickListener = homeViewModel::onDateChangeClickListener,
+        onDateClickListener = homeViewModel::onDateClickListener,
+        onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) },
       )
     }
 
@@ -58,7 +66,7 @@ fun DeliveryNavHost(
         onError = state.errorMessage,
         saveDelivery = registerViewModel::saveDelivery,
         cancelDelivery = registerViewModel::cancelDelivery,
-        onBackListener = { navController.popBackStack() }
+        onBackListener = { navController.popBackStack() },
       )
     }
 
