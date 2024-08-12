@@ -46,6 +46,7 @@ private fun SearchDetailTitleComponentPreview() {
     trackingDetails = listOf(),
     estimate = "estimate",
     level = Level.DELIVERY_COMPLETE,
+    companyCode = "companyCode"
   )
 
   SearchDetailScreen(

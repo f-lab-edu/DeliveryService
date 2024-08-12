@@ -4,6 +4,7 @@ package jjh.deliveryservice.domain.model
  * 운송장 조회 결과
  *
  * @param invoiceNo 운송장 번호
+ * @param companyCode 택배사 코드
  * @param name 택배명
  * @param trackingDetails 추적 상세 정보 목록
  * @param estimate 배송 예정 시간
@@ -12,6 +13,7 @@ package jjh.deliveryservice.domain.model
  * */
 data class TrackingInfoModel(
   val invoiceNo: String,
+  val companyCode: String,
   val name: String,
   val trackingDetails: List<TrackingDetailModel>?,
   val estimate: String,

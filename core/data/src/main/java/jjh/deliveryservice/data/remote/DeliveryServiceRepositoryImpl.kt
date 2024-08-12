@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import jjh.deliveryservice.calendar.CalendarUtil.calendarStringFormat
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.year
@@ -13,6 +14,7 @@ import jjh.deliveryservice.data.db.dao.DeliveryDao
 import jjh.deliveryservice.data.db.datastore.COMPANY_LIST_KEY
 import jjh.deliveryservice.data.db.entity.TrackingInfoEntity.Companion.toEntity
 import jjh.deliveryservice.data.remote.response.companys.CompanyResponse
+import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse.Companion.toEntity
 import jjh.deliveryservice.domain.model.CompanyModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
@@ -118,7 +120,7 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * @param invoiceNumber 송장 번호
    * */
   override suspend fun trackingInfo(companyCode: String, invoiceNumber: String): TrackingInfoModel {
-    return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel()
+    return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel(companyCode)
   }
 
   /**
@@ -128,7 +130,7 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * */
   override suspend fun saveTrackingInfo(model: TrackingInfoModel) {
     val entity = model.toEntity()
-      .copy(registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" })
+      .copy(registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) })
 
     return deliveryDao.insertTrackingInfo(listOf(entity))
   }
@@ -141,7 +143,7 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * @param invoiceNumber 송장 번호
    * */
   override suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean {
-    return deliveryDao.getAllDeliveryInfo().isNotEmpty()
+    return deliveryDao.getDeliveryInfo(invoiceNumber) != null
   }
 
   /**
@@ -152,6 +154,17 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * */
   override suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel> {
     return deliveryDao.getDateDeliveryInfo(startDate, endDate).map { it.toModel() }
+  }
+
+  override suspend fun updateTrackingInfo() {
+    val resultList = deliveryDao.getNotCompletedDeliveryInfo()
+      .map {
+        deliveryServiceApi.trackingInfo(
+          invoiceNumber = it.invoiceNo,
+          code = it.companyCode
+        ).toEntity(companyCode = it.companyCode)
+      }
+    deliveryDao.insertTrackingInfo(resultList)
   }
 
   /**

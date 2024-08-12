@@ -1,5 +1,8 @@
 package jjh.deliveryservice.calendar
 
+import jjh.deliveryservice.calendar.CalendarUtil.calendarStringFormat
+import java.util.Calendar
+
 data class CalendarModel(
   val year: Int,
   val month: Int,
@@ -7,5 +10,9 @@ data class CalendarModel(
   val isCurrentMonth: Boolean = false,
 ) {
 
-  fun toDateString(): String = "$year.$month.$date"
+  val calendar = Calendar.getInstance().apply {
+    set(this.year, this.month, this.date)
+  }
+
+  fun toDateString(): String = calendarStringFormat(year, month, date)
 }

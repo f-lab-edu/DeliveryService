@@ -1,7 +1,10 @@
 package jjh.deliveryservice.home.ui.home
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,15 +16,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,23 +41,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jjh.deliveryservice.calendar.CalendarModel
 import jjh.deliveryservice.calendar.CalendarUtil
 import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
 import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
+import jjh.deliveryservice.calendar.calendar
+import jjh.deliveryservice.calendar.dayOfWeekString
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.resource.R
 import jjh.deliveryservice.resource.CommonGreenColor
+import jjh.deliveryservice.ui.DeliveryDatePickerDialog
 
 @Composable
 fun HomeScreen(
   modifier: Modifier = Modifier,
+  dateArray: Array<CalendarModel>,
   year: Int,
   month: Int,
+  date: Int,
+  today: CalendarModel,
+  clickedDate: CalendarModel? = null,
   deliveryList: List<TrackingInfoModel> = listOf(),
-  onDateClickListener: (year: Int, month: Int) -> Unit = { _, _ -> },
+  homeScreenDetailState: Boolean = false,
+  homeScreenDetailStateChange: (Boolean) -> Unit = {},
+  onDateChangeClickListener: (timeInMillis: Long) -> Unit = {},
+  onDateClickListener: (CalendarModel) -> Unit = { },
   onStartSearchScreen: () -> Unit = {}, // 택배 검색하기 이동
   onStartRegisterScreen: () -> Unit = {}, // 택배 등록하기 이동
 ) {
+
   val context = LocalContext.current
   Box(modifier = modifier) {
     Column {
@@ -53,7 +77,8 @@ fun HomeScreen(
         modifier = Modifier.fillMaxWidth(),
         year = year,
         month = month,
-        onDateClickListener = onDateClickListener,
+        date = date,
+        onDateChangeClickListener = onDateChangeClickListener,
         onStartSearchScreen = onStartSearchScreen,
       ) // DateAndSearchComponent 날짜
 
@@ -64,10 +89,55 @@ fun HomeScreen(
         dayOfWeek = context.resources.getStringArray(R.array.day_of_week)
       ) // DayOfWeekComponent 요일
 
-      CalendarComponent(
-        dateArray = CalendarUtil.getDaysInMonth(year, month),
-        deliveryList = deliveryList
-      ) // CalendarComponent 달력
+      var dragPosition by remember { mutableStateOf(Offset(0f, 0f)) }
+
+      // onDragEnd가 끝나기 전까지 들고있어야 하는 값, expended 여부 체크 시 homeScreenDetailState를 대신 사용
+      var isDetailViewExtended by remember { mutableStateOf(false) }
+      var isMoving by remember { mutableStateOf(false) }
+
+      Column(modifier = Modifier
+        .pointerInput(Unit) {
+          detectVerticalDragGestures(
+            onDragStart = { dragPosition = it },
+            onDragEnd = {
+              homeScreenDetailStateChange(isDetailViewExtended)
+              isMoving = false
+            },
+            onVerticalDrag = { _, dragAmount ->
+              if (isMoving.not()) {
+                isDetailViewExtended = dragAmount < 0f
+                isMoving = true
+              }
+            }
+          )
+        }
+      ) {
+        CalendarComponent(
+          modifier = Modifier.weight(1f),
+          today = today,
+          clickedDate = clickedDate,
+          dateArray = dateArray,
+          deliveryList = deliveryList,
+          onDateClickListener = { onDateClickListener(it) },
+          isDetailViewExpended = homeScreenDetailState
+        ) // CalendarComponent 달력
+
+
+        val animatedValue by animateFloatAsState(
+          targetValue = if (homeScreenDetailState) 1f else 0.001f,
+          animationSpec = tween(durationMillis = 300),
+          label = ""
+        )
+
+        clickedDate?.let { model ->
+          HomeDetailListComponent(
+            modifier = Modifier.weight(animatedValue),
+            date = model.date,
+            dayOfWeek = model.calendar.dayOfWeekString,
+            trackingINfoModelList = deliveryList.filter { item -> item.registerDate == model.toDateString() }
+          )
+        }
+      }
     }
 
 
@@ -90,20 +160,38 @@ fun HomeScreen(
 
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateAndSearchComponent(
   modifier: Modifier = Modifier,
   year: Int,
   month: Int,
-  onDateClickListener: (year: Int, month: Int) -> Unit = { _, _ -> },
+  date: Int,
+  onDateChangeClickListener: (timeInMillis: Long) -> Unit = {},
   onStartSearchScreen: () -> Unit = {},
 ) {
+
+  var isShowDatePicker by remember { mutableStateOf(false) }
+  val calendar = calendar(year, month - 1, date)
+
+  if (isShowDatePicker) {
+    DeliveryDatePickerDialog(
+      onDismissRequest = { isShowDatePicker = false },
+      onConfirmClickListener = {
+        onDateChangeClickListener(it)
+        isShowDatePicker = false
+      },
+      state = rememberDatePickerState(initialSelectedDateMillis = calendar.timeInMillis)
+    )
+  }
+
   Row(
     modifier = modifier
   ) {
     Row(modifier = Modifier
       .align(Alignment.CenterVertically)
-      .clickable { onDateClickListener(year, month) }
+      .clickable { isShowDatePicker = true }
       .padding(vertical = 10.dp)
       .padding(start = 16.dp)
     ) {
@@ -162,5 +250,9 @@ fun DayOfWeekComponent(
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenPreview() {
-  HomeScreen(year = 2024, month = 4)
+  HomeScreen(
+    year = 2024, month = 4, date = 2,
+    today = CalendarModel(0, 0, 0),
+    dateArray = CalendarUtil.getDaysInMonth(2024, 4)
+  )
 }

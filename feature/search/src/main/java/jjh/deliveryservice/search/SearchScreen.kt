@@ -224,6 +224,7 @@ private fun SearchScreenPreview() {
     trackingDetails = listOf(),
     estimate = "",
     level = Level.DELIVERY_COMPLETE,
+    companyCode = "companyCode"
   )
 
   val deliveryList = listOf(trackingInfoModel)
@@ -246,6 +247,7 @@ private fun DeliveryItemPreview() {
     trackingDetails = listOf(),
     estimate = "estimate",
     level = Level.DELIVERY_COMPLETE,
+    companyCode = "companyCode"
   )
   DeliveryItem(trackingInfoModel = trackingInfoModel)
 }
