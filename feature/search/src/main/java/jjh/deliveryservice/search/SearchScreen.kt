@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.sp
 import jjh.deliveryservice.common.getString
 import jjh.deliveryservice.domain.model.Level
 import jjh.deliveryservice.domain.model.TrackingInfoModel
-import jjh.deliveryservice.register.R
+import jjh.deliveryservice.resource.R
 import jjh.deliveryservice.resource.CommonGreenColor
 import jjh.deliveryservice.resource.emptyColors
 

@@ -2,7 +2,7 @@ package jjh.deliveryservice.common
 
 import androidx.annotation.StringRes
 import jjh.deliveryservice.domain.model.Level
-import jjh.deliveryservice.home.R
+import jjh.deliveryservice.resource.R
 
 
 @StringRes

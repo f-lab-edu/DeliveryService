@@ -38,6 +38,7 @@ dependencies {
   implementation(project(":feature:home"))
   implementation(project(":feature:register"))
   implementation(project(":feature:search"))
+  implementation(project(":feature:detail"))
   implementation(project(":feature:resource"))
 
   implementation(libs.accompanist.systemuicontroller)

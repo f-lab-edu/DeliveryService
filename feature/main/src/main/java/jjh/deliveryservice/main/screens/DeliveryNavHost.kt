@@ -20,7 +20,7 @@ import jjh.deliveryservice.home.ui.home.HomeViewModel
 import jjh.deliveryservice.register.RegisterScreen
 import jjh.deliveryservice.register.RegisterUiState
 import jjh.deliveryservice.register.RegisterViewModel
-import jjh.deliveryservice.search.SearchDetailScreen
+import jjh.deliveryservice.detail.SearchDetailScreen
 import jjh.deliveryservice.search.SearchScreen
 import jjh.deliveryservice.search.SearchUiState
 import jjh.deliveryservice.search.SearchViewModel

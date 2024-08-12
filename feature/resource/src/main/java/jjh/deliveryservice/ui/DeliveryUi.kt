@@ -106,7 +106,7 @@ fun Toolbar(
       Image(
         modifier = Modifier
           .size(54.dp)
-          .clickable { onStartClickListener() }
+          .clickable { onEndClickListener() }
           .padding(horizontal = 16.dp)
           .fillMaxHeight(),
         painter = painterResource(id = endIcon),
