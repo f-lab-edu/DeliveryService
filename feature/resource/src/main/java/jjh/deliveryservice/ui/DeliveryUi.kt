@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jjh.deliveryservice.resource.CommonGreenColor
@@ -148,7 +149,9 @@ fun Toolbar(
       modifier = Modifier
         .weight(1f),
       text = title,
-      textAlign = TextAlign.Center
+      textAlign = TextAlign.Center,
+      maxLines = 1,
+      overflow = TextOverflow.Ellipsis
     )
 
     if (endIcon != null)

@@ -104,7 +104,8 @@ fun DeliveryNavHost(
 
       SearchDetailScreen(
         modifier = modifier,
-        trackingInfoModel = clickedTrackingInfo
+        trackingInfoModel = clickedTrackingInfo,
+        onBackListener = navController::popBackStack,
       )
     }
 

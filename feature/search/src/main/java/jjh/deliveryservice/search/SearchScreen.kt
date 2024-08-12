@@ -91,7 +91,6 @@ fun SearchScreen(
   }
 }
 
-
 // 상단 검색 타이틀
 @Composable
 private fun SearchTitleComponent(
