@@ -90,6 +90,23 @@ object CalendarUtil {
       else -> throw IllegalArgumentException("요일이 잘못되었습니다")
     }
 
+  /**
+   * @param dayOfWeek 요일에 대한 int value [Calendar.get], [Calendar.DAY_OF_WEEK]
+   * */
+  internal fun getDayOfWeekString(
+    dayOfWeek: Int,
+  ): String =
+    when (dayOfWeek) {
+      Calendar.SUNDAY -> "일"
+      Calendar.MONDAY -> "월"
+      Calendar.TUESDAY -> "화"
+      Calendar.WEDNESDAY -> "수"
+      Calendar.THURSDAY -> "목"
+      Calendar.FRIDAY -> "금"
+      Calendar.SATURDAY -> "토"
+      else -> throw IllegalArgumentException("요일이 잘못되었습니다")
+    }
+
   const val SUNDAY_INDEX = 0
   const val SATURDAY_INDEX = 6
 
@@ -104,5 +121,9 @@ object CalendarUtil {
       SATURDAY_INDEX -> SATURDAY_COLOR
       else -> ELSE_COLOR
     }
+  }
+
+  fun calendarStringFormat(year: Int, month: Int, date: Int): String {
+    return "$year.${String.format("%02d", month)}.${String.format("%02d", date)}"
   }
 }

@@ -81,11 +81,13 @@ class RegisterViewModel @Inject constructor(
       }
 
       if (deliveryTrackingInfoUseCase.isExistedDeliveryTrackingInfo(companyCode, invoiceNumber)) {
-        _uiState.update { it.copy(
-          invoiceNumber = "",
-          selectedCompany = null,
-          errorMessage = "이미 등록된 택배입니다."
-        ) }
+        _uiState.update {
+          it.copy(
+            invoiceNumber = "",
+            selectedCompany = null,
+            errorMessage = "이미 등록된 택배입니다."
+          )
+        }
         return@exceptionHandlerCoroutine
       }
 

@@ -23,14 +23,16 @@ import jjh.deliveryservice.resource.deliveryDatePickerColor
 fun DeliveryDatePickerDialog(
   modifier: Modifier = Modifier,
   onDismissRequest: () -> Unit,
-  onConfirmClickListener: () -> Unit,
+  onConfirmClickListener: (timeInMillis: Long) -> Unit,
   state: DatePickerState = rememberDatePickerState(),
 ) {
   DatePickerDialog(
     modifier = modifier,
     onDismissRequest = onDismissRequest,
     confirmButton = {
-      TextButton(onClick = onConfirmClickListener) {
+      TextButton(
+        onClick = { onConfirmClickListener(state.selectedDateMillis ?: 0L) }
+      ) {
         Text(text = "확인", style = TextStyle(color = CommonGreenColor))
       }
     },

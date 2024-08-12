@@ -1,5 +1,6 @@
 package jjh.deliveryservice.data.remote.response.tracking
 
+import jjh.deliveryservice.calendar.CalendarUtil.calendarStringFormat
 import jjh.deliveryservice.calendar.date
 import jjh.deliveryservice.calendar.month
 import jjh.deliveryservice.calendar.year
@@ -34,36 +35,50 @@ import java.util.Calendar
  *
  * */
 data class TrackingInfoResponse(
-    val adUrl: String?,
-    val complete: Boolean?,
-    val invoiceNo: String?,
-    val itemImage: String?,
-    val itemName: String?,
-    val level: Int,
-    val receiverAddr: String?,
-    val receiverName: String?,
-    val recipient: String?,
-    val result: String?,
-    val senderName: String?,
-    val trackingDetails: List<TrackingDetailResponse>?,
-    val orderNumber: String?,
-    val estimate: String?,
-    val productInfo: String?,
-    val zipCode: String?,
-    val lastDetail: TrackingDetailResponse?,
-    val lastStateDetail: TrackingDetailResponse?,
-    val firstDetail: TrackingDetailResponse?,
-    val completeYN: String?,
-) {
-    fun toModel(companyCode: String): TrackingInfoModel {
-        return TrackingInfoModel(
-            invoiceNo = invoiceNo!!,
-            name = itemName.orEmpty(),
-            trackingDetails = trackingDetails?.map { it.toModel() },
-            estimate = estimate.orEmpty(),
-            level = findLevel(level),
-            registerDate = Calendar.getInstance().run { "$year.${month + 1}.$date" },
-            companyCode = companyCode
-        )
+  val adUrl: String?,
+  val complete: Boolean?,
+  val invoiceNo: String?,
+  val itemImage: String?,
+  val itemName: String?,
+  val level: Int,
+  val receiverAddr: String?,
+  val receiverName: String?,
+  val recipient: String?,
+  val result: String?,
+  val senderName: String?,
+  val trackingDetails: List<TrackingDetailResponse>?,
+  val orderNumber: String?,
+  val estimate: String?,
+  val productInfo: String?,
+  val zipCode: String?,
+  val lastDetail: TrackingDetailResponse?,
+  val lastStateDetail: TrackingDetailResponse?,
+  val firstDetail: TrackingDetailResponse?,
+  val completeYN: String?,
+)  {
+  companion object {
+    fun TrackingInfoResponse.toEntity(companyCode: String): TrackingInfoEntity {
+      return TrackingInfoEntity(
+        invoiceNo = invoiceNo.orEmpty(),
+        level = level,
+        estimate = estimate.orEmpty(),
+        trackingDetails = trackingDetails?.map { it.toModel() } ?: listOf(),
+        name = itemName.orEmpty(),
+        registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) },
+        companyCode = companyCode
+      )
     }
+  }
+
+  fun toModel(companyCode: String): TrackingInfoModel {
+    return TrackingInfoModel(
+      invoiceNo = invoiceNo!!,
+      name = itemName.orEmpty(),
+      trackingDetails = trackingDetails?.map { it.toModel() },
+      estimate = estimate.orEmpty(),
+      level = findLevel(level),
+      registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) },
+      companyCode = companyCode
+    )
+  }
 }
