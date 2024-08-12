@@ -1,14 +1,24 @@
 package jjh.deliveryservice
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.FormatStrategy
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
 import dagger.hilt.android.HiltAndroidApp
+import jjh.deliveryservice.data.workmanager.TrackingInfoUpdateWorker.Companion.periodicWorkRequest
+import javax.inject.Inject
 
 @HiltAndroidApp
-class DeliveryServiceApplication : Application() {
+class DeliveryServiceApplication : Application(), Configuration.Provider {
+
+  @Inject
+  lateinit var workerFactory: HiltWorkerFactory
+
   override fun onCreate() {
     super.onCreate()
 
@@ -26,5 +36,19 @@ class DeliveryServiceApplication : Application() {
         return true
       }
     })
+
+    WorkManager
+      .getInstance(this)
+      .enqueueUniquePeriodicWork(
+        "TrackingInfoUpdate",
+        ExistingPeriodicWorkPolicy.REPLACE,
+        periodicWorkRequest
+      )
+  }
+
+  override fun getWorkManagerConfiguration(): Configuration {
+    return Configuration.Builder()
+      .setWorkerFactory(workerFactory)
+      .build()
   }
 }

@@ -96,7 +96,7 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * @param invoiceNumber 송장 번호
    * */
   override suspend fun trackingInfo(companyCode: String, invoiceNumber: String): TrackingInfoModel {
-    return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel()
+    return deliveryServiceApi.trackingInfo(invoiceNumber = invoiceNumber, code = companyCode).toModel(companyCode)
   }
 
   override suspend fun saveTrackingInfo(model: TrackingInfoModel) {
@@ -112,6 +112,17 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
 
   override suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel> {
     return deliveryDao.getDateDeliveryInfo(startDate, endDate).map { it.toModel() }
+  }
+
+  override suspend fun updateTrackingInfo() {
+    val resultList = deliveryDao.getNotCompletedDeliveryInfo()
+      .map {
+        deliveryServiceApi.trackingInfo(
+          invoiceNumber = it.invoiceNo,
+          code = it.companyCode
+        ).toEntity(companyCode = it.companyCode)
+      }
+    deliveryDao.insertTrackingInfo(resultList)
   }
 
   /**

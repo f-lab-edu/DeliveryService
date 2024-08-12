@@ -55,28 +55,30 @@ data class TrackingInfoResponse(
   val lastStateDetail: TrackingDetailResponse?,
   val firstDetail: TrackingDetailResponse?,
   val completeYN: String?,
-) : DeliveryServiceResponse<TrackingInfoModel> {
+)  {
   companion object {
-    fun TrackingInfoResponse.toEntity(): TrackingInfoEntity {
+    fun TrackingInfoResponse.toEntity(companyCode: String): TrackingInfoEntity {
       return TrackingInfoEntity(
         invoiceNo = invoiceNo.orEmpty(),
-        level = findLevel(level),
+        level = level,
         estimate = estimate.orEmpty(),
         trackingDetails = trackingDetails?.map { it.toModel() } ?: listOf(),
         name = itemName.orEmpty(),
-        registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) }
+        registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) },
+        companyCode = companyCode
       )
     }
   }
 
-  override fun toModel(): TrackingInfoModel {
+  fun toModel(companyCode: String): TrackingInfoModel {
     return TrackingInfoModel(
       invoiceNo = invoiceNo!!,
       name = itemName.orEmpty(),
       trackingDetails = trackingDetails?.map { it.toModel() },
       estimate = estimate.orEmpty(),
       level = findLevel(level),
-      registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) }
+      registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) },
+      companyCode = companyCode
     )
   }
 }

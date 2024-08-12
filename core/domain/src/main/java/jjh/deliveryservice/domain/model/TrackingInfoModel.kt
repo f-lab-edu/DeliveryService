@@ -12,6 +12,7 @@ package jjh.deliveryservice.domain.model
  * */
 data class TrackingInfoModel(
   val invoiceNo: String,
+  val companyCode: String,
   val name: String,
   val trackingDetails: List<TrackingDetailModel>?,
   val estimate: String,
