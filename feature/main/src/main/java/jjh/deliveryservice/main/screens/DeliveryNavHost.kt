@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -13,6 +14,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import jjh.deliveryservice.common.fromJson
 import jjh.deliveryservice.common.toJson
+import jjh.deliveryservice.detail.SearchDetailScreen
+import jjh.deliveryservice.detail.SearchDetailUiState
+import jjh.deliveryservice.detail.SearchDetailViewModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.home.ui.home.HomeScreen
 import jjh.deliveryservice.home.ui.home.HomeUiState
@@ -20,10 +24,11 @@ import jjh.deliveryservice.home.ui.home.HomeViewModel
 import jjh.deliveryservice.register.RegisterScreen
 import jjh.deliveryservice.register.RegisterUiState
 import jjh.deliveryservice.register.RegisterViewModel
-import jjh.deliveryservice.detail.SearchDetailScreen
+import jjh.deliveryservice.resource.R
 import jjh.deliveryservice.search.SearchScreen
 import jjh.deliveryservice.search.SearchUiState
 import jjh.deliveryservice.search.SearchViewModel
+import jjh.deliveryservice.ui.OneButtonDialog
 
 @Composable
 fun DeliveryNavHost(
@@ -104,20 +109,32 @@ fun DeliveryNavHost(
       arguments = listOf(navArgument("clickedTrackingInfo") { type = NavType.StringType })
     ) { navBackStackEntry ->
 
-      val clickedTrackingInfo: TrackingInfoModel =
-        navBackStackEntry.arguments
-          ?.getString("clickedTrackingInfo")
-          ?.fromJson<TrackingInfoModel>()
-          ?: return@composable
+      val clickedTrackingInfo: TrackingInfoModel? = navBackStackEntry.arguments
+        ?.getString("clickedTrackingInfo")
+        ?.fromJson<TrackingInfoModel>()
+
+      if (clickedTrackingInfo == null) {
+        OneButtonDialog(
+          message = stringResource(id = R.string.not_found_search_data),
+          buttonText = stringResource(id = R.string.close),
+          onClick = navController::popBackStack,
+          onDismissListener = {},
+        )
+        return@composable
+      }
+
+      val viewModel: SearchDetailViewModel = hiltViewModel()
+      val state: SearchDetailUiState by viewModel.uiState.collectAsStateWithLifecycle()
+      viewModel.setTrackingInfoModel(clickedTrackingInfo)
 
       SearchDetailScreen(
         modifier = modifier,
-        trackingInfoModel = clickedTrackingInfo,
+        searchDetailUiState = state,
+//        trackingInfoModel = clickedTrackingInfo,
+//        companyModel = state.companyModel,
         onBackListener = navController::popBackStack,
       )
     }
-
-
   }
 
 }

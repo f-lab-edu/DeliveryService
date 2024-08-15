@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface DeliveryServiceRepository {
 
   suspend fun getCompanyList(needUpdate: Boolean): Flow<List<CompanyModel>>
+  suspend fun getCompany(companyCode: String): Flow<CompanyModel?>
 
   suspend fun getRecommendCompanyList(invoiceNumber: String): List<CompanyModel>
 

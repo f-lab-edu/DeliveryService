@@ -74,7 +74,7 @@ data class TrackingInfoResponse(
     return TrackingInfoModel(
       invoiceNo = invoiceNo!!,
       name = itemName.orEmpty(),
-      trackingDetails = trackingDetails?.map { it.toModel() },
+      trackingDetails = trackingDetails?.map { it.toModel() } ?: listOf(),
       estimate = estimate.orEmpty(),
       level = findLevel(level),
       registerDate = Calendar.getInstance().run { calendarStringFormat(this.year, this.month + 1, this.date) },

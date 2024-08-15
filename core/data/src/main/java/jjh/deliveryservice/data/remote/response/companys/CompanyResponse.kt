@@ -23,6 +23,6 @@ data class CompanyResponse(
   val companyName: String, // 건영택배
 ) : DeliveryServiceResponse<CompanyModel> {
   override fun toModel(): CompanyModel {
-    return CompanyModel(companyCode, isInternational, companyName)
+    return CompanyModel(companyCode, companyName, isInternational)
   }
 }

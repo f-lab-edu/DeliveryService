@@ -14,6 +14,11 @@
     <string name="search_result_empty">검색 결과가 없습니다.</string>
 
     <!-- detail module -->
+    <string name="search_detail_title">택배 상세 조회</string>
     <string name="invoice_number">송장번호: %s</string>
+    <string name="delivery_company">택배사: %s</string>
+    <string name="not_found_search_data">데이터가 존재하지 않습니다\n다시 시도해주세요</string>
+    <string name="delivery_status">배송현황</string>
+    <string name="close">닫기</string>
 
 </resources>

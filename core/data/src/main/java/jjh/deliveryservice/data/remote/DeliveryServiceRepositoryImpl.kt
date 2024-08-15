@@ -20,8 +20,11 @@ import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.singleOrNull
 import java.io.IOException
 import java.util.Calendar
 import javax.inject.Inject
@@ -56,6 +59,11 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
     return savedList
   }
 
+  override suspend fun getCompany(companyCode: String): Flow<CompanyModel?> {
+    return getSavedCompany(companyCode)
+
+  }
+
 
   /**
    * 저장된 택배사 리스트 불러오기
@@ -66,10 +74,19 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
       else throw t
     }
     .map {
-      Gson().run {
-        val jsonString = it[COMPANY_LIST_KEY]
-        Gson().fromJson(jsonString, object : TypeToken<List<CompanyModel>?>() {}.type)
-      }
+      val jsonString = it[COMPANY_LIST_KEY]
+      Gson().fromJson(jsonString, object : TypeToken<List<CompanyModel>>() {}.type)
+    }
+
+  private suspend fun getSavedCompany(companyCode: String): Flow<CompanyModel?> = dataStorePreferences.data
+    .catch { t ->
+      if (t is IOException) emit(emptyPreferences())
+      else throw t
+    }
+    .map {
+      val jsonString = it[COMPANY_LIST_KEY]
+      val list = Gson().fromJson<List<CompanyModel>>(jsonString, object : TypeToken<List<CompanyModel>>() {}.type)
+      list.firstOrNull { it.companyCode == companyCode }
     }
 
   /**
