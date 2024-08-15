@@ -12,4 +12,20 @@ data class TrackingDetailModel(
   val telNo: String, // 010-3350-5902
   val telNo2: String,
   val timeString: String, // 2024-04-25 20:33:14
-) : DeliveryServiceModel
+) : DeliveryServiceModel {
+  companion object {
+    fun init() = TrackingDetailModel(
+      remark = "",
+      level = 0,
+      manName = "",
+      where = "",
+      code = "",
+      time = 0,
+      manPic = "",
+      kind = "",
+      telNo = "",
+      telNo2 = "",
+      timeString = "-",
+    )
+  }
+}

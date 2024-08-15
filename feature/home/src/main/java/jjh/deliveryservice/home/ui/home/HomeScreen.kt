@@ -48,7 +48,7 @@ import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
 import jjh.deliveryservice.calendar.calendar
 import jjh.deliveryservice.calendar.dayOfWeekString
 import jjh.deliveryservice.domain.model.TrackingInfoModel
-import jjh.deliveryservice.home.R
+import jjh.deliveryservice.resource.R
 import jjh.deliveryservice.resource.CommonGreenColor
 import jjh.deliveryservice.ui.DeliveryDatePickerDialog
 

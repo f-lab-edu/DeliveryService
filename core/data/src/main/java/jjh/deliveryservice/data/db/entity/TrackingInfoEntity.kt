@@ -25,7 +25,7 @@ data class TrackingInfoEntity(
   @PrimaryKey
   val invoiceNo: String,
   val name: String,
-  val trackingDetails: List<TrackingDetailModel>?,
+  val trackingDetails: List<TrackingDetailModel>,
   val estimate: String,
   val level: Int,
   val registerDate: String = "",
@@ -50,9 +50,9 @@ data class TrackingInfoEntity(
       return TrackingInfoEntity(
         invoiceNo = invoiceNo,
         name = name,
-        trackingDetails = trackingDetails,
+        trackingDetails = getTrackingDetails(),
         estimate = estimate,
-        level = level.ordinal + 1,
+        level = level.ordinal,
         registerDate = registerDate,
         companyCode = companyCode
       )

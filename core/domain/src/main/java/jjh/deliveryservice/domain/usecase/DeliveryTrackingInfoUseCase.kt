@@ -2,6 +2,7 @@ package jjh.deliveryservice.domain.usecase
 
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DeliveryTrackingInfoUseCase @Inject constructor(
@@ -20,10 +21,15 @@ class DeliveryTrackingInfoUseCase @Inject constructor(
     return companyListRepository.isExistedDeliveryTrackingInfo(companyCode, invoiceNumber)
   }
 
-  // TODO: 에러 발생 시 result class or Exception viewModel에서 처리할지?
-
-
   suspend fun saveTrackingInfo(trackingInfoModel: TrackingInfoModel) {
     return companyListRepository.saveTrackingInfo(model = trackingInfoModel)
+  }
+
+  suspend fun getSearchByName(name: String): List<TrackingInfoModel> {
+    return companyListRepository.getSearchByName(name)
+  }
+
+  suspend fun getSearchByInvoiceNumber(invoiceNumber: String): List<TrackingInfoModel> {
+    return companyListRepository.getSearchByInvoiceNumber(invoiceNumber)
   }
 }

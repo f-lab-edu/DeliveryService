@@ -1,15 +1,12 @@
 package jjh.deliveryservice.register
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +18,6 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -44,6 +40,7 @@ import jjh.deliveryservice.domain.model.CompanyModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.resource.CommonGreenColor
 import jjh.deliveryservice.ui.DeliveryOutlineTextField
+import jjh.deliveryservice.ui.OneButtonDialog
 import jjh.deliveryservice.ui.Toolbar
 
 
@@ -78,23 +75,12 @@ fun RegisterScreen(
 
   // insert 성공
   if (isShowCompleteAlert) {
-    BasicAlertDialog(onDismissRequest = { }) {
-      Box(
-        modifier = Modifier
-          .background(Color.White, shape = RoundedCornerShape(10.dp))
-          .defaultMinSize(minHeight = 100.dp)
-          .padding(all = 16.dp)
-      ) {
-        Text("택배 등록이 완료되었습니다!")
-        Spacer(modifier = Modifier.height(30.dp))
-        TextButton(
-          modifier = Modifier.align(Alignment.BottomEnd),
-          onClick = { onBackListener() },
-        ) {
-          Text(text = "닫기")
-        }
-      }
-    }
+    OneButtonDialog(
+      message = "택배 등록이 완료되었습니다!",
+      buttonText = "닫기",
+      onClick = onBackListener,
+      onDismissListener = {},
+    )
   }
 
   Column(
@@ -274,7 +260,7 @@ fun CompanyItem(
 private fun RegisterComponentPreview() {
   val list = mutableListOf<CompanyModel>()
   repeat(4) {
-    list.add(CompanyModel("$it", false, "택배사$it"))
+    list.add(CompanyModel("$it", "택배사$it", false))
   }
   RegisterScreen(companyList = list)
 }
@@ -288,32 +274,32 @@ private fun CompaniesComponentPreview() {
 private val companies = listOf(
   CompanyModel(
     "code1",
+    companyName = "asdf",
     true,
-    companyName = "asdf"
   ),
   CompanyModel(
     "code2",
+    companyName = "asdf",
     true,
-    companyName = "asdf"
   ),
   CompanyModel(
     "code3",
+    companyName = "asdf",
     true,
-    companyName = "asdf"
   ),
   CompanyModel(
     "code4",
+    companyName = "asdf",
     true,
-    companyName = "asdf"
   ),
   CompanyModel(
     "code5",
+    companyName = "asdf",
     true,
-    companyName = "asdf"
   ),
   CompanyModel(
     "code6",
+    companyName = "asdf",
     true,
-    companyName = "asdf"
   ),
 )

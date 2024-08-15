@@ -48,8 +48,8 @@ class TrackingInfoUpdateWorker @AssistedInject constructor(
 
     val periodicWorkRequest =
       PeriodicWorkRequestBuilder<TrackingInfoUpdateWorker>(
-        repeatInterval = 1,
-        repeatIntervalTimeUnit = TimeUnit.DAYS
+        repeatInterval = 6,
+        repeatIntervalTimeUnit = TimeUnit.HOURS
       ).setConstraints(constraints)
         .build()
   }

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface DeliveryServiceRepository {
 
   suspend fun getCompanyList(needUpdate: Boolean): Flow<List<CompanyModel>>
+  suspend fun getCompany(companyCode: String): Flow<CompanyModel?>
 
   suspend fun getRecommendCompanyList(invoiceNumber: String): List<CompanyModel>
 
@@ -21,6 +22,10 @@ interface DeliveryServiceRepository {
   suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoModel>
 
   suspend fun isExistedDeliveryTrackingInfo(companyCode: String, invoiceNumber: String): Boolean
+
+  suspend fun getSearchByName(name: String): List<TrackingInfoModel>
+
+  suspend fun getSearchByInvoiceNumber(invoiceNumber: String): List<TrackingInfoModel>
 
   suspend fun updateTrackingInfo()
 }

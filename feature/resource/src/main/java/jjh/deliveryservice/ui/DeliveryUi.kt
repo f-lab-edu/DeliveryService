@@ -30,8 +30,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jjh.deliveryservice.resource.CommonGreenColor
@@ -105,7 +107,7 @@ fun Toolbar(
       Image(
         modifier = Modifier
           .size(54.dp)
-          .clickable { onStartClickListener() }
+          .clickable { onEndClickListener() }
           .padding(horizontal = 16.dp)
           .fillMaxHeight(),
         painter = painterResource(id = endIcon),
@@ -148,7 +150,10 @@ fun Toolbar(
       modifier = Modifier
         .weight(1f),
       text = title,
-      textAlign = TextAlign.Center
+      textAlign = TextAlign.Center,
+      maxLines = 1,
+      overflow = TextOverflow.Ellipsis,
+      fontWeight = FontWeight.Black
     )
 
     if (endIcon != null)

@@ -27,6 +27,7 @@ android {
 
 dependencies {
     implementation(project(":build_config"))
+    implementation(project(":common"))
     implementation(project(":core:domain"))
     implementation(project(":core:calendar"))
 

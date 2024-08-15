@@ -18,12 +18,20 @@ interface DeliveryDao {
   @Query("SELECT * FROM TrackingInfoEntity")
   suspend fun getAllDeliveryInfo(): List<TrackingInfoEntity>
 
-  @Query("SELECT * FROM TrackingInfoEntity WHERE level == 6")
+  @Query("SELECT * FROM TrackingInfoEntity WHERE level != 6")
   suspend fun getNotCompletedDeliveryInfo(): List<TrackingInfoEntity>
 
   @Query("SELECT * FROM TrackingInfoEntity WHERE registerDate BETWEEN :startDate AND :endDate")
   suspend fun getDateDeliveryInfo(startDate: String, endDate: String): List<TrackingInfoEntity>
 
   @Query("SELECT * FROM TrackingInfoEntity where invoiceNo == :invoiceNo")
-  suspend fun getDeliveryInfo(invoiceNo: String): TrackingInfoEntity?
+  suspend fun getDeliveryInfo(invoiceNo: String): TrackingInfoEntity
+
+
+  @Query("SELECT * FROM TrackingInfoEntity where name LIKE '%' || :name || '%'")
+  suspend fun getDeliveryInfoByName(name: String): List<TrackingInfoEntity>
+
+  @Query("SELECT * FROM TrackingInfoEntity where invoiceNo LIKE '%' || :invoiceNo || '%'")
+  suspend fun getDeliveryInfoByInvoiceNo(invoiceNo: String): List<TrackingInfoEntity>
+
 }

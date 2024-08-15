@@ -14,4 +14,8 @@ class CompanyListUseCase @Inject constructor(
     return companyListRepository.getCompanyList(isFirst)
   }
 
+  suspend fun getCompanyModel(companyCode: String): Flow<CompanyModel?> {
+    return companyListRepository.getCompany(companyCode)
+  }
+
 }

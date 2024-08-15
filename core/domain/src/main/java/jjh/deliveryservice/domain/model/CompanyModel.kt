@@ -9,6 +9,6 @@ package jjh.deliveryservice.domain.model
  * */
 data class CompanyModel(
   val companyCode: String, // "18"
-  val isInternational: Boolean, // false
   val companyName: String, // 건영택배
+  val isInternational: Boolean, // false
 ) : DeliveryServiceModel
