@@ -18,7 +18,7 @@ interface DeliveryDao {
   @Query("SELECT * FROM TrackingInfoEntity")
   suspend fun getAllDeliveryInfo(): List<TrackingInfoEntity>
 
-  @Query("SELECT * FROM TrackingInfoEntity WHERE level == 6")
+  @Query("SELECT * FROM TrackingInfoEntity WHERE level != 6")
   suspend fun getNotCompletedDeliveryInfo(): List<TrackingInfoEntity>
 
   @Query("SELECT * FROM TrackingInfoEntity WHERE registerDate BETWEEN :startDate AND :endDate")

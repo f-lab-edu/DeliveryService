@@ -162,7 +162,9 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
         deliveryServiceApi.trackingInfo(
           invoiceNumber = it.invoiceNo,
           code = it.companyCode
-        ).toEntity(companyCode = it.companyCode)
+        )
+          .toEntity(companyCode = it.companyCode)
+          .copy(registerDate = it.registerDate)
       }
     deliveryDao.insertTrackingInfo(resultList)
   }
