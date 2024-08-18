@@ -1,6 +1,7 @@
 package jjh.deliveryservice.home.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,8 @@ fun HomeDetailListComponent(
   modifier: Modifier = Modifier,
   date: Int,
   dayOfWeek: String,
-  trackingINfoModelList: List<TrackingInfoModel>,
+  trackingInfoModelList: List<TrackingInfoModel>,
+  onItemClickListener: (TrackingInfoModel) -> Unit = {}
 ) {
   val context = LocalContext.current
 
@@ -49,7 +51,7 @@ fun HomeDetailListComponent(
 
     LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
       items(
-        trackingINfoModelList,
+        trackingInfoModelList,
         key = { it.invoiceNo }
       ) {
         val isComplete = it.level == Level.DELIVERY_COMPLETE
@@ -57,8 +59,10 @@ fun HomeDetailListComponent(
 
         Row(
           modifier = Modifier
+            .fillMaxWidth()
             .align(Alignment.CenterHorizontally)
             .padding(vertical = 10.dp)
+            .clickable { onItemClickListener(it) }
         ) {
           Box(
             modifier = Modifier
@@ -104,6 +108,6 @@ private fun HomeDetailListComponentPreview() {
     modifier = Modifier,
     date = 20,
     dayOfWeek = "월",
-    trackingINfoModelList = listOf()
+    trackingInfoModelList = listOf()
   )
 }

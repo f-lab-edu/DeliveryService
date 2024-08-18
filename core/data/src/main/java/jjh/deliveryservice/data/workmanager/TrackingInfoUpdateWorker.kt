@@ -1,36 +1,32 @@
 package jjh.deliveryservice.data.workmanager
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
-import jjh.deliveryservice.domain.usecase.WorkManagerUseCase
+import jjh.deliveryservice.domain.usecase.TrackingUpdateUseCase
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 @HiltWorker
 class TrackingInfoUpdateWorker @AssistedInject constructor(
   @Assisted context: Context,
   @Assisted params: WorkerParameters,
-  private val workManagerUseCase: WorkManagerUseCase,
+  private val trackingUpdateUseCase: TrackingUpdateUseCase,
 ) : CoroutineWorker(context, params) {
 
   override suspend fun doWork(): Result {
     return runCatching {
-      workManagerUseCase.doWork()
+      Logger.e("doWork()")
+      trackingUpdateUseCase.update()
       Result.success()
     }.onFailure {
       it.printStackTrace()

@@ -2,6 +2,8 @@ package jjh.deliveryservice.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
@@ -42,6 +44,42 @@ fun OneButtonDialog(
         onClick = onClick,
       ) {
         Text(text = buttonText)
+      }
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TwoButtonDialog(
+  modifier: Modifier = Modifier,
+  message: String,
+  leftButtonText: String,
+  onLeftClick: () -> Unit,
+  rightButtonText: String,
+  onRightButtonClick: () -> Unit,
+  onDismissListener: () -> Unit = {},
+) {
+
+  BasicAlertDialog(onDismissRequest = onDismissListener) {
+    Column(
+      modifier = modifier
+        .background(Color.White, shape = RoundedCornerShape(10.dp))
+        .defaultMinSize(minHeight = 100.dp)
+        .padding(all = 16.dp)
+    ) {
+      Text(message)
+      Row(modifier = Modifier.align(Alignment.End)) {
+        TextButton(
+          onClick = onLeftClick,
+        ) {
+          Text(text = leftButtonText)
+        }
+        TextButton(
+          onClick = onRightButtonClick,
+        ) {
+          Text(text = rightButtonText)
+        }
       }
     }
   }

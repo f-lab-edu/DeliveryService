@@ -23,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,9 +46,10 @@ import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
 import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
 import jjh.deliveryservice.calendar.calendar
 import jjh.deliveryservice.calendar.dayOfWeekString
+import jjh.deliveryservice.domain.model.TrackingDetailModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
-import jjh.deliveryservice.resource.R
 import jjh.deliveryservice.resource.CommonGreenColor
+import jjh.deliveryservice.resource.R
 import jjh.deliveryservice.ui.DeliveryDatePickerDialog
 
 @Composable
@@ -68,6 +68,7 @@ fun HomeScreen(
   onDateClickListener: (CalendarModel) -> Unit = { },
   onStartSearchScreen: () -> Unit = {}, // 택배 검색하기 이동
   onStartRegisterScreen: () -> Unit = {}, // 택배 등록하기 이동
+  onStartDetailScreen: (TrackingInfoModel) -> Unit = {},
 ) {
 
   val context = LocalContext.current
@@ -134,7 +135,8 @@ fun HomeScreen(
             modifier = Modifier.weight(animatedValue),
             date = model.date,
             dayOfWeek = model.calendar.dayOfWeekString,
-            trackingINfoModelList = deliveryList.filter { item -> item.registerDate == model.toDateString() }
+            trackingInfoModelList = deliveryList.filter { item -> item.registerDate == model.toDateString() },
+            onItemClickListener = onStartDetailScreen
           )
         }
       }

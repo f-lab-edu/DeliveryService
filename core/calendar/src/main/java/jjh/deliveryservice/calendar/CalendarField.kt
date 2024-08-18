@@ -29,6 +29,8 @@ val Calendar.dayOfWeekString: String
 val Calendar.monthLastDate: Int
   get() = getActualMaximum(Calendar.DAY_OF_MONTH)
 
+fun Calendar.addField(field: Int, amount: Int): Calendar = apply { add(field, amount) }
+
 private class CalendarField(private val field: Int) : ReadWriteProperty<Calendar, Int> {
   override fun getValue(thisRef: Calendar, property: KProperty<*>): Int = thisRef.get(field)
   override fun setValue(thisRef: Calendar, property: KProperty<*>, value: Int): Unit = thisRef.set(field, value)

@@ -28,4 +28,5 @@ interface DeliveryServiceRepository {
   suspend fun getSearchByInvoiceNumber(invoiceNumber: String): List<TrackingInfoModel>
 
   suspend fun updateTrackingInfo()
+  suspend fun getNotCompleteTrackingInfo(): List<TrackingInfoModel>
 }

@@ -52,6 +52,9 @@ fun DeliveryNavHost(
         month = state.month,
         onStartSearchScreen = { navController.navigate(route = DeliveryScreens.SEARCH()) },
         onStartRegisterScreen = { navController.navigate(route = DeliveryScreens.REGISTER()) },
+        onStartDetailScreen = { trackingInfoModel ->
+          navController.navigate(route = DeliveryScreens.SEARCH_DETAIL() + "/${trackingInfoModel.toJson()}")
+        },
         date = state.date,
         today = state.today,
         clickedDate = state.clickedDate,

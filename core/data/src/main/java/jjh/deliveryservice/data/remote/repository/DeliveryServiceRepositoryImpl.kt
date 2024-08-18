@@ -1,4 +1,4 @@
-package jjh.deliveryservice.data.remote
+package jjh.deliveryservice.data.remote.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -13,6 +13,7 @@ import jjh.deliveryservice.calendar.year
 import jjh.deliveryservice.data.db.dao.DeliveryDao
 import jjh.deliveryservice.data.db.datastore.COMPANY_LIST_KEY
 import jjh.deliveryservice.data.db.entity.TrackingInfoEntity.Companion.toEntity
+import jjh.deliveryservice.data.remote.DeliveryServiceApi
 import jjh.deliveryservice.data.remote.response.companys.CompanyResponse
 import jjh.deliveryservice.data.remote.response.tracking.TrackingInfoResponse.Companion.toEntity
 import jjh.deliveryservice.domain.model.CompanyModel
@@ -20,11 +21,8 @@ import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.singleOrNull
 import java.io.IOException
 import java.util.Calendar
 import javax.inject.Inject
@@ -42,7 +40,6 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
    * @param needUpdate 첫 실행 여부 (택배사 리스트 업데이트)
    * */
   override suspend fun getCompanyList(needUpdate: Boolean): Flow<List<CompanyModel>> {
-
     if (needUpdate)
       return flowOf(getCompanyList()
         .map { response -> response.toModel() }
@@ -61,9 +58,7 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
 
   override suspend fun getCompany(companyCode: String): Flow<CompanyModel?> {
     return getSavedCompany(companyCode)
-
   }
-
 
   /**
    * 저장된 택배사 리스트 불러오기
@@ -184,6 +179,10 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
           .copy(registerDate = it.registerDate)
       }
     deliveryDao.insertTrackingInfo(resultList)
+  }
+
+  override suspend fun getNotCompleteTrackingInfo(): List<TrackingInfoModel> {
+    return deliveryDao.getNotCompletedDeliveryInfo().map { it.toModel() }
   }
 
   /**
