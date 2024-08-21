@@ -38,6 +38,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    kapt(libs.androidx.hilt.compiler)
 
     // Retrofit2
     implementation(libs.retrofit)
@@ -53,7 +54,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
     annotationProcessor(libs.androidx.room.compiler)
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
 
 
     // Coroutine

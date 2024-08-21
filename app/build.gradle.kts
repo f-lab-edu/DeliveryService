@@ -60,6 +60,7 @@ android {
 }
 
 dependencies {
+  implementation(project(":feature:resource"))
   implementation(project(":feature:main"))
   implementation(project(":build_config"))
   implementation(project(":core:data"))

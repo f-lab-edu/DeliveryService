@@ -13,9 +13,6 @@ class TrackingUpdateUseCase @Inject constructor(
   private val trackingTimeRepository: TrackingTimeRepository
 ) {
 
-  /**
-   * 배송완료되지 않은 택배 업데이트
-   * */
   suspend fun update() {
     val savedTimeInMillis = trackingTimeRepository.getLastTrackingTime().first()
     val after = calendar(savedTimeInMillis).addField(Calendar.HOUR, 1).timeInMillis
@@ -24,5 +21,19 @@ class TrackingUpdateUseCase @Inject constructor(
       companyListRepository.updateTrackingInfo()
       trackingTimeRepository.saveTrackingTime(System.currentTimeMillis())
     }
+  }
+
+  /**
+   * 문자 내역중 송장번호 확인해서 업데이트 진행
+   * */
+  suspend fun smsUpdate(smsMessage: String) {
+    companyListRepository.getNotCompleteTrackingInfo()
+      .firstOrNull {
+        smsMessage.contains(it.invoiceNo)
+      }
+      ?.apply {
+        val result = companyListRepository.trackingInfo(companyCode, invoiceNo).copy(registerDate = this.registerDate)
+        companyListRepository.saveTrackingInfo(result)
+      }
   }
 }
