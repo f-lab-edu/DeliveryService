@@ -126,4 +126,8 @@ object CalendarUtil {
   fun calendarStringFormat(year: Int, month: Int, date: Int): String {
     return "$year.${String.format("%02d", month)}.${String.format("%02d", date)}"
   }
+
+  fun calendarStringFormat(): String = calendar().run {
+    "$year.${String.format("%02d", month)}.${String.format("%02d", date)}"
+  }
 }
