@@ -181,6 +181,7 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
     deliveryDao.insertTrackingInfo(resultList)
   }
 
+
   override suspend fun getNotCompleteTrackingInfo(): List<TrackingInfoModel> {
     return deliveryDao.getNotCompletedDeliveryInfo().map { it.toModel() }
   }

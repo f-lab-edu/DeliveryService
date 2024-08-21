@@ -13,9 +13,6 @@ class TrackingUpdateUseCase @Inject constructor(
   private val trackingTimeRepository: TrackingTimeRepository
 ) {
 
-  /**
-   * 배송완료되지 않은 모든 택배 업데이트
-   * */
   suspend fun update() {
     val savedTimeInMillis = trackingTimeRepository.getLastTrackingTime().first()
     val after = calendar(savedTimeInMillis).addField(Calendar.HOUR, 1).timeInMillis
