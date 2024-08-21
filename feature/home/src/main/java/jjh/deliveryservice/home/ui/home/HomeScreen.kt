@@ -46,7 +46,6 @@ import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
 import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
 import jjh.deliveryservice.calendar.calendar
 import jjh.deliveryservice.calendar.dayOfWeekString
-import jjh.deliveryservice.domain.model.TrackingDetailModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.resource.CommonGreenColor
 import jjh.deliveryservice.resource.R
@@ -123,25 +122,21 @@ fun HomeScreen(
           isDetailViewExpended = homeScreenDetailState
         ) // CalendarComponent 달력
 
-
         val animatedValue by animateFloatAsState(
           targetValue = if (homeScreenDetailState) 1f else 0.001f,
           animationSpec = tween(durationMillis = 300),
-          label = ""
+          label = "",
         )
 
-        clickedDate?.let { model ->
-          HomeDetailListComponent(
-            modifier = Modifier.weight(animatedValue),
-            date = model.date,
-            dayOfWeek = model.calendar.dayOfWeekString,
-            trackingInfoModelList = deliveryList.filter { item -> item.registerDate == model.toDateString() },
-            onItemClickListener = onStartDetailScreen
-          )
-        }
+        HomeDetailListComponent(
+          modifier = Modifier.weight(animatedValue),
+          date = clickedDate?.date ?: date,
+          dayOfWeek = (clickedDate ?: today).calendar.dayOfWeekString,
+          trackingInfoModelList = deliveryList.filter { item -> item.registerDate == clickedDate?.toDateString() },
+          onItemClickListener = onStartDetailScreen
+        )
       }
     }
-
 
     FloatingActionButton(
       modifier = Modifier
@@ -159,7 +154,6 @@ fun HomeScreen(
       )
     } // Floating Button
   }
-
 }
 
 
