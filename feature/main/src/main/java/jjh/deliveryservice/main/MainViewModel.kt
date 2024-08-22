@@ -14,7 +14,7 @@ class MainViewModel @Inject constructor(
   private val trackingUpdateUseCase: TrackingUpdateUseCase
 ) : BaseViewModel() {
   fun getCompanyList() {
-//    exceptionHandlerCoroutine(ioDispatcher) { companyListUseCase(isFirst = true) }
+    exceptionHandlerCoroutine(ioDispatcher) { companyListUseCase(isFirst = true) }
   }
 
   fun update() {

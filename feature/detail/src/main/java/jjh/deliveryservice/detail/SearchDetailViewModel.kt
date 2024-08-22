@@ -33,11 +33,8 @@ class SearchDetailViewModel @Inject constructor(
         )
       }
     }
-
   }
 
-  private suspend fun getCompanyModel(companyCode: String): CompanyModel? =
-    useCase.getCompanyModel(companyCode).firstOrNull()
-
+  private suspend fun getCompanyModel(companyCode: String): CompanyModel? = useCase.getCompanyModel(companyCode)
 
 }

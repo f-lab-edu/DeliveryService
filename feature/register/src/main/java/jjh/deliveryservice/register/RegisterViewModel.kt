@@ -42,9 +42,7 @@ class RegisterViewModel @Inject constructor(
 
   fun getCompanyList() {
     exceptionHandlerCoroutine(ioDispatcher) {
-      companyListUseCase.invoke(false).collectLatest { companyList ->
-        _uiState.update { it.copy(companyList = companyList) }
-      }
+        _uiState.update { it.copy(companyList = companyListUseCase(false)) }
     }
   }
 

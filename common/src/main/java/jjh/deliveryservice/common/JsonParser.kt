@@ -6,5 +6,5 @@ import com.google.gson.reflect.TypeToken
 
 fun <T> T.toJson(): String = Gson().toJson(this)
 
-inline fun <reified T> String.fromJson(): T =
+inline fun <reified T> String.fromJson(): T? =
   Gson().fromJson(this, object : TypeToken<T>() {}.type)
