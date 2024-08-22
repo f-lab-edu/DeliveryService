@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
     _uiState.update {
       it.copy(
         clickedDate = clickedDate,
-        homeScreenDetailState = true
+        homeScreenDetailExpanded = true
       )
     }
   }
@@ -61,13 +61,13 @@ class HomeViewModel @Inject constructor(
       it.copy(
         yearMonthDay = YearMonthDay(year, month, date),
         clickedDate = CalendarModel(year, month, date, true),
-        homeScreenDetailState = true
+        homeScreenDetailExpanded = true
       )
     }
   }
 
   fun homeScreenDetailStateChange(state: Boolean) {
-    _uiState.update { it.copy(homeScreenDetailState = state) }
+    _uiState.update { it.copy(homeScreenDetailExpanded = state) }
   }
 
 }

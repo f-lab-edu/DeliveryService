@@ -3,13 +3,11 @@ package jjh.deliveryservice.home.ui.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,7 +42,6 @@ fun CalendarComponent(
   dateArray: Array<CalendarModel> = arrayOf(),
   deliveryList: List<TrackingInfoModel> = listOf(),
   onDateClickListener: (CalendarModel) -> Unit = {},
-  isDetailViewExpended: Boolean = false,
 ) {
   val context = LocalContext.current
   Column(modifier = modifier.fillMaxSize()) {
@@ -55,11 +52,10 @@ fun CalendarComponent(
           .weight(1f)
           .drawLine(context.getDisplayWidth.toFloat()),
         today = today,
+        deliveryList = deliveryList,
         calendarModel = { dateArray[it + (i * 7)] },
         clickedDate = clickedDate,
-        deliveryList = deliveryList,
         onDateClickListener = onDateClickListener,
-        isDetailViewExpended = isDetailViewExpended,
       )
     }
   }
@@ -73,7 +69,6 @@ fun WeekComponent(
   calendarModel: (Int) -> CalendarModel,
   clickedDate: CalendarModel? = null,
   onDateClickListener: (CalendarModel) -> Unit = {},
-  isDetailViewExpended: Boolean = false,
 ) {
   Row(
     modifier = modifier,
@@ -93,7 +88,6 @@ fun WeekComponent(
         textColor = textColor,
         deliveryList = deliveryList.filter { it.registerDate == model.toDateString() },
         onDateClickListener = onDateClickListener,
-        isDetailViewExpended = isDetailViewExpended,
       )
     }
   }
@@ -108,7 +102,6 @@ fun DateComponent(
   textColor: Color,
   deliveryList: List<TrackingInfoModel> = listOf(),
   onDateClickListener: (CalendarModel) -> Unit = {},
-  isDetailViewExpended: Boolean = false,
 ) {
   val alpha = if (calendarModel.isCurrentMonth) 1f else 0.3f
   val isToday = today == calendarModel
@@ -167,9 +160,9 @@ fun DateComponent(
 @Composable
 private fun CalendarComponentPreview() {
   CalendarComponent(
-    dateArray = CalendarUtil.getDaysInMonth(2024, 7),
     today = CalendarModel(0, 0, 0),
     clickedDate = CalendarModel(0, 0, 0),
+    dateArray = CalendarUtil.getDaysInMonth(2024, 7),
 
     )
 }
@@ -183,8 +176,8 @@ private fun WeekComponentPreview() {
 
   WeekComponent(
     modifier = Modifier.height(50.dp),
-    calendarModel = { calendarModel(it) },
     today = CalendarModel(0, 0, 0),
+    calendarModel = { calendarModel(it) },
     clickedDate = CalendarModel(0, 0, 0)
   )
 }
@@ -194,11 +187,11 @@ private fun WeekComponentPreview() {
 private fun DateCellPreview() {
   DateComponent(
     modifier = Modifier.size(50.dp),
+    today = CalendarModel(0, 0, 0),
     calendarModel = CalendarModel(2024, 6, 1),
+    clickedDate = CalendarModel(0, 0, 0),
     textColor = Color.Red,
     deliveryList = listOf(),
     onDateClickListener = {},
-    today = CalendarModel(0, 0, 0),
-    clickedDate = CalendarModel(0, 0, 0),
   )
 }

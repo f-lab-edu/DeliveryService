@@ -92,7 +92,6 @@ fun HomeDetailListComponent(
                 color = Color.Gray
               )
             )
-
           }
         }
       }
