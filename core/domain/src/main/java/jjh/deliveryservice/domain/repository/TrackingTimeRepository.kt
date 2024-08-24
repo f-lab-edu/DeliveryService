@@ -3,6 +3,8 @@ package jjh.deliveryservice.domain.repository
 import kotlinx.coroutines.flow.Flow
 
 interface TrackingTimeRepository {
-  suspend fun saveTrackingTime(millis: Long)
-  suspend fun getLastTrackingTime(): Flow<Long>
+  fun saveTrackingTime(millis: Long)
+  fun getLastTrackingTime(): Long
+  fun saveRefreshTime(millis: Long)
+  fun getRefreshTime(): Long
 }

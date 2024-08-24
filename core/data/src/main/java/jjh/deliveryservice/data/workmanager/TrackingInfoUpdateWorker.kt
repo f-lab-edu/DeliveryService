@@ -42,10 +42,10 @@ class TrackingInfoUpdateWorker @AssistedInject constructor(
       .setRequiresCharging(false)
       .build()
 
-    val periodicWorkRequest =
+    fun periodicWorkRequest(timeMillis: Long) =
       PeriodicWorkRequestBuilder<TrackingInfoUpdateWorker>(
-        repeatInterval = 6,
-        repeatIntervalTimeUnit = TimeUnit.HOURS
+        repeatInterval = timeMillis,
+        repeatIntervalTimeUnit = TimeUnit.MILLISECONDS
       ).setConstraints(constraints)
         .build()
   }

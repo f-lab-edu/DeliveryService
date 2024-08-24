@@ -3,6 +3,7 @@ plugins {
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.googleDaggerHilt)
   id("kotlin-kapt")
+  id("com.google.gms.google-services")
 }
 
 android {
@@ -45,6 +46,10 @@ dependencies {
   implementation(libs.androidx.material3)
   implementation(libs.androidx.navigation.compose)
   implementation (libs.androidx.lifecycle.runtime.compose)
+
+  // firebase
+  implementation(platform(libs.firebase.bom))
+  implementation(libs.firebase.database.ktx)
 
   // hilt
   implementation(libs.hilt.android)

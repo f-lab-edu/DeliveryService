@@ -20,4 +20,8 @@ class MainViewModel @Inject constructor(
   fun update() {
     exceptionHandlerCoroutine(ioDispatcher) { trackingUpdateUseCase.update() }
   }
+
+  fun saveRefreshTime(millis: Long) {
+    trackingUpdateUseCase.saveRefreshTime(millis)
+  }
 }

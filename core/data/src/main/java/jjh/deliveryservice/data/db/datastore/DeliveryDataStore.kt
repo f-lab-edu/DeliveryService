@@ -27,6 +27,15 @@ class DeliveryDataStore @Inject constructor(
     helper = dataStorePreferences.helper()
   )
 
+  fun longDataStore(
+    key: Preferences.Key<Long>,
+    defValue: Long = 0L,
+  ) = DataStoreDelegate(
+    key = key,
+    defValue = defValue,
+    helper = dataStorePreferences.helper()
+  )
+
   fun floatDataStore(
     key: Preferences.Key<Float>,
     defValue: Float = 0f,

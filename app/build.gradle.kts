@@ -5,6 +5,7 @@ plugins {
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.googleDaggerHilt)
   id("kotlin-kapt")
+  id("com.google.gms.google-services")
 }
 
 
@@ -74,6 +75,10 @@ dependencies {
 
   // lint
   lintChecks(libs.compose.lint.checks)
+
+  // firebase
+  implementation(platform(libs.firebase.bom))
+  implementation(libs.firebase.database.ktx)
 
   // WorkManager
   implementation(libs.androidx.work.runtime.ktx)

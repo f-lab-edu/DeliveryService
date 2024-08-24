@@ -5,6 +5,7 @@ plugins {
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.googleDaggerHilt)
   id("kotlin-kapt")
+  id("com.google.gms.google-services")
 }
 
 android {
@@ -65,6 +66,9 @@ dependencies {
   // Logger
   implementation(libs.logger)
 
+  // firebase
+  implementation(platform(libs.firebase.bom))
+  implementation(libs.firebase.database.ktx)
 
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)

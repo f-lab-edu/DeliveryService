@@ -20,6 +20,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.firebase.FirebaseApp
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import jjh.deliveryservice.common.hasNotificationAccess
 import jjh.deliveryservice.common.openNotificationPermissions
@@ -27,6 +34,7 @@ import jjh.deliveryservice.main.screens.DeliveryNavHost
 import jjh.deliveryservice.resource.DeliveryServiceTheme
 import jjh.deliveryservice.resource.R
 import jjh.deliveryservice.ui.TwoButtonDialog
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -37,7 +45,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     viewModel.getCompanyList()
     viewModel.update()
-
+    getTime(viewModel::saveRefreshTime)
     enableEdgeToEdge()
     setContent {
       RequestPermission()
@@ -79,5 +87,20 @@ class MainActivity : ComponentActivity() {
         )
       }
     }
+  }
+
+  private fun getTime(listener: (Long) -> Unit) {
+
+    val reference: DatabaseReference = Firebase.database.reference
+    reference.addValueEventListener(object : ValueEventListener {
+      override fun onDataChange(snapshot: DataSnapshot) {
+        val hashMap = (snapshot.value as? HashMap<*, *>?)
+        listener(hashMap?.get("repeatTime") as? Long ?: 3600000L)
+      }
+
+      override fun onCancelled(error: DatabaseError) {
+        listener(TimeUnit.HOURS.toMillis(1))
+      }
+    })
   }
 }
