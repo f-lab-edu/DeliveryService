@@ -17,8 +17,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -89,7 +90,7 @@ fun RegisterScreen(
   ) {
     Toolbar(
       title = "택배 등록",
-      startIcon = Icons.AutoMirrored.Default.ArrowBack,
+      startIcon = Icons.Default.ArrowBack,
       onStartClickListener = onBackListener,
     )
 
@@ -138,7 +139,7 @@ fun RegisterScreen(
             shape = RoundedCornerShape(10.dp),
             enabled = selectedCompany != null && invoiceNumber.isNotEmpty(),
             onClick = { saveDelivery(trackingInfoModel) },
-            colors = ButtonColors(
+            colors = ButtonDefaults.textButtonColors(
               containerColor = CommonGreenColor,
               contentColor = CommonGreenColor,
               disabledContainerColor = Color.Gray.copy(alpha = 0.4f),
@@ -191,7 +192,7 @@ fun InputInvoiceNumberScreen(
       shape = RoundedCornerShape(10.dp),
       enabled = selectedCompany != null && invoiceNumber.isNotEmpty(),
       onClick = { onFindClickListener(selectedCompany!!.companyCode, invoiceNumber) },
-      colors = ButtonColors(
+      colors = ButtonDefaults.textButtonColors(
         containerColor = CommonGreenColor,
         contentColor = CommonGreenColor,
         disabledContainerColor = Color.Gray.copy(alpha = 0.4f),

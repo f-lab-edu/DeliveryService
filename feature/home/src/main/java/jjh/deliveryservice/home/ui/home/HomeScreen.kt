@@ -1,11 +1,10 @@
 package jjh.deliveryservice.home.ui.home
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.animate
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,13 +22,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
@@ -46,7 +46,6 @@ import jjh.deliveryservice.calendar.CalendarUtil.SATURDAY_INDEX
 import jjh.deliveryservice.calendar.CalendarUtil.SUNDAY_INDEX
 import jjh.deliveryservice.calendar.calendar
 import jjh.deliveryservice.calendar.dayOfWeekString
-import jjh.deliveryservice.domain.model.TrackingDetailModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
 import jjh.deliveryservice.resource.CommonGreenColor
 import jjh.deliveryservice.resource.R
@@ -62,7 +61,7 @@ fun HomeScreen(
   today: CalendarModel,
   clickedDate: CalendarModel? = null,
   deliveryList: List<TrackingInfoModel> = listOf(),
-  homeScreenDetailState: Boolean = false,
+  isExpand: Boolean = false,
   homeScreenDetailStateChange: (Boolean) -> Unit = {},
   onDateChangeClickListener: (timeInMillis: Long) -> Unit = {},
   onDateClickListener: (CalendarModel) -> Unit = { },
@@ -72,7 +71,8 @@ fun HomeScreen(
 ) {
 
   val context = LocalContext.current
-  Box(modifier = modifier) {
+  BoxWithConstraints(modifier = modifier) {
+    val height = this.maxHeight.value
     Column {
       DateAndSearchComponent(
         modifier = Modifier.fillMaxWidth(),
@@ -90,25 +90,32 @@ fun HomeScreen(
         dayOfWeek = context.resources.getStringArray(R.array.day_of_week)
       ) // DayOfWeekComponent 요일
 
-      var dragPosition by remember { mutableStateOf(Offset(0f, 0f)) }
 
       // onDragEnd가 끝나기 전까지 들고있어야 하는 값, expended 여부 체크 시 homeScreenDetailState를 대신 사용
-      var isDetailViewExtended by remember { mutableStateOf(false) }
-      var isMoving by remember { mutableStateOf(false) }
+      var firstDragDirection by remember { mutableFloatStateOf(0f) }
+      var animatedValue by remember { mutableFloatStateOf(0.001f) }
+
+      LaunchedEffect(isExpand) { // 클릭으로 상태 변경되는 경우
+        val targetValue = if (isExpand) 1f else 0.001f
+        animate(initialValue = animatedValue, targetValue = targetValue) { value, _ ->
+          animatedValue = value
+        }
+      }
 
       Column(modifier = Modifier
         .pointerInput(Unit) {
           detectVerticalDragGestures(
-            onDragStart = { dragPosition = it },
             onDragEnd = {
-              homeScreenDetailStateChange(isDetailViewExtended)
-              isMoving = false
+              homeScreenDetailStateChange(firstDragDirection < 0f)
+              firstDragDirection = 0f
             },
             onVerticalDrag = { _, dragAmount ->
-              if (isMoving.not()) {
-                isDetailViewExtended = dragAmount < 0f
-                isMoving = true
+              if (firstDragDirection == 0f) {
+                firstDragDirection = dragAmount
               }
+
+              val value = animatedValue - dragAmount / height
+              animatedValue = if (value < 0.001f) 0.001f else if (value >= 1f) 1f else value
             }
           )
         }
@@ -119,29 +126,18 @@ fun HomeScreen(
           clickedDate = clickedDate,
           dateArray = dateArray,
           deliveryList = deliveryList,
-          onDateClickListener = { onDateClickListener(it) },
-          isDetailViewExpended = homeScreenDetailState
+          onDateClickListener = { onDateClickListener(it) }
         ) // CalendarComponent 달력
 
-
-        val animatedValue by animateFloatAsState(
-          targetValue = if (homeScreenDetailState) 1f else 0.001f,
-          animationSpec = tween(durationMillis = 300),
-          label = ""
+        HomeDetailListComponent(
+          modifier = Modifier.weight(animatedValue),
+          date = clickedDate?.date ?: date,
+          dayOfWeek = (clickedDate ?: today).calendar.dayOfWeekString,
+          trackingInfoModelList = deliveryList.filter { item -> item.registerDate == clickedDate?.toDateString() },
+          onItemClickListener = onStartDetailScreen
         )
-
-        clickedDate?.let { model ->
-          HomeDetailListComponent(
-            modifier = Modifier.weight(animatedValue),
-            date = model.date,
-            dayOfWeek = model.calendar.dayOfWeekString,
-            trackingInfoModelList = deliveryList.filter { item -> item.registerDate == model.toDateString() },
-            onItemClickListener = onStartDetailScreen
-          )
-        }
       }
     }
-
 
     FloatingActionButton(
       modifier = Modifier
@@ -159,7 +155,6 @@ fun HomeScreen(
       )
     } // Floating Button
   }
-
 }
 
 

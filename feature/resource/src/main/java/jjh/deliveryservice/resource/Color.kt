@@ -4,7 +4,6 @@ import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.DatePickerColors
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -31,19 +30,13 @@ fun deliveryDatePickerColor(
   headlineContentColor: Color = Color.Unspecified,
   weekdayContentColor: Color = Color.Unspecified,
   subheadContentColor: Color = Color.Unspecified,
-  navigationContentColor: Color = Color.Unspecified,
   yearContentColor: Color = Color.Unspecified,
-  disabledYearContentColor: Color = Color.Unspecified,
   selectedYearContentColor: Color = Color.Unspecified,
-  disabledSelectedYearContentColor: Color = Color.Unspecified,
-  disabledSelectedYearContainerColor: Color = Color.Unspecified,
   dayContentColor: Color = Color.Unspecified,
   disabledDayContentColor: Color = Color.Unspecified,
   disabledSelectedDayContentColor: Color = Color.Unspecified,
   disabledSelectedDayContainerColor: Color = Color.Unspecified,
   dayInSelectionRangeContainerColor: Color = Color.Unspecified,
-  dividerColor: Color = Color.Unspecified,
-  dateTextFieldColors: TextFieldColors? = null,
 ): DatePickerColors =
   DatePickerDefaults.colors(
     selectedDayContainerColor = CommonGreenColor,
@@ -59,19 +52,13 @@ fun deliveryDatePickerColor(
     headlineContentColor = headlineContentColor,
     weekdayContentColor = weekdayContentColor,
     subheadContentColor = subheadContentColor,
-    navigationContentColor = navigationContentColor,
     yearContentColor = yearContentColor,
-    disabledYearContentColor = disabledYearContentColor,
     selectedYearContentColor = selectedYearContentColor,
-    disabledSelectedYearContentColor = disabledSelectedYearContentColor,
-    disabledSelectedYearContainerColor = disabledSelectedYearContainerColor,
     dayContentColor = dayContentColor,
     disabledDayContentColor = disabledDayContentColor,
     disabledSelectedDayContentColor = disabledSelectedDayContentColor,
     disabledSelectedDayContainerColor = disabledSelectedDayContainerColor,
     dayInSelectionRangeContainerColor = dayInSelectionRangeContainerColor,
-    dividerColor = dividerColor,
-    dateTextFieldColors = dateTextFieldColors,
   )
 
 @Composable
@@ -86,7 +73,7 @@ fun TextFieldDefaults.emptyColors(
   errorContainerColor: Color = Color.Transparent,
   cursorColor: Color = Color.Transparent,
   errorCursorColor: Color = Color.Transparent,
-  selectionColors: TextSelectionColors? = null,
+  selectionColors: TextSelectionColors = TextSelectionColors(handleColor = Color(0xFF4286F4), backgroundColor = Color(0xFF4286F4).copy(alpha = 0.4f)),
   focusedIndicatorColor: Color = Color.Transparent,
   unfocusedIndicatorColor: Color = Color.Transparent,
   disabledIndicatorColor: Color = Color.Transparent,

@@ -10,9 +10,7 @@ data class CalendarModel(
   val isCurrentMonth: Boolean = false,
 ) {
 
-  val calendar = Calendar.getInstance().apply {
-    set(this.year, this.month, this.date)
-  }
+  val calendar = calendar(year, month - 1, date)
 
   fun toDateString(): String = calendarStringFormat(year, month, date)
 }

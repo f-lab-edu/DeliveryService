@@ -6,3 +6,4 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 
 val COMPANY_LIST_KEY = stringPreferencesKey("COMPANY_LIST_KEY")
 val LAST_TRACKING_TIME = longPreferencesKey("LAST_TRACKING_TIME")
+val REFRESH_TIME = longPreferencesKey("REFRESH_TIME")

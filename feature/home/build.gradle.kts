@@ -2,7 +2,8 @@ plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.googleDaggerHilt)
-  id("kotlin-kapt")
+  alias(libs.plugins.ksp)
+  id("com.google.gms.google-services")
 }
 
 android {
@@ -23,6 +24,11 @@ android {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
   }
+
+  composeOptions {
+    kotlinCompilerExtensionVersion = "1.5.2"
+  }
+
   kotlinOptions {
     jvmTarget = "17"
   }
@@ -39,6 +45,7 @@ dependencies {
   implementation(libs.androidx.lifecycle.runtime.ktx)
   implementation(libs.androidx.activity.compose)
   implementation(platform(libs.androidx.compose.bom))
+
   implementation(libs.androidx.ui)
   implementation(libs.androidx.ui.graphics)
   implementation(libs.androidx.ui.tooling.preview)
@@ -46,9 +53,13 @@ dependencies {
   implementation(libs.androidx.navigation.compose)
   implementation (libs.androidx.lifecycle.runtime.compose)
 
+  // firebase
+  implementation(platform(libs.firebase.bom))
+  implementation(libs.firebase.database)
+
   // hilt
   implementation(libs.hilt.android)
-  kapt(libs.hilt.android.compiler)
+  ksp(libs.hilt.android.compiler)
   implementation(libs.androidx.hilt.navigation.compose)
 
   // glide

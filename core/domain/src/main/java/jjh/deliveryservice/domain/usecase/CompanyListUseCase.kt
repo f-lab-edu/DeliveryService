@@ -2,7 +2,6 @@ package jjh.deliveryservice.domain.usecase
 
 import jjh.deliveryservice.domain.model.CompanyModel
 import jjh.deliveryservice.domain.repository.DeliveryServiceRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CompanyListUseCase @Inject constructor(
@@ -10,11 +9,11 @@ class CompanyListUseCase @Inject constructor(
 ) {
 
   // 첫 실행 시 API 호출로 리스트 업데이트
-  suspend operator fun invoke(isFirst: Boolean): Flow<List<CompanyModel>> {
+  suspend operator fun invoke(isFirst: Boolean): List<CompanyModel> {
     return companyListRepository.getCompanyList(isFirst)
   }
 
-  suspend fun getCompanyModel(companyCode: String): Flow<CompanyModel?> {
+  suspend fun getCompanyModel(companyCode: String): CompanyModel? {
     return companyListRepository.getCompany(companyCode)
   }
 

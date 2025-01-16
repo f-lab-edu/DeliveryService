@@ -2,7 +2,7 @@ plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.googleDaggerHilt)
-  id("kotlin-kapt")
+  alias(libs.plugins.ksp)
 }
 
 android {
@@ -27,5 +27,5 @@ dependencies {
 
   // hilt
   implementation(libs.hilt.android)
-  kapt(libs.hilt.android.compiler)
+  ksp(libs.hilt.android.compiler)
 }

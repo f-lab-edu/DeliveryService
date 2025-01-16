@@ -59,7 +59,7 @@ fun DeliveryNavHost(
         today = state.today,
         clickedDate = state.clickedDate,
         deliveryList = state.savedTrackingInfoList,
-        homeScreenDetailState = state.homeScreenDetailState,
+        isExpand = state.homeScreenDetailExpanded,
         homeScreenDetailStateChange = homeViewModel::homeScreenDetailStateChange,
         onDateChangeClickListener = homeViewModel::onDateChangeClickListener,
         onDateClickListener = homeViewModel::onDateClickListener,
