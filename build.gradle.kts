@@ -6,4 +6,5 @@ plugins {
   alias(libs.plugins.jetbrains.kotlin.jvm) apply false
   alias(libs.plugins.googleDaggerHilt) apply false
   alias(libs.plugins.googleService) apply false
+  alias(libs.plugins.ksp) apply false
 }
