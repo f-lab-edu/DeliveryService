@@ -22,18 +22,15 @@ dependencyResolutionManagement {
 rootProject.name = "DeliveryService"
 include(
   ":app",
-
   ":core:data",
-
-  ":feature:home"
+  ":feature:home",
+  ":build_config",
+  ":core:calendar",
+  ":feature:register",
+  ":feature:main",
+  ":core:domain",
+  ":feature:resource",
+  ":common",
+  ":feature:search",
+  ":feature:detail",
 )
-include(":build_config")
-//include(":build_config_stub")
-include(":core:calendar")
-include(":feature:register")
-include(":feature:main")
-include(":core:domain")
-include(":feature:resource")
-include(":common")
-include(":feature:search")
-include(":feature:detail")

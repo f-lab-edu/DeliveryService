@@ -21,7 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -111,7 +111,7 @@ private fun SearchTitleComponent(
         .clickable { onBackListener() }
         .padding(horizontal = 16.dp)
         .fillMaxHeight(),
-      imageVector = Icons.AutoMirrored.Default.ArrowBack,
+      imageVector = Icons.Default.ArrowBack,
       contentDescription = "StartIcon"
     )
 

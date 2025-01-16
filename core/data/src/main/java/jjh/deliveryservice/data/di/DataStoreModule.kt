@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import jjh.deliveryservice.data.db.datastore.DeliveryDataStore
+import jjh.deliveryservice.data.db.datastore.DeliveryDataStoreImpl
 import javax.inject.Singleton
 
 @Module
@@ -31,5 +32,5 @@ object DataStoreModule {
   @Singleton
   fun providesDeliveryDataStore(
     dataStorePreferences: DataStore<Preferences>,
-  ): DeliveryDataStore = DeliveryDataStore(dataStorePreferences)
+  ): DeliveryDataStore = DeliveryDataStoreImpl(dataStorePreferences)
 }

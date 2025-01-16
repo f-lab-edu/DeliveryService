@@ -1,10 +1,8 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.googleDaggerHilt)
-  id("kotlin-kapt")
+  alias(libs.plugins.ksp)
 }
 
 android {
@@ -21,10 +19,16 @@ android {
   buildFeatures {
     compose = true
   }
+  
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
   }
+
+  composeOptions {
+    kotlinCompilerExtensionVersion = "1.5.2"
+  }
+
   kotlinOptions {
     jvmTarget = "17"
   }
@@ -38,7 +42,7 @@ dependencies {
 
   // hilt
   implementation(libs.hilt.android)
-  kapt(libs.hilt.android.compiler)
+  ksp(libs.hilt.android.compiler)
   implementation(libs.androidx.hilt.navigation.compose)
 
   // gson

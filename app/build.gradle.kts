@@ -4,7 +4,7 @@ plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.googleDaggerHilt)
-  id("kotlin-kapt")
+  alias(libs.plugins.ksp)
   id("com.google.gms.google-services")
 }
 
@@ -43,16 +43,20 @@ android {
 
     }
   }
+
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
   }
+
   kotlinOptions {
     jvmTarget = "17"
   }
+
   composeOptions {
-    kotlinCompilerExtensionVersion = "1.5.1"
+    kotlinCompilerExtensionVersion = "1.5.2"
   }
+
   packaging {
     resources {
       excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -70,15 +74,15 @@ dependencies {
 
   // hilt
   implementation(libs.hilt.android)
-  kapt(libs.hilt.android.compiler)
-  kapt(libs.androidx.hilt.compiler)
+  ksp(libs.hilt.android.compiler)
+  ksp(libs.androidx.hilt.compiler)
 
   // lint
   lintChecks(libs.compose.lint.checks)
 
   // firebase
   implementation(platform(libs.firebase.bom))
-  implementation(libs.firebase.database.ktx)
+  implementation(libs.firebase.database)
 
   // WorkManager
   implementation(libs.androidx.work.runtime.ktx)

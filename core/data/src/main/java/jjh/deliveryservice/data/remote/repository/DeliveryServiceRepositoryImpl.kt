@@ -24,9 +24,9 @@ class DeliveryServiceRepositoryImpl @Inject constructor(
   private val deliveryServiceApi: DeliveryServiceApi,
   private val deliveryDao: DeliveryDao,
   dataStore: DeliveryDataStore,
-) : DeliveryServiceRepository {
+) : DeliveryServiceRepository, DeliveryDataStore by dataStore {
 
-  private var prefCompanyList: String by dataStore.stringDataStore(COMPANY_LIST_KEY)
+  private var prefCompanyList: String by stringDataStore(COMPANY_LIST_KEY)
 
   /**
    * 택배사 리스트 조회

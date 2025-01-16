@@ -1,6 +1,5 @@
 package jjh.deliveryservice.domain.repository
 
-import kotlinx.coroutines.flow.Flow
 
 interface TrackingTimeRepository {
   fun saveTrackingTime(millis: Long)

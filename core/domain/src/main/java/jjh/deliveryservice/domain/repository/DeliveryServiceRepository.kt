@@ -2,7 +2,6 @@ package jjh.deliveryservice.domain.repository
 
 import jjh.deliveryservice.domain.model.CompanyModel
 import jjh.deliveryservice.domain.model.TrackingInfoModel
-import kotlinx.coroutines.flow.Flow
 
 interface DeliveryServiceRepository {
 
